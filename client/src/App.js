@@ -1,12 +1,15 @@
-import React from 'react';
-import './App.css';
-import AuthForm from './components/AuthForm';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Splash from "./pages/Splash";
+import Login from "./pages/Login";
 
 function App() {
   return (
-    <div className="App">
-      <AuthForm />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Splash />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
   );
 }
 
