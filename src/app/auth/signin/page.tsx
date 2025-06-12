@@ -10,7 +10,7 @@ export default function SignInPage() {
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="text-center">
           <CardTitle className="font-headline text-2xl">Welcome Back!</CardTitle>
-          <CardDescription>Sign in to continue to HomePalate.</CardDescription>
+          <CardDescription>Sign in to continue to Tiffin Box.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">

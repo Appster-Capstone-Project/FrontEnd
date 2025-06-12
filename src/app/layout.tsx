@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'HomePalate',
+  title: 'Tiffin Box',
   description: 'Discover homemade food and tiffin services near you.',
 };
 

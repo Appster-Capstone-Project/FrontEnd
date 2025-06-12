@@ -8,7 +8,7 @@ const Header = () => {
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
           <UtensilsCrossed className="h-8 w-8 text-primary" />
-          <span className="font-headline text-2xl font-bold text-foreground">HomePalate</span>
+          <span className="font-headline text-2xl font-bold text-foreground">Tiffin Box</span>
         </Link>
         <nav className="flex items-center space-x-4">
           <Button variant="ghost" asChild>

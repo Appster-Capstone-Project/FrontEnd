@@ -10,7 +10,7 @@ export default function SignUpPage() {
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="text-center">
           <CardTitle className="font-headline text-2xl">Create an Account</CardTitle>
-          <CardDescription>Join HomePalate to discover amazing homemade food.</CardDescription>
+          <CardDescription>Join Tiffin Box to discover amazing homemade food.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
