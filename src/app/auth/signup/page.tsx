@@ -1,10 +1,22 @@
+
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 
 export default function SignUpPage() {
+  const router = useRouter();
+
+  const handleSignUp = () => {
+    // In a real app, you would perform authentication and user creation here
+    // For now, we'll just redirect to the homepage
+    router.push('/');
+  };
+
   return (
     <div className="container flex min-h-[calc(100vh-var(--header-height)-var(--footer-height))] items-center justify-center py-12">
       <Card className="w-full max-w-md shadow-xl">
@@ -31,7 +43,12 @@ export default function SignUpPage() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">Sign Up</Button>
+          <Button 
+            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+            onClick={handleSignUp}
+          >
+            Sign Up
+          </Button>
           <p className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link href="/auth/signin" className="font-medium text-primary hover:underline">
