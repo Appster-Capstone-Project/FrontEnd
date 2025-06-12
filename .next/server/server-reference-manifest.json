@@ -1,0 +1,17 @@
+{
+  "node": {
+    "40069749c52f5008305fea61e7bb738e0c1f92c205": {
+      "workers": {
+        "app/vendors/[id]/page": {
+          "moduleId": "[project]/.next-internal/server/app/vendors/[id]/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/vendors/[id]/page.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/vendors/[id]/page": "rsc"
+      }
+    }
+  },
+  "edge": {},
+  "encryptionKey": "HzG9tNNE5xGgpuvpgu9h6QXS2wbhoBJddB4taoczDhk="
+}
