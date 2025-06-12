@@ -1,13 +1,16 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { UtensilsCrossed, UserCircle, ShoppingBag } from 'lucide-react';
+import { Package, Heart, UserCircle, ShoppingBag } from 'lucide-react';
 
 const Header = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
-          <UtensilsCrossed className="h-8 w-8 text-primary" />
+          <div className="relative flex items-center justify-center">
+            <Package className="h-7 w-7 text-primary" />
+            <Heart className="absolute top-0 right-0 h-3.5 w-3.5 text-accent fill-accent transform translate-x-1/4 -translate-y-1/4" />
+          </div>
           <span className="font-headline text-2xl font-bold text-foreground">Tiffin Box</span>
         </Link>
         <nav className="flex items-center space-x-4">
