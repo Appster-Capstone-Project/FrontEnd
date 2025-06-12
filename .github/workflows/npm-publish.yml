@@ -20,4 +20,4 @@ jobs:
 
       - name: 🏗️ Build project
         working-directory: .next
-        run: npm run build
+        run: npm run
