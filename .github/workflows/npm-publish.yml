@@ -18,10 +18,6 @@ jobs:
         with:
           node-version: 20
 
-      - name: 📦 Install dependencies
-        working-directory: .next
-        run: npm ci
-
       - name: 🏗️ Build project
         working-directory: .next
         run: npm run build
