@@ -3,7 +3,7 @@ name: Build on Push
 on:
   push:
     branches:
-      - main  # Triggers on push to any branch; change to 'main' if needed
+      - main
 
 jobs:
   build:
@@ -18,5 +18,10 @@ jobs:
         with:
           node-version: 20
 
+      - name: 📦 Install dependencies
+        working-directory: .next
+        run: npm ci
+
       - name: 🏗️ Build project
+        working-directory: .next
         run: npm run build
