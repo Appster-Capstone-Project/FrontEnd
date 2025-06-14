@@ -25,6 +25,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://172.174.95.6:8080/:path*', // your backend IP
+      },
+    ];
+  },
 };
 
 export default withPwa(nextConfig);
