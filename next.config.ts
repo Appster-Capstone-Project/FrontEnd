@@ -1,3 +1,4 @@
+
 import type {NextConfig} from 'next';
 import withPWA from 'next-pwa';
 
@@ -5,6 +6,7 @@ const withPwa = withPWA({
   dest: '.next/pwa',
   register: true,
   skipWaiting: true,
+  disable: false, // Ensure PWA is active in development
 });
 
 const nextConfig: NextConfig = {
