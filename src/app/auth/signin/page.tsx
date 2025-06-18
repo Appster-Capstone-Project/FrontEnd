@@ -28,44 +28,54 @@ export default function SignInPage() {
 
   const handleSignIn = async () => {
     setIsLoading(true);
-    try {
-      const response = await fetch("/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
 
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error || "Login failed. Please check your credentials.");
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    try {
+      // --- Start of MOCK SUCCESS ---
+      // For demonstration, we'll simulate a successful login.
+      // In a real application, you would validate credentials against a backend.
+      if (!email || !password) {
+         toast({
+            variant: "destructive",
+            title: "Login Failed",
+            description: "Please enter email and password.",
+         });
+         setIsLoading(false);
+         return;
       }
 
-      const data = await response.json();
-      localStorage.setItem("token", data.token);
+      // Mock data that would typically come from your API response
+      const mockToken = "mock-jwt-token-for-tiffinbox"; 
+      const mockUserName = email.split('@')[0] || "Tiffin Fan"; // Use part of email or a default
+      const mockUserCity = "Curryville"; // Default city for suggestions
+
+      localStorage.setItem("token", mockToken);
+      localStorage.setItem("userName", mockUserName); 
+      localStorage.setItem("userCity", mockUserCity);
       
-      // In a real application, user details (name, city) would come from the API response (e.g., data.user.name)
-      // For this mock setup, we'll use hardcoded values.
-      localStorage.setItem("userName", data.user?.name || "Tiffin Lover"); 
-      localStorage.setItem("userCity", data.user?.city || "Curryville"); // Default city for suggestions
-      
-      console.log("Login Successful");
+      console.log("Mock Login Successful. User:", mockUserName, "City:", mockUserCity);
       toast({
         title: "Login Successful!",
-        description: "Welcome back!",
+        description: "Welcome back! Redirecting to your dashboard...",
       });
       router.push("/dashboard"); // Redirect to dashboard
-    } catch (err: any) {
-      console.error("Login error:", err);
+      // Note: setIsLoading(false) is not explicitly called here on success
+      // because the component will unmount upon navigation.
+      // --- End of MOCK SUCCESS ---
+
+    } catch (err: any) { 
+      // This catch block would handle errors if a real API call was made and failed unexpectedly
+      console.error("Login error during mock setup:", err);
       toast({
         variant: "destructive",
         title: "Login Failed",
-        description: err.message || "An unexpected error occurred.",
+        description: "An unexpected error occurred during the mock login process.",
       });
-    } finally {
       setIsLoading(false);
     }
+    // setIsLoading(false) is handled in the error cases or implied by navigation
   };
 
   return (
