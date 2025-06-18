@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Package, Heart, UserCircle, ShoppingBag } from 'lucide-react';
+import { Package, Heart, UserCircle, ShoppingBag, Search, ChefHat } from 'lucide-react';
 
 const Header = () => {
   return (
@@ -13,17 +13,24 @@ const Header = () => {
           </div>
           <span className="font-headline text-2xl font-bold text-foreground">Tiffin Box</span>
         </Link>
-        <nav className="flex items-center space-x-4">
+        <nav className="flex items-center space-x-2 md:space-x-4">
           <Button variant="ghost" asChild>
-            <Link href="/">Browse Food</Link>
+            <Link href="/vendors" className="flex items-center space-x-1">
+              <Search className="h-4 w-4 md:mr-1" />
+              <span className="hidden md:inline">Browse Food</span>
+            </Link>
           </Button>
           <Button variant="ghost" asChild>
-            <Link href="/sell">Become a Seller</Link>
+            <Link href="/sell" className="flex items-center space-x-1">
+              <ChefHat className="h-4 w-4 md:mr-1" />
+              <span className="hidden md:inline">Become a Seller</span>
+            </Link>
           </Button>
           <Button variant="outline" size="sm" asChild>
             <Link href="/auth/signin" className="flex items-center space-x-2">
               <UserCircle className="h-4 w-4" />
-              <span>Login / Sign Up</span>
+              <span className="hidden sm:inline">Login</span>
+              <span className="hidden md:inline"> / Sign Up</span>
             </Link>
           </Button>
           <Button variant="ghost" size="icon" aria-label="Cart">

@@ -1,4 +1,4 @@
-import { getVendorById } from '@/lib/data';
+import { getVendorById, mockVendors } from '@/lib/data'; // Added mockVendors
 import type { Vendor } from '@/lib/types';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -24,6 +24,12 @@ async function submitReview(formData: FormData) {
   console.log("Rating:", formData.get("rating"));
   console.log("Comment:", formData.get("comment"));
   // Potentially revalidatePath or redirect
+}
+
+export async function generateStaticParams() {
+  return mockVendors.map((vendor) => ({
+    id: vendor.id,
+  }));
 }
 
 

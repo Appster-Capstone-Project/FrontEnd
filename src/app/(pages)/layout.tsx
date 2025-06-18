@@ -9,7 +9,7 @@ export default function PagesLayout({
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
-      <main className="flex-grow">{children}</main>
+      <main className="flex-grow flex flex-col">{children}</main>
       <Footer />
     </div>
   );
