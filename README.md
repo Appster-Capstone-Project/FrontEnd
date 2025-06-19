@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+# Firebase Studio
+
+This is a NextJS starter in Firebase Studio.
+
+To get started, take a look at src/app/page.tsx.
+=======
 # 🥗 TiffinBox
 
 TiffinBox is a web application that helps people in the same neighborhood **share home-cooked meals** and **offer tiffin services**. Whether you're a home cook, a tiffin service provider, or someone looking for healthy homemade food, TiffinBox connects you with your community.
@@ -33,3 +40,4 @@ TiffinBox is a web application that helps people in the same neighborhood **shar
 ```bash
 git clone https://github.com/your-username/tiffinbox.git
 cd tiffinbox
+>>>>>>> 21fc6b21cda6d38cbef6901bc1a8e953e818f878
