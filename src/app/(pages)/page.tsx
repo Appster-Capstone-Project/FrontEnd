@@ -37,7 +37,7 @@ export default function HomePage() {
               </Button>
             </div>
              <p className="mt-6 text-sm text-muted-foreground text-center">
-              Or, <Link href="/vendors" className="font-medium text-primary hover:underline">browse all listings</Link> as a guest.
+              <Link href="/auth/signin?type=seller" className="font-medium text-primary hover:underline">Login as Seller</Link>
             </p>
           </CardContent>
         </Card>
