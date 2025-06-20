@@ -1,15 +1,23 @@
+"use client";
 
+import * as React from "react";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon, UploadCloud, PlusCircle, Star } from "lucide-react";
+
+import { cn } from "@/lib/utils";
 import SectionTitle from "@/components/shared/SectionTitle";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { UploadCloud, PlusCircle, Star } from "lucide-react";
 import ReviewCard from "@/components/shared/ReviewCard";
 import { mockVendors } from "@/lib/data";
 
 export default function SellPage() {
+  const [date, setDate] = React.useState<Date>();
   // Mock data for reviews, taking from the first vendor
   const sellerReviews = mockVendors[0].reviews;
 
@@ -38,14 +46,39 @@ export default function SellPage() {
                 <Label htmlFor="description">Description</Label>
                 <Textarea id="description" placeholder="Describe your dish..." />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="price">Price ($)</Label>
                   <Input id="price" type="number" step="0.01" placeholder="12.99" />
                 </div>
                 <div>
-                  <Label htmlFor="portions">Portions Available (Optional)</Label>
+                  <Label htmlFor="portions">Portions Available</Label>
                   <Input id="portions" type="number" placeholder="10" />
+                </div>
+                 <div>
+                  <Label htmlFor="cookingDate">Cooking Date</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !date && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
               <div>
