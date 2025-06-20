@@ -21,9 +21,9 @@ const Header = () => {
             </Link>
           </Button>
           <Button variant="ghost" asChild>
-            <Link href="/sell" className="flex items-center space-x-1">
+            <Link href="/auth/signin?type=seller" className="flex items-center space-x-1">
               <ChefHat className="h-4 w-4 md:mr-1" />
-              <span className="hidden md:inline">Become a Seller</span>
+              <span className="hidden md:inline">Become / Sign In as Seller</span>
             </Link>
           </Button>
           <Button variant="outline" size="sm" asChild>

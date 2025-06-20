@@ -2812,6 +2812,10 @@ body {
     border-radius: var(--radius);
   }
 
+  .sm\:p-8 {
+    padding: 2rem;
+  }
+
   .sm\:text-left {
     text-align: left;
   }
