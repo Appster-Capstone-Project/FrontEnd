@@ -30,49 +30,58 @@ export default function SignInPage() {
   const handleSignIn = async () => {
     setIsLoading(true);
 
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    if (!email || !password) {
+       toast({
+          variant: "destructive",
+          title: "Login Failed",
+          description: "Please enter email and password.",
+       });
+       setIsLoading(false);
+       return;
+    }
 
     try {
-      if (!email || !password) {
-         toast({
-            variant: "destructive",
-            title: "Login Failed",
-            description: "Please enter email and password.",
-         });
-         setIsLoading(false);
-         return;
-      }
-
-      // Mock data that would typically come from your API response
-      const mockToken = "mock-jwt-token-for-tiffinbox"; 
-      const userType = searchParams.get('type');
-      const mockUserName = email.split('@')[0] || (userType === 'seller' ? "Super Chef" : "Tiffin Fan");
-      const mockUserCity = "Curryville"; // Default city for suggestions
-
-      localStorage.setItem("token", mockToken);
-      localStorage.setItem("userName", mockUserName); 
-      localStorage.setItem("userCity", mockUserCity);
-      
-      console.log("Mock Login Successful. User:", mockUserName, "City:", mockUserCity, "Type:", userType);
-      toast({
-        title: "Login Successful!",
-        description: "Welcome back! Redirecting...",
+      const response = await fetch("/api/login", { // Using rewrite path
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
       });
-      
-      if (userType === 'seller') {
-        router.push('/sell');
-      } else {
-        router.push("/dashboard");
-      }
 
-    } catch (err: any) { 
-      console.error("Login error during mock setup:", err);
+      const data = await response.json();
+
+      if (response.ok) {
+        // Assuming API returns token and user object
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userName", data.user.name); 
+        localStorage.setItem("userCity", data.user.city || "Curryville"); // Fallback city
+        
+        toast({
+          title: "Login Successful!",
+          description: "Welcome back! Redirecting...",
+        });
+        
+        if (data.user.role === 'seller') {
+          router.push('/sell');
+        } else {
+          router.push("/dashboard");
+        }
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Login Failed",
+          description: data.error || "Invalid credentials. Please try again.",
+        });
+      }
+    } catch (err) { 
+      console.error("Login error:", err);
       toast({
         variant: "destructive",
-        title: "Login Failed",
-        description: "An unexpected error occurred during the mock login process.",
+        title: "Login Error",
+        description: "An unexpected error occurred. Please check your connection and try again.",
       });
+    } finally {
       setIsLoading(false);
     }
   };

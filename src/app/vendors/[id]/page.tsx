@@ -1,11 +1,10 @@
-import { getVendorById, mockVendors } from '@/lib/data'; // Added mockVendors
+
 import type { Vendor } from '@/lib/types';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import StarRating from '@/components/shared/StarRating';
 import DishCard from '@/components/shared/DishCard';
@@ -13,28 +12,64 @@ import ReviewCard from '@/components/shared/ReviewCard';
 import SectionTitle from '@/components/shared/SectionTitle';
 import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-// Placeholder for a form component if we were to use react-hook-form
-// import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
-// Dummy submit review action
+// API fetching functions
+// NOTE: For server-side fetching, we need the full absolute URL of the backend.
+// The rewrite in next.config.js is for client-side requests.
+const BACKEND_URL = process.env.BACKEND_URL || 'http://172.174.95.6:8080';
+
+async function getVendorById(id: string): Promise<Vendor | null> {
+  try {
+    // Using no-store to ensure fresh data on every request
+    const res = await fetch(`${BACKEND_URL}/vendors/${id}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    return res.json();
+  } catch (error) {
+    console.error(`Failed to fetch vendor ${id}:`, error);
+    return null;
+  }
+}
+
+async function getAllVendors(): Promise<Vendor[]> {
+  try {
+    const res = await fetch(`${BACKEND_URL}/vendors`, { cache: 'no-store' });
+    if (!res.ok) return [];
+    return res.json();
+  } catch (error) {
+    console.error('Failed to fetch all vendors:', error);
+    return [];
+  }
+}
+
 async function submitReview(formData: FormData) {
   "use server";
-  // In a real app, you'd process this data, save to DB, etc.
-  console.log("Review Submitted:");
-  console.log("Rating:", formData.get("rating"));
-  console.log("Comment:", formData.get("comment"));
-  // Potentially revalidatePath or redirect
+  // In a real app, you'd get the user's auth token from their session/cookie
+  const rawFormData = {
+    rating: formData.get('rating'),
+    comment: formData.get('comment'),
+    vendorId: formData.get('vendorId'),
+  };
+  
+  console.log("Review Submitted (Server Action):", rawFormData);
+  // Example API call:
+  // await fetch(`${BACKEND_URL}/reviews`, {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ...` },
+  //   body: JSON.stringify(rawFormData),
+  // });
+  // You would then revalidate the path to show the new review, e.g., revalidatePath(`/vendors/${vendorId}`)
 }
 
 export async function generateStaticParams() {
-  return mockVendors.map((vendor) => ({
+  const vendors = await getAllVendors();
+  return vendors.map((vendor) => ({
     id: vendor.id,
   }));
 }
 
 
 export default async function VendorDetailPage({ params }: { params: { id: string } }) {
-  const vendor = getVendorById(params.id);
+  const vendor = await getVendorById(params.id);
 
   if (!vendor) {
     notFound();
@@ -49,7 +84,7 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
         <div className="md:flex">
           <div className="md:w-1/3 relative">
             <Image
-              src={vendor.imageUrl}
+              src={vendor.imageUrl || 'https://placehold.co/600x400.png'}
               alt={vendor.name}
               width={600}
               height={400}
@@ -107,13 +142,13 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
             <Utensils className="mr-2 h-5 w-5" /> Menu
           </TabsTrigger>
           <TabsTrigger value="reviews" className="text-base py-2.5">
-            <MessageSquare className="mr-2 h-5 w-5" /> Reviews ({vendor.reviews.length})
+            <MessageSquare className="mr-2 h-5 w-5" /> Reviews ({vendor.reviews ? vendor.reviews.length : 0})
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="menu">
           <SectionTitle title="Our Menu" className="text-center mb-6" />
-          {vendor.menu.length > 0 ? (
+          {vendor.menu && vendor.menu.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {vendor.menu.map((dish) => (
                 <DishCard key={dish.id} dish={dish} />
@@ -128,7 +163,7 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
           <SectionTitle title="Customer Reviews" className="text-center mb-6" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              {vendor.reviews.length > 0 ? (
+              {vendor.reviews && vendor.reviews.length > 0 ? (
                 vendor.reviews.map((review) => (
                   <ReviewCard key={review.id} review={review} />
                 ))
@@ -143,9 +178,9 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
               </CardHeader>
               <CardContent>
                 <form action={submitReview} className="space-y-4">
+                  <input type="hidden" name="vendorId" value={vendor.id} />
                   <div>
                     <label htmlFor="rating" className="block text-sm font-medium text-foreground mb-1">Your Rating</label>
-                    {/* Basic select for rating, can be replaced with a star input component */}
                     <select 
                       id="rating" 
                       name="rating"

@@ -1,26 +1,42 @@
+
+"use client";
+
 import Image from 'next/image';
 import type { Dish } from '@/lib/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ShoppingCart, Package } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface DishCardProps {
   dish: Dish;
 }
 
 const DishCard: React.FC<DishCardProps> = ({ dish }) => {
-  const portionsText = dish.portionsAvailable !== undefined && dish.portionsTotal !== undefined
+  const { toast } = useToast();
+  
+  const portionsText = dish.portionsAvailable !== undefined
     ? dish.portionsAvailable > 0
       ? `${dish.portionsAvailable} portion${dish.portionsAvailable > 1 ? 's' : ''} left`
       : 'Sold out'
     : null;
 
+  const handleAddToCart = () => {
+    // In a real app, this would dispatch an action to a cart context/store
+    // and likely make an API call.
+    console.log(`Added ${dish.name} to cart.`);
+    toast({
+      title: "Added to Cart!",
+      description: `You've added ${dish.name} to your cart.`,
+    });
+  };
+
   return (
     <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col h-full">
       <CardHeader className="p-0 relative">
         <Image
-          src={dish.imageUrl}
+          src={dish.imageUrl || 'https://placehold.co/300x200.png'}
           alt={dish.name}
           width={300}
           height={200}
@@ -44,10 +60,11 @@ const DishCard: React.FC<DishCardProps> = ({ dish }) => {
       <CardFooter className="p-4 border-t">
         <Button 
           className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" 
-          disabled={dish.portionsAvailable === 0}
+          disabled={!dish.portionsAvailable || dish.portionsAvailable === 0}
+          onClick={handleAddToCart}
         >
           <ShoppingCart className="mr-2 h-4 w-4" />
-          {dish.portionsAvailable === 0 ? 'Unavailable' : 'Add to Cart'}
+          {!dish.portionsAvailable || dish.portionsAvailable === 0 ? 'Unavailable' : 'Add to Cart'}
         </Button>
       </CardFooter>
     </Card>

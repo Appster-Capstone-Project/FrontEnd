@@ -1,19 +1,41 @@
 
 "use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { mockVendors } from '@/lib/data';
+import { useState, useEffect } from 'react';
 import type { Vendor } from '@/lib/types';
 import VendorCard from '@/components/shared/VendorCard';
 import SectionTitle from '@/components/shared/SectionTitle';
 import CategoryTabs from '@/components/shared/CategoryTabs';
 import { Input } from '@/components/ui/input';
 import { MapPin } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function AllVendorsPage() {
+  const [allVendors, setAllVendors] = useState<Vendor[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState<Vendor['type'] | 'all'>('all');
+
+  useEffect(() => {
+    const fetchVendors = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch('/api/vendors'); // Using rewrite path
+        if (!response.ok) {
+          throw new Error('Failed to fetch vendors');
+        }
+        const data: Vendor[] = await response.json();
+        setAllVendors(data);
+      } catch (error) {
+        console.error("Error fetching vendors:", error);
+        // In a real app, you might show a toast notification here
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchVendors();
+  }, []);
 
   const categories = [
     { name: 'All Vendors', value: 'all' as const },
@@ -21,7 +43,7 @@ export default function AllVendorsPage() {
     { name: 'Tiffin Services', value: 'Tiffin Service' as const },
   ];
   
-  const filteredVendors = mockVendors.filter(vendor => {
+  const filteredVendors = allVendors.filter(vendor => {
     const matchesCategory = activeCategory === 'all' || vendor.type === activeCategory;
     const searchTermLower = searchTerm.toLowerCase();
     const matchesSearch = 
@@ -62,7 +84,13 @@ export default function AllVendorsPage() {
         />
       </div>
 
-      {filteredVendors.length > 0 ? (
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[...Array(6)].map((_, i) => (
+            <CardSkeleton key={i} />
+          ))}
+        </div>
+      ) : filteredVendors.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredVendors.map((vendor) => (
             <VendorCard key={vendor.id} vendor={vendor} />
@@ -76,3 +104,13 @@ export default function AllVendorsPage() {
     </div>
   );
 }
+
+const CardSkeleton = () => (
+  <div className="flex flex-col space-y-3">
+    <Skeleton className="h-[192px] w-full rounded-xl" />
+    <div className="space-y-2">
+      <Skeleton className="h-4 w-4/5" />
+      <Skeleton className="h-4 w-3/5" />
+    </div>
+  </div>
+);
