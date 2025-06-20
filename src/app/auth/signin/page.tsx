@@ -52,17 +52,23 @@ export default function SignInPage() {
       const data = await response.json();
 
       if (response.ok) {
-        // Assuming API returns token and user object
+        // Assuming API returns token and an optional user object
         localStorage.setItem("token", data.token);
-        localStorage.setItem("userName", data.user.name); 
-        localStorage.setItem("userCity", data.user.city || "Curryville"); // Fallback city
+        
+        // Safely access user data if it exists
+        const userName = data.user?.name || "User";
+        const userCity = data.user?.city || "Curryville";
+        const userRole = data.user?.role;
+
+        localStorage.setItem("userName", userName); 
+        localStorage.setItem("userCity", userCity);
         
         toast({
           title: "Login Successful!",
-          description: "Welcome back! Redirecting...",
+          description: `Welcome back, ${userName}! Redirecting...`,
         });
         
-        if (data.user.role === 'seller') {
+        if (userRole === 'seller') {
           router.push('/sell');
         } else {
           router.push("/dashboard");

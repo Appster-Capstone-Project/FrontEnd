@@ -264,43 +264,56 @@ function SignInPage() {
     const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const handleSignIn = async ()=>{
         setIsLoading(true);
-        // Simulate API call delay
-        await new Promise((resolve)=>setTimeout(resolve, 1000));
-        try {
-            if (!email || !password) {
-                toast({
-                    variant: "destructive",
-                    title: "Login Failed",
-                    description: "Please enter email and password."
-                });
-                setIsLoading(false);
-                return;
-            }
-            // Mock data that would typically come from your API response
-            const mockToken = "mock-jwt-token-for-tiffinbox";
-            const userType = searchParams.get('type');
-            const mockUserName = email.split('@')[0] || (userType === 'seller' ? "Super Chef" : "Tiffin Fan");
-            const mockUserCity = "Curryville"; // Default city for suggestions
-            localStorage.setItem("token", mockToken);
-            localStorage.setItem("userName", mockUserName);
-            localStorage.setItem("userCity", mockUserCity);
-            console.log("Mock Login Successful. User:", mockUserName, "City:", mockUserCity, "Type:", userType);
-            toast({
-                title: "Login Successful!",
-                description: "Welcome back! Redirecting..."
-            });
-            if (userType === 'seller') {
-                router.push('/sell');
-            } else {
-                router.push("/dashboard");
-            }
-        } catch (err) {
-            console.error("Login error during mock setup:", err);
+        if (!email || !password) {
             toast({
                 variant: "destructive",
                 title: "Login Failed",
-                description: "An unexpected error occurred during the mock login process."
+                description: "Please enter email and password."
             });
+            setIsLoading(false);
+            return;
+        }
+        try {
+            const response = await fetch("/api/login", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                // Assuming API returns token and user object
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("userName", data.user.name);
+                localStorage.setItem("userCity", data.user.city || "Curryville"); // Fallback city
+                toast({
+                    title: "Login Successful!",
+                    description: "Welcome back! Redirecting..."
+                });
+                if (data.user.role === 'seller') {
+                    router.push('/sell');
+                } else {
+                    router.push("/dashboard");
+                }
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "Login Failed",
+                    description: data.error || "Invalid credentials. Please try again."
+                });
+            }
+        } catch (err) {
+            console.error("Login error:", err);
+            toast({
+                variant: "destructive",
+                title: "Login Error",
+                description: "An unexpected error occurred. Please check your connection and try again."
+            });
+        } finally{
             setIsLoading(false);
         }
     };
@@ -321,20 +334,20 @@ function SignInPage() {
                             children: title
                         }, void 0, false, {
                             fileName: "[project]/src/app/auth/signin/page.tsx",
-                            lineNumber: 89,
+                            lineNumber: 98,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardDescription"], {
                             children: description
                         }, void 0, false, {
                             fileName: "[project]/src/app/auth/signin/page.tsx",
-                            lineNumber: 90,
+                            lineNumber: 99,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/auth/signin/page.tsx",
-                    lineNumber: 88,
+                    lineNumber: 97,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -348,7 +361,7 @@ function SignInPage() {
                                     children: "Email"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/auth/signin/page.tsx",
-                                    lineNumber: 94,
+                                    lineNumber: 103,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -360,13 +373,13 @@ function SignInPage() {
                                     disabled: isLoading
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/auth/signin/page.tsx",
-                                    lineNumber: 95,
+                                    lineNumber: 104,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/auth/signin/page.tsx",
-                            lineNumber: 93,
+                            lineNumber: 102,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -377,7 +390,7 @@ function SignInPage() {
                                     children: "Password"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/auth/signin/page.tsx",
-                                    lineNumber: 105,
+                                    lineNumber: 114,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -389,19 +402,19 @@ function SignInPage() {
                                     disabled: isLoading
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/auth/signin/page.tsx",
-                                    lineNumber: 106,
+                                    lineNumber: 115,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/auth/signin/page.tsx",
-                            lineNumber: 104,
+                            lineNumber: 113,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/auth/signin/page.tsx",
-                    lineNumber: 92,
+                    lineNumber: 101,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardFooter"], {
@@ -414,7 +427,7 @@ function SignInPage() {
                             children: isLoading ? "Signing In..." : "Sign In"
                         }, void 0, false, {
                             fileName: "[project]/src/app/auth/signin/page.tsx",
-                            lineNumber: 117,
+                            lineNumber: 126,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -428,30 +441,30 @@ function SignInPage() {
                                     children: "Sign Up"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/auth/signin/page.tsx",
-                                    lineNumber: 126,
+                                    lineNumber: 135,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/auth/signin/page.tsx",
-                            lineNumber: 124,
+                            lineNumber: 133,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/auth/signin/page.tsx",
-                    lineNumber: 116,
+                    lineNumber: 125,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/auth/signin/page.tsx",
-            lineNumber: 87,
+            lineNumber: 96,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/auth/signin/page.tsx",
-        lineNumber: 86,
+        lineNumber: 95,
         columnNumber: 5
     }, this);
 }
