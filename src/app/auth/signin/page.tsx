@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from "next/link";
 
@@ -17,9 +17,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
-
-export default function SignInPage() {
+function SignInCard() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -62,60 +62,6 @@ export default function SignInPage() {
       }
       setIsLoading(false);
     }, 1000);
-
-    /*
-    // REAL API CALL (currently disabled for demo)
-    try {
-      const response = await fetch("/api/login", { // Using rewrite path
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Assuming API returns token and an optional user object
-        localStorage.setItem("token", data.token);
-        
-        // Safely access user data if it exists
-        const userName = data.user?.name || "User";
-        const userCity = data.user?.city || "Curryville";
-        const userRole = data.user?.role;
-
-        localStorage.setItem("userName", userName); 
-        localStorage.setItem("userCity", userCity);
-        
-        toast({
-          title: "Login Successful!",
-          description: `Welcome back, ${userName}! Redirecting...`,
-        });
-        
-        if (userRole === 'seller') {
-          router.push('/sell');
-        } else {
-          router.push("/dashboard");
-        }
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Login Failed",
-          description: data.error || "Invalid credentials. Please try again.",
-        });
-      }
-    } catch (err) { 
-      console.error("Login error:", err);
-      toast({
-        variant: "destructive",
-        title: "Login Error",
-        description: "An unexpected error occurred. Please check your connection and try again.",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-    */
   };
 
   const userType = searchParams.get('type');
@@ -124,7 +70,6 @@ export default function SignInPage() {
   const signupLink = userType === 'seller' ? '/auth/signup?type=seller' : '/auth/signup';
 
   return (
-    <div className="container flex min-h-[calc(100vh-var(--header-height)-var(--footer-height))] items-center justify-center py-12">
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="text-center">
           <CardTitle className="font-headline text-2xl">{title}</CardTitle>
@@ -173,6 +118,38 @@ export default function SignInPage() {
           </p>
         </CardFooter>
       </Card>
+  );
+}
+
+const AuthCardSkeleton = () => (
+    <Card className="w-full max-w-md">
+        <CardHeader className="text-center space-y-2">
+            <Skeleton className="h-7 w-48 mx-auto" />
+            <Skeleton className="h-5 w-64 mx-auto" />
+        </CardHeader>
+        <CardContent className="space-y-4">
+            <div className="space-y-2">
+                <Skeleton className="h-4 w-12" />
+                <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="space-y-2">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-10 w-full" />
+            </div>
+        </CardContent>
+        <CardFooter className="flex flex-col gap-4">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-5 w-48" />
+        </CardFooter>
+    </Card>
+)
+
+export default function SignInPage() {
+  return (
+    <div className="container flex min-h-[calc(100vh-var(--header-height)-var(--footer-height))] items-center justify-center py-12">
+      <Suspense fallback={<AuthCardSkeleton />}>
+        <SignInCard />
+      </Suspense>
     </div>
   );
 }

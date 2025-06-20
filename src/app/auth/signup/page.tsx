@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,8 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export default function SignUpPage() {
+function SignUpCard() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -65,44 +66,6 @@ export default function SignUpPage() {
       router.push(`/auth/signin?type=${userType}`);
       setIsLoading(false);
     }, 1000);
-
-    /*
-    // REAL API CALL (currently disabled for demo)
-    try {
-       const response = await fetch("/api/register", { // Using the rewrite path
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, password, role: userType }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        toast({
-          title: "Registration Successful!",
-          description: "You can now sign in with your credentials.",
-        });
-        router.push(`/auth/signin?type=${userType}`);
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Registration Failed",
-          description: data.error || "An unknown error occurred.",
-        });
-      }
-    } catch (err) {
-      console.error("Error during registration:", err);
-      toast({
-        variant: "destructive",
-        title: "Registration Error",
-        description: "Something went wrong. Please try again.",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-    */
   };
 
   const userType = searchParams.get('type');
@@ -112,7 +75,6 @@ export default function SignUpPage() {
   const signInLink = isSeller ? '/auth/signin?type=seller' : '/auth/signin';
 
   return (
-    <div className="container flex min-h-[calc(100vh-var(--header-height)-var(--footer-height))] items-center justify-center py-12">
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="text-center">
           <CardTitle className="font-headline text-2xl">{title}</CardTitle>
@@ -152,6 +114,46 @@ export default function SignUpPage() {
           </p>
         </CardFooter>
       </Card>
+  );
+}
+
+const AuthCardSkeleton = () => (
+    <Card className="w-full max-w-md">
+        <CardHeader className="text-center space-y-2">
+            <Skeleton className="h-7 w-48 mx-auto" />
+            <Skeleton className="h-5 w-64 mx-auto" />
+        </CardHeader>
+        <CardContent className="space-y-4">
+            <div className="space-y-2">
+                <Skeleton className="h-4 w-12" />
+                <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="space-y-2">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="space-y-2">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="space-y-2">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-10 w-full" />
+            </div>
+        </CardContent>
+        <CardFooter className="flex flex-col gap-4">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-5 w-48" />
+        </CardFooter>
+    </Card>
+)
+
+export default function SignUpPage() {
+  return (
+    <div className="container flex min-h-[calc(100vh-var(--header-height)-var(--footer-height))] items-center justify-center py-12">
+       <Suspense fallback={<AuthCardSkeleton />}>
+        <SignUpCard />
+      </Suspense>
     </div>
   );
 }
