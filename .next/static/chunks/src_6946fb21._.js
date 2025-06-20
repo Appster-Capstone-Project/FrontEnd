@@ -383,7 +383,7 @@ const VendorCard = ({ vendor })=>{
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardHeader"], {
                 className: "p-0 relative",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                    src: vendor.imageUrl,
+                    src: vendor.imageUrl || 'https://placehold.co/400x250.png',
                     alt: vendor.name,
                     width: 400,
                     height: 250,
@@ -391,12 +391,12 @@ const VendorCard = ({ vendor })=>{
                     "data-ai-hint": vendor.dataAiHint || 'food vendor'
                 }, void 0, false, {
                     fileName: "[project]/src/components/shared/VendorCard.tsx",
-                    lineNumber: 19,
+                    lineNumber: 20,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/shared/VendorCard.tsx",
-                lineNumber: 18,
+                lineNumber: 19,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -413,14 +413,14 @@ const VendorCard = ({ vendor })=>{
                                         className: "mr-1 h-4 w-4"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/shared/VendorCard.tsx",
-                                        lineNumber: 31,
+                                        lineNumber: 32,
                                         columnNumber: 13
                                     }, this),
                                     vendor.type
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/shared/VendorCard.tsx",
-                                lineNumber: 30,
+                                lineNumber: 31,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$shared$2f$StarRating$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -428,13 +428,13 @@ const VendorCard = ({ vendor })=>{
                                 size: 18
                             }, void 0, false, {
                                 fileName: "[project]/src/components/shared/VendorCard.tsx",
-                                lineNumber: 34,
+                                lineNumber: 35,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/shared/VendorCard.tsx",
-                        lineNumber: 29,
+                        lineNumber: 30,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardTitle"], {
@@ -445,12 +445,12 @@ const VendorCard = ({ vendor })=>{
                             children: vendor.name
                         }, void 0, false, {
                             fileName: "[project]/src/components/shared/VendorCard.tsx",
-                            lineNumber: 37,
+                            lineNumber: 38,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/shared/VendorCard.tsx",
-                        lineNumber: 36,
+                        lineNumber: 37,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -458,7 +458,7 @@ const VendorCard = ({ vendor })=>{
                         children: vendor.description
                     }, void 0, false, {
                         fileName: "[project]/src/components/shared/VendorCard.tsx",
-                        lineNumber: 41,
+                        lineNumber: 42,
                         columnNumber: 9
                     }, this),
                     vendor.specialty && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -469,7 +469,7 @@ const VendorCard = ({ vendor })=>{
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/shared/VendorCard.tsx",
-                        lineNumber: 42,
+                        lineNumber: 43,
                         columnNumber: 30
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -479,26 +479,26 @@ const VendorCard = ({ vendor })=>{
                                 className: "h-3 w-3 mr-1"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/shared/VendorCard.tsx",
-                                lineNumber: 44,
+                                lineNumber: 45,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: vendor.city
                             }, void 0, false, {
                                 fileName: "[project]/src/components/shared/VendorCard.tsx",
-                                lineNumber: 45,
+                                lineNumber: 46,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/shared/VendorCard.tsx",
-                        lineNumber: 43,
+                        lineNumber: 44,
                         columnNumber: 10
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/shared/VendorCard.tsx",
-                lineNumber: 28,
+                lineNumber: 29,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardFooter"], {
@@ -511,23 +511,23 @@ const VendorCard = ({ vendor })=>{
                         children: "View Menu & Reviews"
                     }, void 0, false, {
                         fileName: "[project]/src/components/shared/VendorCard.tsx",
-                        lineNumber: 50,
+                        lineNumber: 51,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/shared/VendorCard.tsx",
-                    lineNumber: 49,
+                    lineNumber: 50,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/shared/VendorCard.tsx",
-                lineNumber: 48,
+                lineNumber: 49,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/shared/VendorCard.tsx",
-        lineNumber: 17,
+        lineNumber: 18,
         columnNumber: 5
     }, this);
 };
@@ -548,60 +548,63 @@ __turbopack_context__.s({
     "getVendorById": (()=>getVendorById),
     "mockVendors": (()=>mockVendors)
 });
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chef$2d$hat$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChefHat$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chef-hat.js [app-client] (ecmascript) <export default as ChefHat>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$utensils$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Utensils$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/utensils.js [app-client] (ecmascript) <export default as Utensils>");
-;
 const mockVendors = [
     {
         id: '1',
-        name: 'Auntie Priya\'s Kitchen',
+        name: "Auntie's Kitchen",
         type: 'Home Cook',
-        description: 'Authentic North Indian homemade meals, cooked with love and fresh ingredients. Specializing in curries and biryanis.',
+        description: 'Authentic home-style Indian curries and breads, made with love and traditional spices.',
         rating: 4.8,
-        address: '123 Spice Lane, Curryville',
+        address: '123 Spice Lane',
         city: 'Curryville',
-        imageUrl: 'https://placehold.co/600x400.png',
-        dataAiHint: 'indian food',
-        profileImageUrl: 'https://placehold.co/100x100.png',
-        dataAiHintProfile: 'woman cooking',
-        Icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chef$2d$hat$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChefHat$3e$__["ChefHat"],
-        specialty: 'Butter Chicken, Paneer Tikka Masala',
-        operatingHours: '11:00 AM - 09:00 PM',
+        imageUrl: 'https://placehold.co/400x250.png',
+        dataAiHint: 'indian food platter',
+        specialty: 'Butter Chicken, Naan',
+        operatingHours: '5 PM - 10 PM, Tue-Sun',
         deliveryOptions: [
-            'Self-pickup',
+            'Pickup',
             'Local Delivery'
         ],
         menu: [
             {
                 id: 'd1-1',
                 name: 'Butter Chicken',
-                description: 'Creamy tomato-based chicken curry.',
-                price: 12.99,
-                imageUrl: 'https://placehold.co/300x200.png',
-                dataAiHint: 'butter chicken',
+                description: 'Creamy and rich tomato-based curry with tender chicken pieces.',
+                price: 14.99,
                 category: 'Main Course',
-                portionsAvailable: 5,
-                portionsTotal: 10
+                portionsAvailable: 8,
+                imageUrl: 'https://placehold.co/300x200.png',
+                dataAiHint: 'butter chicken'
             },
             {
                 id: 'd1-2',
-                name: 'Paneer Tikka Masala',
-                description: 'Grilled paneer in a spicy gravy.',
-                price: 10.99,
-                imageUrl: 'https://placehold.co/300x200.png',
-                dataAiHint: 'paneer tikka',
+                name: 'Palak Paneer',
+                description: 'Soft paneer cheese in a smooth, creamy spinach gravy.',
+                price: 12.99,
                 category: 'Main Course',
-                portionsAvailable: 3,
-                portionsTotal: 8
+                portionsAvailable: 12,
+                imageUrl: 'https://placehold.co/300x200.png',
+                dataAiHint: 'palak paneer'
             },
             {
                 id: 'd1-3',
                 name: 'Garlic Naan',
-                description: 'Soft flatbread with garlic.',
-                price: 3.00,
+                description: 'Soft and fluffy flatbread topped with garlic and butter.',
+                price: 3.50,
+                category: 'Breads',
+                portionsAvailable: 20,
                 imageUrl: 'https://placehold.co/300x200.png',
-                dataAiHint: 'naan bread',
-                category: 'Sides'
+                dataAiHint: 'garlic naan'
+            },
+            {
+                id: 'd1-4',
+                name: 'Samosas (2 pcs)',
+                description: 'Crispy pastry filled with spiced potatoes and peas.',
+                price: 5.00,
+                category: 'Appetizer',
+                portionsAvailable: 0,
+                imageUrl: 'https://placehold.co/300x200.png',
+                dataAiHint: 'samosas'
             }
         ],
         reviews: [
@@ -627,163 +630,128 @@ const mockVendors = [
     },
     {
         id: '2',
-        name: 'Healthy Bites Tiffin',
+        name: 'Daily Bites Tiffin',
         type: 'Tiffin Service',
-        description: 'Daily and weekly tiffin plans with balanced and nutritious meals. Perfect for busy professionals and students.',
+        description: 'Healthy and wholesome daily meals, perfect for students and professionals. New menu every day!',
         rating: 4.5,
-        address: '45 Green Street, Healthburg',
-        city: 'Healthburg',
-        imageUrl: 'https://placehold.co/600x400.png',
-        dataAiHint: 'tiffin box',
-        profileImageUrl: 'https://placehold.co/100x100.png',
-        dataAiHintProfile: 'healthy food',
-        Icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$utensils$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Utensils$3e$__["Utensils"],
-        specialty: 'Vegetarian Thalis, Quinoa Salads',
-        operatingHours: '09:00 AM - 06:00 PM (Mon-Fri)',
+        address: '456 Wellness St',
+        city: 'Curryville',
+        imageUrl: 'https://placehold.co/400x250.png',
+        dataAiHint: 'indian thali tiffin',
+        specialty: 'North Indian Thali',
+        operatingHours: '11 AM - 2 PM, 6 PM - 9 PM, Mon-Sat',
         deliveryOptions: [
             'Subscription Delivery'
         ],
         menu: [
             {
                 id: 'd2-1',
-                name: 'Vegetarian Thali',
-                description: 'Dal, 2 sabzis, roti, rice, salad.',
-                price: 8.50,
+                name: 'Weekly Veg Tiffin',
+                description: 'A week of delicious vegetarian meals, delivered daily. Includes roti, sabzi, dal, and rice.',
+                price: 85.00,
+                category: 'Subscription',
+                portionsAvailable: 30,
                 imageUrl: 'https://placehold.co/300x200.png',
-                dataAiHint: 'veg thali',
-                category: 'Daily Tiffin'
+                dataAiHint: 'veg thali'
             },
             {
                 id: 'd2-2',
-                name: 'Quinoa Power Bowl',
-                description: 'Quinoa with roasted vegetables and chickpeas.',
-                price: 9.00,
+                name: 'Monthly Non-Veg Tiffin',
+                description: 'A full month of veg and non-veg meals. Chicken/fish twice a week.',
+                price: 350.00,
+                category: 'Subscription',
+                portionsAvailable: 15,
                 imageUrl: 'https://placehold.co/300x200.png',
-                dataAiHint: 'quinoa salad',
-                category: 'Healthy Options'
+                dataAiHint: 'tiffin box meal'
+            },
+            {
+                id: 'd2-3',
+                name: 'Trial Meal (Veg)',
+                description: 'Try one of our wholesome vegetarian thalis for a day.',
+                price: 12.00,
+                category: 'Trial',
+                portionsAvailable: 10,
+                imageUrl: 'https://placehold.co/300x200.png',
+                dataAiHint: 'vegetarian meal'
             }
         ],
         reviews: [
             {
                 id: 'r2-1',
-                userName: 'Vikram P.',
+                userName: 'Priya D.',
                 rating: 5,
-                comment: 'Reliable and healthy tiffin service. Great variety.',
+                comment: 'Such a lifesaver! The food is healthy and feels like home.',
                 date: '2024-07-16T12:00:00Z',
                 userImageUrl: 'https://placehold.co/40x40.png',
-                dataAiHintUser: 'professional man'
+                dataAiHintUser: 'professional woman'
+            },
+            {
+                id: 'r2-2',
+                userName: 'Amit G.',
+                rating: 4,
+                comment: 'Good variety and always on time. Wish they had more non-veg options.',
+                date: '2024-07-15T13:00:00Z',
+                userImageUrl: 'https://placehold.co/40x40.png',
+                dataAiHintUser: 'man office'
             }
         ]
     },
     {
         id: '3',
-        name: 'Mama Rosa\'s Pasta',
+        name: "Mama Rosa's Pasta",
         type: 'Home Cook',
-        description: 'Authentic Italian pasta dishes, made from scratch using family recipes passed down through generations.',
+        description: 'Handmade pasta and authentic Italian sauces, just like nonna used to make.',
         rating: 4.9,
-        address: '78 Little Italy, Foodville',
-        city: 'Foodville',
-        imageUrl: 'https://placehold.co/600x400.png',
-        dataAiHint: 'italian pasta',
-        profileImageUrl: 'https://placehold.co/100x100.png',
-        dataAiHintProfile: 'italian woman',
-        Icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chef$2d$hat$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChefHat$3e$__["ChefHat"],
-        specialty: 'Lasagna, Spaghetti Carbonara',
-        operatingHours: '05:00 PM - 10:00 PM (Wed-Sun)',
+        address: '789 Vineyard Ave',
+        city: 'Grand City',
+        imageUrl: 'https://placehold.co/400x250.png',
+        dataAiHint: 'italian pasta dish',
+        specialty: 'Lasagna, Fresh Pasta',
+        operatingHours: '6 PM - 9 PM, Fri-Sun',
         deliveryOptions: [
-            'Self-pickup'
+            'Pickup'
         ],
         menu: [
             {
                 id: 'd3-1',
-                name: 'Classic Lasagna',
-                description: 'Layers of pasta, meat sauce, and béchamel.',
-                price: 15.00,
-                imageUrl: 'https://placehold.co/300x200.png',
-                dataAiHint: 'lasagna dish',
+                name: 'Classic Beef Lasagna',
+                description: 'Layers of fresh pasta, rich bolognese sauce, and creamy béchamel.',
+                price: 18.00,
                 category: 'Main Course',
-                portionsAvailable: 2,
-                portionsTotal: 5
+                portionsAvailable: 5,
+                imageUrl: 'https://placehold.co/300x200.png',
+                dataAiHint: 'lasagna slice'
             },
             {
                 id: 'd3-2',
-                name: 'Spaghetti Carbonara',
-                description: 'Spaghetti with eggs, cheese, pancetta.',
-                price: 13.50,
+                name: 'Fettuccine Alfredo',
+                description: 'Silky fettuccine in a classic parmesan and cream sauce.',
+                price: 15.50,
+                category: 'Main Course',
+                portionsAvailable: 7,
                 imageUrl: 'https://placehold.co/300x200.png',
-                dataAiHint: 'carbonara pasta',
-                category: 'Main Course'
+                dataAiHint: 'fettuccine alfredo'
+            },
+            {
+                id: 'd3-3',
+                name: 'Tiramisu',
+                description: 'The perfect pick-me-up. Coffee-soaked ladyfingers and mascarpone cream.',
+                price: 7.50,
+                category: 'Dessert',
+                portionsAvailable: 10,
+                imageUrl: 'https://placehold.co/300x200.png',
+                dataAiHint: 'tiramisu dessert'
             }
         ],
         reviews: [
             {
                 id: 'r3-1',
-                userName: 'Sophia L.',
+                userName: 'Jessica B.',
                 rating: 5,
-                comment: 'Just like my nonna used to make! The lasagna is divine.',
-                date: '2024-07-18T19:00:00Z',
+                comment: 'The lasagna was absolutely divine! So authentic.',
+                date: '2024-07-12T20:00:00Z',
                 userImageUrl: 'https://placehold.co/40x40.png',
-                dataAiHintUser: 'young woman'
-            }
-        ]
-    },
-    {
-        id: '4',
-        name: 'Green Leaf Tiffins',
-        type: 'Tiffin Service',
-        description: 'Wholesome and delicious vegetarian tiffin meals delivered to your doorstep. Focus on organic and locally sourced ingredients.',
-        rating: 4.7,
-        address: '90 Organic Ave, Healthburg',
-        city: 'Healthburg',
-        imageUrl: 'https://placehold.co/600x400.png',
-        dataAiHint: 'salad tiffin',
-        profileImageUrl: 'https://placehold.co/100x100.png',
-        dataAiHintProfile: 'vegetable basket',
-        Icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$utensils$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Utensils$3e$__["Utensils"],
-        specialty: 'South Indian Thalis, Millet Dishes',
-        operatingHours: '10:00 AM - 07:00 PM',
-        deliveryOptions: [
-            'Subscription Delivery',
-            'Bulk Orders'
-        ],
-        menu: [
-            {
-                id: 'd4-1',
-                name: 'South Indian Mini Tiffin',
-                description: 'Idli, Vada, Sambar, Chutney.',
-                price: 7.00,
-                imageUrl: 'https://placehold.co/300x200.png',
-                dataAiHint: 'idli vada',
-                category: 'Daily Tiffin'
-            },
-            {
-                id: 'd4-2',
-                name: 'Millet Upma',
-                description: 'Healthy and filling upma made with foxtail millet.',
-                price: 6.50,
-                imageUrl: 'https://placehold.co/300x200.png',
-                dataAiHint: 'upma recipe',
-                category: 'Healthy Options'
-            }
-        ],
-        reviews: [
-            {
-                id: 'r4-1',
-                userName: 'Priya G.',
-                rating: 5,
-                comment: 'Absolutely love their tiffins! So fresh and tasty.',
-                date: '2024-07-20T13:00:00Z',
-                userImageUrl: 'https://placehold.co/40x40.png',
-                dataAiHintUser: 'indian woman'
-            },
-            {
-                id: 'r4-2',
-                userName: 'Arjun M.',
-                rating: 4,
-                comment: 'Good food, sometimes delivery is a bit late.',
-                date: '2024-07-19T14:00:00Z',
-                userImageUrl: 'https://placehold.co/40x40.png',
-                dataAiHintUser: 'young man'
+                dataAiHintUser: 'woman smiling'
             }
         ]
     }
