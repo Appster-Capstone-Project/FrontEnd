@@ -1,12 +1,18 @@
+
 import SectionTitle from "@/components/shared/SectionTitle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { UploadCloud, PlusCircle } from "lucide-react";
+import { UploadCloud, PlusCircle, Star } from "lucide-react";
+import ReviewCard from "@/components/shared/ReviewCard";
+import { mockVendors } from "@/lib/data";
 
 export default function SellPage() {
+  // Mock data for reviews, taking from the first vendor
+  const sellerReviews = mockVendors[0].reviews;
+
   return (
     <div className="container py-8 md:py-12">
       <SectionTitle 
@@ -72,7 +78,6 @@ export default function SellPage() {
               <CardTitle className="font-headline text-lg">Your Active Listings</CardTitle>
             </CardHeader>
             <CardContent>
-              {/* Placeholder for listings */}
               <p className="text-muted-foreground text-sm">You have 3 active dishes.</p>
               <Button variant="link" className="p-0 h-auto mt-2 text-primary">Manage Listings</Button>
             </CardContent>
@@ -82,9 +87,26 @@ export default function SellPage() {
               <CardTitle className="font-headline text-lg">Recent Orders</CardTitle>
             </CardHeader>
             <CardContent>
-              {/* Placeholder for orders */}
               <p className="text-muted-foreground text-sm">No new orders yet.</p>
               <Button variant="link" className="p-0 h-auto mt-2 text-primary">View All Orders</Button>
+            </CardContent>
+          </Card>
+           <Card>
+            <CardHeader>
+              <CardTitle className="font-headline text-lg flex items-center">
+                <Star className="mr-2 h-5 w-5 text-yellow-400 fill-yellow-400" />
+                Customer Reviews
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {sellerReviews.length > 0 ? (
+                sellerReviews.slice(0, 2).map((review) => (
+                  <ReviewCard key={review.id} review={review} />
+                ))
+              ) : (
+                <p className="text-muted-foreground text-sm">No reviews yet.</p>
+              )}
+              <Button variant="link" className="p-0 h-auto mt-2 text-primary">View All Reviews</Button>
             </CardContent>
           </Card>
         </div>

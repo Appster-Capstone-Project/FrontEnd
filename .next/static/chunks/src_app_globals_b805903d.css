@@ -1360,6 +1360,10 @@ h1, h2, h3, h4, h5, h6 {
   fill: currentColor;
 }
 
+.fill-yellow-400 {
+  fill: #facc15;
+}
+
 .object-cover {
   object-fit: cover;
 }
@@ -1707,6 +1711,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .text-sidebar-foreground\/70 {
   color: hsl(var(--sidebar-foreground) / .7);
+}
+
+.text-yellow-400 {
+  --tw-text-opacity: 1;
+  color: rgb(250 204 21 / var(--tw-text-opacity, 1));
 }
 
 .underline-offset-4 {
