@@ -56,6 +56,18 @@ export default function SignUpPage() {
       return;
     }
 
+    // DEMO: Bypassing API call for demonstration purposes
+    setTimeout(() => {
+      toast({
+        title: "Registration Successful!",
+        description: "You can now sign in with your credentials.",
+      });
+      router.push(`/auth/signin?type=${userType}`);
+      setIsLoading(false);
+    }, 1000);
+
+    /*
+    // REAL API CALL (currently disabled for demo)
     try {
        const response = await fetch("/api/register", { // Using the rewrite path
         method: "POST",
@@ -90,11 +102,12 @@ export default function SignUpPage() {
     } finally {
       setIsLoading(false);
     }
+    */
   };
 
   const userType = searchParams.get('type');
   const isSeller = userType === 'seller';
-  const title = isSeller ? 'Create a Seller Account' : 'Create an Account';
+  const title = isSeller ? 'Create a Seller Account' : 'Start selling your homemade food today.';
   const description = isSeller ? 'Start selling your homemade food today.' : 'Join Tiffin Box to discover amazing food.';
   const signInLink = isSeller ? '/auth/signin?type=seller' : '/auth/signin';
 

@@ -14,8 +14,6 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-// Note: ReviewCard and mock data will be replaced by API calls in a future step.
-// For now, let's keep it to demonstrate the layout.
 import ReviewCard from "@/components/shared/ReviewCard";
 import type { Review } from "@/lib/types";
 
@@ -48,6 +46,24 @@ export default function SellPage() {
       return;
     }
     
+    // DEMO: Bypassing API call for demonstration purposes
+    setTimeout(() => {
+        toast({
+          title: "Dish Added!",
+          description: `${dishName} has been added to your menu.`
+        });
+        // Reset form
+        setDishName("");
+        setDescription("");
+        setPrice("");
+        setPortions("");
+        setDate(undefined);
+        setIsLoading(false);
+    }, 1000);
+
+
+    /*
+    // REAL API CALL (currently disabled for demo)
     try {
       const token = localStorage.getItem('token');
       const response = await fetch('/api/dishes', {
@@ -95,6 +111,7 @@ export default function SellPage() {
     } finally {
       setIsLoading(false);
     }
+    */
   };
 
   return (

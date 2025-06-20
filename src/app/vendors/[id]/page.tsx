@@ -12,33 +12,21 @@ import ReviewCard from '@/components/shared/ReviewCard';
 import SectionTitle from '@/components/shared/SectionTitle';
 import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { mockVendors } from '@/lib/data'; // DEMO: Import mock data
 
 // API fetching functions
-// NOTE: For server-side fetching, we need the full absolute URL of the backend.
-// The rewrite in next.config.js is for client-side requests.
-const BACKEND_URL = process.env.BACKEND_URL || 'http://172.174.95.6:8080';
+// NOTE: For a real backend, use the full absolute URL for server-side fetching.
+// const BACKEND_URL = process.env.BACKEND_URL || 'http://172.174.95.6:8080';
 
+// DEMO: Use mock data instead of API calls
 async function getVendorById(id: string): Promise<Vendor | null> {
-  try {
-    // Using no-store to ensure fresh data on every request
-    const res = await fetch(`${BACKEND_URL}/vendors/${id}`, { cache: 'no-store' });
-    if (!res.ok) return null;
-    return res.json();
-  } catch (error) {
-    console.error(`Failed to fetch vendor ${id}:`, error);
-    return null;
-  }
+  const vendor = mockVendors.find((v) => v.id === id);
+  return vendor || null;
 }
 
+// DEMO: Use mock data
 async function getAllVendors(): Promise<Vendor[]> {
-  try {
-    const res = await fetch(`${BACKEND_URL}/vendors`, { cache: 'no-store' });
-    if (!res.ok) return [];
-    return res.json();
-  } catch (error) {
-    console.error('Failed to fetch all vendors:', error);
-    return [];
-  }
+  return mockVendors;
 }
 
 async function submitReview(formData: FormData) {
@@ -202,7 +190,7 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
                   <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">Submit Review</Button>
                 </form>
               </CardContent>
-            </Card>
+            </card>
           </div>
         </TabsContent>
       </Tabs>

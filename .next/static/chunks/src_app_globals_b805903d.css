@@ -714,6 +714,10 @@ h1, h2, h3, h4, h5, h6 {
   height: 125px;
 }
 
+.h-\[192px\] {
+  height: 192px;
+}
+
 .h-\[1px\] {
   height: 1px;
 }
@@ -736,10 +740,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .h-svh {
   height: 100svh;
-}
-
-.h-\[192px\] {
-  height: 192px;
 }
 
 .max-h-96 {
@@ -1398,10 +1398,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .p-6 {
   padding: 1.5rem;
-}
-
-.p-8 {
-  padding: 2rem;
 }
 
 .p-\[1px\] {
