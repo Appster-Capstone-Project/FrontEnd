@@ -20,10 +20,10 @@ export default function DashboardPage() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     // In a real app, you might want to verify the token or redirect if not found
-    // if (!token) {
-    //   router.push('/auth/signin');
-    //   return;
-    // }
+    if (!token) {
+      router.push('/auth/signin');
+      return;
+    }
 
     const nameFromStorage = localStorage.getItem('userName');
     const cityFromStorage = localStorage.getItem('userCity');

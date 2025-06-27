@@ -42,3 +42,7 @@ export interface Vendor {
   deliveryOptions?: string[];
   Icon?: LucideIcon;
 }
+
+export interface CartItem extends Dish {
+  quantity: number;
+}

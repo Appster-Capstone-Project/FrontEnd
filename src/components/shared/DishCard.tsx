@@ -7,14 +7,14 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ShoppingCart, Package } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { useCart } from '@/context/CartContext';
 
 interface DishCardProps {
   dish: Dish;
 }
 
 const DishCard: React.FC<DishCardProps> = ({ dish }) => {
-  const { toast } = useToast();
+  const { addToCart } = useCart();
   
   const portionsText = dish.portionsAvailable !== undefined
     ? dish.portionsAvailable > 0
@@ -23,13 +23,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish }) => {
     : null;
 
   const handleAddToCart = () => {
-    // In a real app, this would dispatch an action to a cart context/store
-    // and likely make an API call.
-    console.log(`Added ${dish.name} to cart.`);
-    toast({
-      title: "Added to Cart!",
-      description: `You've added ${dish.name} to your cart.`,
-    });
+    addToCart(dish);
   };
 
   return (

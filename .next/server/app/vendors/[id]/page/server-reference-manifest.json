@@ -1,16 +1,4 @@
 {
-  "node": {
-    "4037096e53c3dae36eab2cdc63b454eef1617dc230": {
-      "workers": {
-        "app/vendors/[id]/page": {
-          "moduleId": "[project]/.next-internal/server/app/vendors/[id]/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/vendors/[id]/page.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/vendors/[id]/page": "rsc"
-      }
-    }
-  },
+  "node": {},
   "edge": {}
 }

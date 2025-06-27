@@ -60,58 +60,6 @@ export default function SellPage() {
         setDate(undefined);
         setIsLoading(false);
     }, 1000);
-
-
-    /*
-    // REAL API CALL (currently disabled for demo)
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/dishes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // Assuming backend requires JWT
-        },
-        body: JSON.stringify({
-          name: dishName,
-          description,
-          price: parseFloat(price),
-          portionsAvailable: parseInt(portions),
-          cookingDate: date.toISOString(),
-        })
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        toast({
-          title: "Dish Added!",
-          description: `${dishName} has been added to your menu.`
-        });
-        // Reset form
-        setDishName("");
-        setDescription("");
-        setPrice("");
-        setPortions("");
-        setDate(undefined);
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Failed to Add Dish",
-          description: data.error || "An unknown error occurred."
-        });
-      }
-    } catch (error) {
-      console.error("Failed to add dish:", error);
-      toast({
-        variant: "destructive",
-        title: "Network Error",
-        description: "Could not add dish. Please check your connection."
-      });
-    } finally {
-      setIsLoading(false);
-    }
-    */
   };
 
   return (
@@ -121,8 +69,8 @@ export default function SellPage() {
         subtitle="Manage your menu, track orders, and grow your home-cooking business."
         className="mb-10"
       />
-      <div className="grid md:grid-cols-3 gap-8">
-        <div className="md:col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div className="lg:col-span-2">
           <form onSubmit={handleSubmit}>
             <Card className="shadow-lg">
               <CardHeader>

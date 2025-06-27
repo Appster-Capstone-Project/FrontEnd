@@ -1,8 +1,17 @@
+
+"use client";
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Package, Heart, UserCircle, ShoppingBag, Search, ChefHat } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
+import CartSheet from './CartSheet';
+import { Badge } from '@/components/ui/badge';
 
 const Header = () => {
+  const { getItemCount } = useCart();
+  const itemCount = getItemCount();
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
@@ -33,9 +42,16 @@ const Header = () => {
               <span className="hidden md:inline"> / Sign Up</span>
             </Link>
           </Button>
-          <Button variant="ghost" size="icon" aria-label="Cart">
-            <ShoppingBag className="h-5 w-5" />
-          </Button>
+          <CartSheet>
+            <Button variant="ghost" size="icon" aria-label="Cart" className="relative">
+              <ShoppingBag className="h-5 w-5" />
+              {itemCount > 0 && (
+                <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 justify-center rounded-full p-0 text-xs">
+                  {itemCount}
+                </Badge>
+              )}
+            </Button>
+          </CartSheet>
         </nav>
       </div>
     </header>
