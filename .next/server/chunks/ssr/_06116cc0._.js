@@ -125,7 +125,7 @@ const Card = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$n
         ...props
     }, void 0, false, {
         fileName: "[project]/src/components/ui/card.tsx",
-        lineNumber: 9,
+        lineNumber: 10,
         columnNumber: 3
     }, this));
 Card.displayName = "Card";
@@ -135,7 +135,7 @@ const CardHeader = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$
         ...props
     }, void 0, false, {
         fileName: "[project]/src/components/ui/card.tsx",
-        lineNumber: 24,
+        lineNumber: 25,
         columnNumber: 3
     }, this));
 CardHeader.displayName = "CardHeader";
@@ -145,7 +145,7 @@ const CardTitle = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5
         ...props
     }, void 0, false, {
         fileName: "[project]/src/components/ui/card.tsx",
-        lineNumber: 36,
+        lineNumber: 37,
         columnNumber: 3
     }, this));
 CardTitle.displayName = "CardTitle";
@@ -155,7 +155,7 @@ const CardDescription = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$pro
         ...props
     }, void 0, false, {
         fileName: "[project]/src/components/ui/card.tsx",
-        lineNumber: 51,
+        lineNumber: 52,
         columnNumber: 3
     }, this));
 CardDescription.displayName = "CardDescription";
@@ -165,7 +165,7 @@ const CardContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project
         ...props
     }, void 0, false, {
         fileName: "[project]/src/components/ui/card.tsx",
-        lineNumber: 63,
+        lineNumber: 64,
         columnNumber: 3
     }, this));
 CardContent.displayName = "CardContent";
@@ -175,7 +175,7 @@ const CardFooter = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$
         ...props
     }, void 0, false, {
         fileName: "[project]/src/components/ui/card.tsx",
-        lineNumber: 71,
+        lineNumber: 72,
         columnNumber: 3
     }, this));
 CardFooter.displayName = "CardFooter";
