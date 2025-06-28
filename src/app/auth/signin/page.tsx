@@ -23,8 +23,8 @@ function SignInCard() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
-  const [email, setEmail] = useState("demo@example.com");
-  const [password, setPassword] = useState("demopassword");
+  const [email, setEmail] = useState("seller@example.com");
+  const [password, setPassword] = useState("password123");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSignIn = async () => {
@@ -40,28 +40,45 @@ function SignInCard() {
        return;
     }
     
-    // DEMO: Bypassing API call for demonstration purposes
-    setTimeout(() => {
-      const userName = email.split('@')[0] || "Demo User";
-      const userCity = "Curryville";
-      const userRole = searchParams.get('type') === 'seller' ? 'seller' : 'user';
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      localStorage.setItem("token", "mock-demo-token");
-      localStorage.setItem("userName", userName); 
-      localStorage.setItem("userCity", userCity);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "An unknown error occurred.");
+      }
+      
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userName", data.user?.name || "User"); 
+      localStorage.setItem("userCity", data.user?.city || "");
       
       toast({
         title: "Login Successful!",
-        description: `Welcome back, ${userName}! Redirecting...`,
+        description: `Welcome back, ${data.user?.name}! Redirecting...`,
       });
 
-      if (userRole === 'seller') {
+      if (data.user?.role === 'seller') {
         router.push('/sell');
       } else {
         router.push("/dashboard");
       }
-      setIsLoading(false);
-    }, 1000);
+
+    } catch (error: any) {
+        toast({
+          variant: "destructive",
+          title: "Login Failed",
+          description: error.message,
+        });
+    } finally {
+        setIsLoading(false);
+    }
   };
 
   const userType = searchParams.get('type');

@@ -35,7 +35,7 @@ function SignUpCard() {
   const handleSignUp = async () => {
     setIsLoading(true);
     const { name, email, password, confirmPassword } = formData;
-    const userType = searchParams.get('type') || 'user';
+    const role = searchParams.get('type') === 'seller' ? 'seller' : 'user';
 
     if (!name || !email || !password || !confirmPassword) {
       toast({
@@ -56,21 +56,42 @@ function SignUpCard() {
       setIsLoading(false);
       return;
     }
+    
+    try {
+      const response = await fetch("/api/register", { 
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password, role }),
+      });
 
-    // DEMO: Bypassing API call for demonstration purposes
-    setTimeout(() => {
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to create account.");
+      }
+
       toast({
         title: "Registration Successful!",
         description: "You can now sign in with your credentials.",
       });
-      router.push(`/auth/signin?type=${userType}`);
+      router.push(`/auth/signin?type=${role}`);
+
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Registration Failed",
+        description: error.message,
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   const userType = searchParams.get('type');
   const isSeller = userType === 'seller';
-  const title = isSeller ? 'Create a Seller Account' : 'Start selling your homemade food today.';
+  const title = isSeller ? 'Create a Seller Account' : 'Create an Account';
   const description = isSeller ? 'Start selling your homemade food today.' : 'Join Tiffin Box to discover amazing food.';
   const signInLink = isSeller ? '/auth/signin?type=seller' : '/auth/signin';
 
