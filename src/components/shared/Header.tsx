@@ -2,15 +2,58 @@
 "use client";
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Package, Heart, UserCircle, ShoppingBag, Search, ChefHat } from 'lucide-react';
+import { 
+  Package, 
+  Heart, 
+  UserCircle, 
+  ShoppingBag, 
+  Search, 
+  ChefHat, 
+  LogOut, 
+  LayoutDashboard, 
+  TicketPercent,
+  ListOrdered
+} from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import CartSheet from './CartSheet';
 import { Badge } from '@/components/ui/badge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Header = () => {
   const { getItemCount } = useCart();
   const itemCount = getItemCount();
+  const router = useRouter();
+  
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState('');
+
+  useEffect(() => {
+    // This check runs only on the client-side
+    const token = localStorage.getItem('token');
+    const name = localStorage.getItem('userName');
+    if (token) {
+      setIsLoggedIn(true);
+      setUserName(name || 'User');
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userCity');
+    setIsLoggedIn(false);
+    router.push('/auth/signin');
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -22,6 +65,7 @@ const Header = () => {
           </div>
           <span className="font-headline text-2xl font-bold text-foreground">Tiffin Box</span>
         </Link>
+        
         <nav className="flex items-center space-x-2 md:space-x-4">
           <Button variant="ghost" asChild>
             <Link href="/vendors" className="flex items-center space-x-1">
@@ -29,19 +73,61 @@ const Header = () => {
               <span className="hidden md:inline">Browse Food</span>
             </Link>
           </Button>
-          <Button variant="ghost" asChild>
-            <Link href="/auth/signin?type=seller" className="flex items-center space-x-1">
-              <ChefHat className="h-4 w-4 md:mr-1" />
-              <span className="hidden md:inline">Become / Sign In as Seller</span>
-            </Link>
-          </Button>
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/auth/signin" className="flex items-center space-x-2">
-              <UserCircle className="h-4 w-4" />
-              <span className="hidden sm:inline">Login</span>
-              <span className="hidden md:inline"> / Sign Up</span>
-            </Link>
-          </Button>
+
+          {isLoggedIn ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                  <UserCircle className="h-5 w-5" />
+                   <span className="hidden sm:inline">{userName}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                   <Link href="/dashboard">
+                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    <span>Dashboard</span>
+                   </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/orders">
+                    <ListOrdered className="mr-2 h-4 w-4" />
+                    <span>My Orders</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/promotions">
+                    <TicketPercent className="mr-2 h-4 w-4" />
+                    <span>Promotions</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log Out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Button variant="ghost" asChild>
+                <Link href="/auth/signin?type=seller" className="flex items-center space-x-1">
+                  <ChefHat className="h-4 w-4 md:mr-1" />
+                  <span className="hidden md:inline">Become / Sign In as Seller</span>
+                </Link>
+              </Button>
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/auth/signin" className="flex items-center space-x-2">
+                  <UserCircle className="h-4 w-4" />
+                  <span className="hidden sm:inline">Login</span>
+                  <span className="hidden md:inline"> / Sign Up</span>
+                </Link>
+              </Button>
+            </>
+          )}
+
           <CartSheet>
             <Button variant="ghost" size="icon" aria-label="Cart" className="relative">
               <ShoppingBag className="h-5 w-5" />
