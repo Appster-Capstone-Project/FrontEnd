@@ -871,6 +871,10 @@ h1, h2, h3, h4, h5, h6 {
   width: 83.3333%;
 }
 
+.w-56 {
+  width: 14rem;
+}
+
 .w-64 {
   width: 16rem;
 }
@@ -907,10 +911,6 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
 }
 
-.w-56 {
-  width: 14rem;
-}
-
 .min-w-0 {
   min-width: 0;
 }
@@ -931,6 +931,10 @@ h1, h2, h3, h4, h5, h6 {
   min-width: var(--radix-select-trigger-width);
 }
 
+.max-w-2xl {
+  max-width: 42rem;
+}
+
 .max-w-\[--skeleton-width\] {
   max-width: var(--skeleton-width);
 }
@@ -949,10 +953,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .max-w-xl {
   max-width: 36rem;
-}
-
-.max-w-2xl {
-  max-width: 42rem;
 }
 
 .flex-1 {
