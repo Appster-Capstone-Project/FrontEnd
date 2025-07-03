@@ -1,5 +1,5 @@
 
-import type { Vendor } from '@/lib/types';
+import type { Vendor, Dish } from '@/lib/types';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,21 +12,64 @@ import ReviewCard from '@/components/shared/ReviewCard';
 import SectionTitle from '@/components/shared/SectionTitle';
 import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { mockVendors } from '@/lib/data'; // DEMO: Import mock data
 
 // API fetching functions
-// NOTE: For a real backend, use the full absolute URL for server-side fetching.
-// const BACKEND_URL = process.env.BACKEND_URL || 'http://172.174.95.6:8080';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://172.174.95.6:8080';
 
-// DEMO: Use mock data instead of API calls
-async function getVendorById(id: string): Promise<Vendor | null> {
-  const vendor = mockVendors.find((v) => v.id === id);
-  return vendor || null;
+async function getSellerById(id: string): Promise<Vendor | null> {
+  try {
+    const res = await fetch(`${BACKEND_URL}/sellers/${id}`, { cache: 'no-store' });
+    if (!res.ok) {
+      return null;
+    }
+    const sellerData = await res.json();
+    
+    // Map backend response to frontend Vendor type
+    const vendor: Vendor = {
+      id: sellerData.id,
+      name: sellerData.name,
+      type: sellerData.type || 'Home Cook',
+      description: sellerData.description,
+      rating: sellerData.rating || 0,
+      address: sellerData.address,
+      city: sellerData.city,
+      imageUrl: sellerData.imageUrl,
+      dataAiHint: sellerData.dataAiHint,
+      profileImageUrl: sellerData.profileImageUrl,
+      dataAiHintProfile: sellerData.dataAiHintProfile,
+      specialty: sellerData.specialty,
+      operatingHours: sellerData.operatingHours,
+      deliveryOptions: sellerData.deliveryOptions,
+      reviews: sellerData.reviews || [],
+      menu: (sellerData.listings || []).map((listing: any): Dish => ({
+        id: listing.id,
+        name: listing.name,
+        description: listing.description,
+        price: listing.price,
+        imageUrl: listing.imageUrl,
+        dataAiHint: listing.dataAiHint,
+        category: listing.category || 'Main Course',
+        portionsAvailable: listing.quantity,
+      })),
+    };
+    return vendor;
+  } catch (error) {
+    console.error(`Failed to fetch seller ${id}:`, error);
+    return null;
+  }
 }
 
-// DEMO: Use mock data
-async function getAllVendors(): Promise<Vendor[]> {
-  return mockVendors;
+async function getAllSellers(): Promise<Vendor[]> {
+   try {
+    const res = await fetch(`${BACKEND_URL}/sellers`, { cache: 'no-store' });
+    if (!res.ok) {
+      return [];
+    }
+    return await res.json();
+  } catch (error) {
+    console.error('Failed to fetch sellers:', error);
+    return [];
+  }
 }
 
 async function submitReview(formData: FormData) {
@@ -49,15 +92,15 @@ async function submitReview(formData: FormData) {
 }
 
 export async function generateStaticParams() {
-  const vendors = await getAllVendors();
-  return vendors.map((vendor) => ({
-    id: vendor.id,
+  const sellers = await getAllSellers();
+  return sellers.map((seller) => ({
+    id: seller.id,
   }));
 }
 
 
 export default async function VendorDetailPage({ params }: { params: { id: string } }) {
-  const vendor = await getVendorById(params.id);
+  const vendor = await getSellerById(params.id);
 
   if (!vendor) {
     notFound();

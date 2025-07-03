@@ -57,13 +57,15 @@ function SignUpCard() {
       return;
     }
     
+    const endpoint = role === 'seller' ? '/api/sellers/register' : '/api/users/register';
+
     try {
-      const response = await fetch("/api/register", { 
+      const response = await fetch(endpoint, { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, email, password, role }),
+        body: JSON.stringify({ name, email, password }),
       });
 
       const data = await response.json();

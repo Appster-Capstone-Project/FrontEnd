@@ -35,6 +35,7 @@ export default function SellPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    const token = localStorage.getItem('token');
 
     if (!dishName || !description || !price || !portions || !date) {
       toast({
@@ -45,9 +46,39 @@ export default function SellPage() {
       setIsLoading(false);
       return;
     }
+
+    if (!token) {
+        toast({
+            variant: "destructive",
+            title: "Authentication Error",
+            description: "You must be logged in to add a dish.",
+        });
+        setIsLoading(false);
+        return;
+    }
     
-    // DEMO: Bypassing API call for demonstration purposes
-    setTimeout(() => {
+    try {
+        const response = await fetch('/api/listings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                name: dishName,
+                description: description,
+                price: parseFloat(price),
+                quantity: parseInt(portions, 10),
+                available_date: date.toISOString(),
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to add dish');
+        }
+
         toast({
           title: "Dish Added!",
           description: `${dishName} has been added to your menu.`
@@ -58,8 +89,16 @@ export default function SellPage() {
         setPrice("");
         setPortions("");
         setDate(undefined);
+
+    } catch (error: any) {
+        toast({
+            variant: "destructive",
+            title: "Failed to Add Dish",
+            description: error.message,
+        });
+    } finally {
         setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
