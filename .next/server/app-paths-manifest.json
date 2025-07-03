@@ -1,4 +1,3 @@
 {
-  "/(pages)/page": "app/(pages)/page.js",
-  "/auth/signin/page": "app/auth/signin/page.js"
+  "/(pages)/page": "app/(pages)/page.js"
 }

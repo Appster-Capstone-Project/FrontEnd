@@ -14,7 +14,7 @@ import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat } from 'l
 import { Badge } from '@/components/ui/badge';
 
 // API fetching functions
-const BACKEND_URL = process.env.BACKEND_URL || 'http://172.174.95.6:8080';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://40.117.194.158';
 
 async function getSellerById(id: string): Promise<Vendor | null> {
   try {

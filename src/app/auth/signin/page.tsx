@@ -64,7 +64,10 @@ function SignInCard() {
         description: `Welcome back, ${data.user?.name}! Redirecting...`,
       });
 
-      if (data.user?.role === 'seller') {
+      // Make the role check more robust and case-insensitive.
+      const userRole = (data.user?.role || '').toLowerCase();
+
+      if (userRole === 'seller') {
         router.push('/sell');
       } else {
         router.push("/dashboard");

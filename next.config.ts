@@ -31,7 +31,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://172.174.95.6:8080/:path*', // your backend IP
+        destination: 'http://40.117.194.158/:path*', // your backend IP
       },
     ];
   },
