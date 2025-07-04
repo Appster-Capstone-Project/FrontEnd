@@ -14,7 +14,7 @@ import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat } from 'l
 import { Badge } from '@/components/ui/badge';
 
 // In a real app, these would come from environment variables
-const API_BASE_URL = 'http://172.206.209.255'; 
+const API_BASE_URL = 'http://172.206.209.255:8080'; 
 
 async function getVendorData(id: string): Promise<Vendor | null> {
   try {
