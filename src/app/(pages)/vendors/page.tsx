@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import type { Vendor } from '@/lib/types';
+import { mockVendors } from '@/lib/data';
 import VendorCard from '@/components/shared/VendorCard';
 import SectionTitle from '@/components/shared/SectionTitle';
 import CategoryTabs from '@/components/shared/CategoryTabs';
@@ -17,24 +18,12 @@ export default function AllVendorsPage() {
   const [activeCategory, setActiveCategory] = useState<Vendor['type'] | 'all'>('all');
 
   useEffect(() => {
-    const fetchVendors = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch('/api/sellers'); // Using rewrite path
-        if (!response.ok) {
-          throw new Error('Failed to fetch vendors');
-        }
-        const data: Vendor[] = await response.json();
-        setAllVendors(data);
-      } catch (error) {
-        console.error("Error fetching vendors:", error);
-        // In a real app, you might show a toast notification here
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchVendors();
+    // DEMO: Use mock data instead of fetching from an API
+    setIsLoading(true);
+    setTimeout(() => {
+      setAllVendors(mockVendors);
+      setIsLoading(false);
+    }, 500);
   }, []);
 
   const categories = [

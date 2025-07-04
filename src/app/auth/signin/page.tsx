@@ -23,7 +23,7 @@ function SignInCard() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
-  const [email, setEmail] = useState("seller@example.com");
+  const [email, setEmail] = useState("user@example.com");
   const [password, setPassword] = useState("password123");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,48 +40,30 @@ function SignInCard() {
        return;
     }
     
-    try {
-      const response = await fetch('/api/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+    // DEMO: Mock API call for demonstration purposes.
+    // Use 'seller@example.com' to log in as a seller.
+    setTimeout(() => {
+      const isSeller = email.toLowerCase() === 'seller@example.com';
+      const role = isSeller ? 'seller' : 'user';
+      const name = isSeller ? 'Demo Seller' : 'Demo User';
+      const city = isSeller ? 'Grand City' : 'Curryville';
 
-      const data = await response.json();
+      localStorage.setItem("token", "mock-token-for-demo");
+      localStorage.setItem("userName", name);
+      localStorage.setItem("userCity", city);
 
-      if (!response.ok) {
-        throw new Error(data.error || "An unknown error occurred.");
-      }
-      
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("userName", data.user?.name || "User"); 
-      localStorage.setItem("userCity", data.user?.city || "");
-      
       toast({
         title: "Login Successful!",
-        description: `Welcome back, ${data.user?.name}! Redirecting...`,
+        description: `Welcome back, ${name}! Redirecting...`,
       });
 
-      // Make the role check more robust and case-insensitive.
-      const userRole = (data.user?.role || '').toLowerCase();
-
-      if (userRole === 'seller') {
+      if (role === 'seller') {
         router.push('/sell');
       } else {
         router.push("/dashboard");
       }
-
-    } catch (error: any) {
-        toast({
-          variant: "destructive",
-          title: "Login Failed",
-          description: error.message,
-        });
-    } finally {
-        setIsLoading(false);
-    }
+      setIsLoading(false);
+    }, 1000);
   };
 
   const userType = searchParams.get('type');
@@ -101,7 +83,7 @@ function SignInCard() {
             <Input
               id="email"
               type="email"
-              placeholder="you@example.com"
+              placeholder="user@example.com or seller@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={isLoading}

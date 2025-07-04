@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import ReviewCard from "@/components/shared/ReviewCard";
 import type { Review } from "@/lib/types";
+import { useRouter } from "next/navigation";
 
 const mockReviews: Review[] = [
     { id: 'r1-1', userName: 'Raj K.', rating: 5, comment: 'Best butter chicken I\'ve had in ages!', date: '2024-07-15T10:00:00Z', userImageUrl: 'https://placehold.co/40x40.png', dataAiHintUser: 'man smiling' },
@@ -24,6 +25,7 @@ const mockReviews: Review[] = [
 
 export default function SellPage() {
   const { toast } = useToast();
+  const router = useRouter();
   const [dishName, setDishName] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [price, setPrice] = React.useState("");
@@ -32,73 +34,44 @@ export default function SellPage() {
   const [isLoading, setIsLoading] = React.useState(false);
   const sellerReviews = mockReviews; // Replace with API call in future
 
+  React.useEffect(() => {
+    // In a real app, you'd verify the token with the backend. For demo, just check existence.
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/auth/signin?type=seller');
+    }
+  }, [router]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    const token = localStorage.getItem('token');
 
-    if (!dishName || !description || !price || !portions || !date) {
-      toast({
-        variant: "destructive",
-        title: "Missing Information",
-        description: "Please fill out all fields to add a dish.",
-      });
-      setIsLoading(false);
-      return;
-    }
-
-    if (!token) {
+    // DEMO: Mock API call
+    setTimeout(() => {
+      if (!dishName || !description || !price || !portions || !date) {
         toast({
-            variant: "destructive",
-            title: "Authentication Error",
-            description: "You must be logged in to add a dish.",
+          variant: "destructive",
+          title: "Missing Information",
+          description: "Please fill out all fields to add a dish.",
         });
         setIsLoading(false);
         return;
-    }
-    
-    try {
-        const response = await fetch('/api/listings', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                name: dishName,
-                description: description,
-                price: parseFloat(price),
-                quantity: parseInt(portions, 10),
-                available_date: date.toISOString(),
-            })
-        });
+      }
 
-        const data = await response.json();
+      toast({
+        title: "Dish Added (Demo)!",
+        description: `${dishName} has been added to your menu. This is a demonstration and the dish is not saved.`
+      });
 
-        if (!response.ok) {
-            throw new Error(data.error || 'Failed to add dish');
-        }
+      // Reset form
+      setDishName("");
+      setDescription("");
+      setPrice("");
+      setPortions("");
+      setDate(undefined);
 
-        toast({
-          title: "Dish Added!",
-          description: `${dishName} has been added to your menu.`
-        });
-        // Reset form
-        setDishName("");
-        setDescription("");
-        setPrice("");
-        setPortions("");
-        setDate(undefined);
-
-    } catch (error: any) {
-        toast({
-            variant: "destructive",
-            title: "Failed to Add Dish",
-            description: error.message,
-        });
-    } finally {
-        setIsLoading(false);
-    }
+      setIsLoading(false);
+    }, 1000);
   };
 
   return (

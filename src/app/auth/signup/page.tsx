@@ -35,7 +35,6 @@ function SignUpCard() {
   const handleSignUp = async () => {
     setIsLoading(true);
     const { name, email, password, confirmPassword } = formData;
-    const role = searchParams.get('type') === 'seller' ? 'seller' : 'user';
 
     if (!name || !email || !password || !confirmPassword) {
       toast({
@@ -57,38 +56,17 @@ function SignUpCard() {
       return;
     }
     
-    const endpoint = role === 'seller' ? '/api/sellers/register' : '/api/users/register';
+    const role = searchParams.get('type') === 'seller' ? 'seller' : 'user';
 
-    try {
-      const response = await fetch(endpoint, { 
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to create account.");
-      }
-
+    // DEMO: Mock API call
+    setTimeout(() => {
       toast({
         title: "Registration Successful!",
-        description: "You can now sign in with your credentials.",
+        description: "This is a demo. You can now sign in.",
       });
       router.push(`/auth/signin?type=${role}`);
-
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Registration Failed",
-        description: error.message,
-      });
-    } finally {
       setIsLoading(false);
-    }
+    }, 1000);
   };
 
   const userType = searchParams.get('type');

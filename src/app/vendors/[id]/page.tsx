@@ -12,64 +12,18 @@ import ReviewCard from '@/components/shared/ReviewCard';
 import SectionTitle from '@/components/shared/SectionTitle';
 import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { mockVendors } from '@/lib/data';
 
-// API fetching functions
-const BACKEND_URL = process.env.BACKEND_URL || 'http://40.117.194.158';
-
+// API fetching functions (Now using mock data for demo)
 async function getSellerById(id: string): Promise<Vendor | null> {
-  try {
-    const res = await fetch(`${BACKEND_URL}/sellers/${id}`, { cache: 'no-store' });
-    if (!res.ok) {
-      return null;
-    }
-    const sellerData = await res.json();
-    
-    // Map backend response to frontend Vendor type
-    const vendor: Vendor = {
-      id: sellerData.id,
-      name: sellerData.name,
-      type: sellerData.type || 'Home Cook',
-      description: sellerData.description,
-      rating: sellerData.rating || 0,
-      address: sellerData.address,
-      city: sellerData.city,
-      imageUrl: sellerData.imageUrl,
-      dataAiHint: sellerData.dataAiHint,
-      profileImageUrl: sellerData.profileImageUrl,
-      dataAiHintProfile: sellerData.dataAiHintProfile,
-      specialty: sellerData.specialty,
-      operatingHours: sellerData.operatingHours,
-      deliveryOptions: sellerData.deliveryOptions,
-      reviews: sellerData.reviews || [],
-      menu: (sellerData.listings || []).map((listing: any): Dish => ({
-        id: listing.id,
-        name: listing.name,
-        description: listing.description,
-        price: listing.price,
-        imageUrl: listing.imageUrl,
-        dataAiHint: listing.dataAiHint,
-        category: listing.category || 'Main Course',
-        portionsAvailable: listing.quantity,
-      })),
-    };
-    return vendor;
-  } catch (error) {
-    console.error(`Failed to fetch seller ${id}:`, error);
-    return null;
-  }
+  // DEMO: Find seller from mock data
+  const seller = mockVendors.find((v) => v.id === id);
+  return Promise.resolve(seller || null);
 }
 
 async function getAllSellers(): Promise<Vendor[]> {
-   try {
-    const res = await fetch(`${BACKEND_URL}/sellers`, { cache: 'no-store' });
-    if (!res.ok) {
-      return [];
-    }
-    return await res.json();
-  } catch (error) {
-    console.error('Failed to fetch sellers:', error);
-    return [];
-  }
+  // DEMO: Return all mock sellers for static path generation
+  return Promise.resolve(mockVendors);
 }
 
 async function submitReview(formData: FormData) {
@@ -81,9 +35,9 @@ async function submitReview(formData: FormData) {
     vendorId: formData.get('vendorId'),
   };
   
-  console.log("Review Submitted (Server Action):", rawFormData);
+  console.log("Review Submitted (Server Action Demo):", rawFormData);
   // Example API call:
-  // await fetch(`${BACKEND_URL}/reviews`, {
+  // await fetch(`/api/reviews`, {
   //   method: 'POST',
   //   headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ...` },
   //   body: JSON.stringify(rawFormData),
@@ -233,7 +187,7 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
                   <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">Submit Review</Button>
                 </form>
               </CardContent>
-            </card>
+            </Card>
           </div>
         </TabsContent>
       </Tabs>
