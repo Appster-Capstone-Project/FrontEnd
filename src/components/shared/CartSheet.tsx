@@ -48,14 +48,14 @@ export default function CartSheet({ children }: { children: React.ReactNode }) {
                   <div key={item.id} className="flex items-center gap-4">
                     <Image
                       src={item.imageUrl || 'https://placehold.co/100x100.png'}
-                      alt={item.name}
+                      alt={item.title}
                       width={64}
                       height={64}
                       className="rounded-md object-cover h-16 w-16"
                       data-ai-hint={item.dataAiHint || 'food dish'}
                     />
                     <div className="flex-grow">
-                      <p className="font-semibold">{item.name}</p>
+                      <p className="font-semibold">{item.title}</p>
                       <p className="text-sm text-muted-foreground">${item.price.toFixed(2)}</p>
                       <div className="flex items-center mt-2">
                         <Input

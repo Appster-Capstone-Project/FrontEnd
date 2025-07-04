@@ -3,14 +3,14 @@ import type { LucideIcon } from 'lucide-react';
 
 export interface Dish {
   id: string;
-  name: string;
+  title: string;
+  sellerId: string;
   description?: string;
   price: number;
   imageUrl?: string;
   dataAiHint?: string;
   category?: string;
-  portionsAvailable?: number;
-  portionsTotal?: number;
+  available: boolean;
 }
 
 export interface Review {

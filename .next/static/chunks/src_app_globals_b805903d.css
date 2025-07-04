@@ -911,6 +911,10 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
 }
 
+.w-2\/3 {
+  width: 66.6667%;
+}
+
 .min-w-0 {
   min-width: 0;
 }
@@ -1761,6 +1765,16 @@ h1, h2, h3, h4, h5, h6 {
 .text-yellow-400 {
   --tw-text-opacity: 1;
   color: rgb(250 204 21 / var(--tw-text-opacity, 1));
+}
+
+.text-green-500 {
+  --tw-text-opacity: 1;
+  color: rgb(34 197 94 / var(--tw-text-opacity, 1));
+}
+
+.text-red-500 {
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity, 1));
 }
 
 .underline-offset-4 {

@@ -33,7 +33,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
     toast({
       title: "Added to Cart!",
-      description: `You've added ${dish.name} to your cart.`,
+      description: `You've added ${dish.title} to your cart.`,
     });
   };
 

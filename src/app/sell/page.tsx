@@ -2,22 +2,20 @@
 "use client";
 
 import * as React from "react";
-import { format } from "date-fns";
-import { Calendar as CalendarIcon, UploadCloud, PlusCircle, Star } from "lucide-react";
+import { UploadCloud, PlusCircle, Star, CheckCircle, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import SectionTitle from "@/components/shared/SectionTitle";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import ReviewCard from "@/components/shared/ReviewCard";
 import type { Review, Dish } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Switch } from "@/components/ui/switch";
 
 const mockReviews: Review[] = [
     { id: 'r1-1', userName: 'Raj K.', rating: 5, comment: 'Best butter chicken I\'ve had in ages!', date: '2024-07-15T10:00:00Z', userImageUrl: 'https://placehold.co/40x40.png', dataAiHintUser: 'man smiling' },
@@ -27,11 +25,10 @@ const mockReviews: Review[] = [
 export default function SellPage() {
   const { toast } = useToast();
   const router = useRouter();
-  const [dishName, setDishName] = React.useState("");
+  const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [price, setPrice] = React.useState("");
-  const [portions, setPortions] = React.useState("");
-  const [date, setDate] = React.useState<Date>();
+  const [available, setAvailable] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(false);
   
   const [listings, setListings] = React.useState<Dish[]>([]);
@@ -41,12 +38,15 @@ export default function SellPage() {
   const fetchListings = React.useCallback(async () => {
     setIsListingsLoading(true);
     const token = localStorage.getItem('token');
-    if (!token) {
+    const sellerId = localStorage.getItem('userId');
+
+    if (!token || !sellerId) {
       setIsListingsLoading(false);
       return;
     }
     try {
-      const response = await fetch('/api/listings', {
+      // Use the sellerId from local storage to fetch their specific listings
+      const response = await fetch(`/api/listings?sellerId=${sellerId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -83,12 +83,22 @@ export default function SellPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const sellerId = localStorage.getItem("userId");
 
-    if (!dishName || !price || !date) {
+    if (!title || !price) {
       toast({
         variant: "destructive",
         title: "Missing Information",
-        description: "Dish Name, Price, and Cooking Date are required.",
+        description: "Dish Title and Price are required.",
+      });
+      return;
+    }
+    
+    if (!sellerId) {
+      toast({
+        variant: "destructive",
+        title: "Authentication Error",
+        description: "Could not identify seller. Please log in again.",
       });
       return;
     }
@@ -97,11 +107,11 @@ export default function SellPage() {
     const token = localStorage.getItem('token');
 
     const listingData = {
-      name: dishName,
+      title,
       price: parseFloat(price),
-      available_at: date.toISOString(),
-      ...(description && { description }),
-      ...(portions && { portions_available: parseInt(portions, 10) }),
+      description,
+      available,
+      sellerId,
     };
 
     try {
@@ -114,17 +124,16 @@ export default function SellPage() {
         body: JSON.stringify(listingData),
       });
 
-      if (response.ok) {
+      if (response.status === 201) {
         toast({
           title: "Dish Added Successfully!",
-          description: `${dishName} has been added to your menu.`,
+          description: `${title} has been added to your menu.`,
         });
         // Reset form
-        setDishName("");
+        setTitle("");
         setDescription("");
         setPrice("");
-        setPortions("");
-        setDate(undefined);
+        setAvailable(true);
         // Refetch listings
         fetchListings();
       } else {
@@ -165,49 +174,25 @@ export default function SellPage() {
                 <CardDescription>Fill in the details to add a new item to your menu.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="dishName">Dish Name</Label>
-                  <Input id="dishName" placeholder="e.g., Butter Chicken" value={dishName} onChange={e => setDishName(e.target.value)} disabled={isLoading} />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="title">Dish Title</Label>
+                    <Input id="title" placeholder="e.g., Butter Chicken" value={title} onChange={e => setTitle(e.target.value)} disabled={isLoading} />
+                  </div>
+                  <div>
+                    <Label htmlFor="price">Price ($)</Label>
+                    <Input id="price" type="number" step="0.01" placeholder="12.99" value={price} onChange={e => setPrice(e.target.value)} disabled={isLoading} />
+                  </div>
                 </div>
                 <div>
                   <Label htmlFor="description">Description (Optional)</Label>
                   <Textarea id="description" placeholder="Describe your dish..." value={description} onChange={e => setDescription(e.target.value)} disabled={isLoading} />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <Label htmlFor="price">Price ($)</Label>
-                    <Input id="price" type="number" step="0.01" placeholder="12.99" value={price} onChange={e => setPrice(e.target.value)} disabled={isLoading} />
-                  </div>
-                  <div>
-                    <Label htmlFor="portions">Portions Available (Optional)</Label>
-                    <Input id="portions" type="number" placeholder="10" value={portions} onChange={e => setPortions(e.target.value)} disabled={isLoading} />
-                  </div>
-                   <div>
-                    <Label htmlFor="cookingDate">Cooking Date</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !date && "text-muted-foreground"
-                          )}
-                          disabled={isLoading}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {date ? format(date, "PPP") : <span>Pick a date</span>}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={date}
-                          onSelect={setDate}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
+                <div className="flex items-center space-x-3">
+                  <Switch id="available" checked={available} onCheckedChange={setAvailable} disabled={isLoading} />
+                  <Label htmlFor="available" className="cursor-pointer">
+                    {available ? "This dish is currently available for purchase" : "This dish is currently not available"}
+                  </Label>
                 </div>
                 <div>
                   <Label htmlFor="dishImage">Dish Image (Optional)</Label>
@@ -243,21 +228,32 @@ export default function SellPage() {
             </CardHeader>
             <CardContent>
               {isListingsLoading ? (
-                  <div className="space-y-2">
-                      <Skeleton className="h-5 w-4/5" />
-                      <Skeleton className="h-5 w-3/5" />
+                  <div className="space-y-3">
+                      <Skeleton className="h-6 w-4/5" />
+                      <Skeleton className="h-6 w-3/5" />
+                      <Skeleton className="h-6 w-2/3" />
                   </div>
               ) : listings.length > 0 ? (
-                  <ul className="space-y-2 text-sm">
+                  <ul className="space-y-3 text-sm">
                       {listings.map((listing) => (
-                          <li key={listing.id} className="flex justify-between items-center border-b pb-1">
-                              <span>{listing.name}</span>
-                              <span className="font-mono text-muted-foreground">${listing.price.toFixed(2)}</span>
+                          <li key={listing.id} className="flex justify-between items-center border-b pb-2">
+                              <div>
+                                <span className="font-medium">{listing.title}</span>
+                                <div className="flex items-center text-xs text-muted-foreground">
+                                    {listing.available ? (
+                                        <CheckCircle className="h-4 w-4 mr-1 text-green-500" />
+                                    ) : (
+                                        <XCircle className="h-4 w-4 mr-1 text-red-500" />
+                                    )}
+                                    {listing.available ? 'Available' : 'Unavailable'}
+                                </div>
+                              </div>
+                              <span className="font-mono text-foreground">${listing.price.toFixed(2)}</span>
                           </li>
                       ))}
                   </ul>
               ) : (
-                  <p className="text-muted-foreground text-sm">You have no active dishes.</p>
+                  <p className="text-muted-foreground text-sm text-center py-4">You have no active dishes.</p>
               )}
               <Button variant="link" className="p-0 h-auto mt-2 text-primary">Manage Listings</Button>
             </CardContent>
@@ -294,5 +290,3 @@ export default function SellPage() {
     </div>
   );
 }
-
-    

@@ -24,47 +24,68 @@ function SignInCard() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("password123");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const userType = searchParams.get('type');
   const isSellerView = userType === 'seller';
-
-  useEffect(() => {
-    // Pre-fill email for demo purposes
-    if (isSellerView) {
-      setEmail("seller@example.com");
-    } else {
-      setEmail("user@example.com");
-    }
-  }, [isSellerView]);
+  
+  // No longer needed in API mode, but useful for quick demo switching if re-enabled
+  // useEffect(() => {
+  //   if (isSellerView) {
+  //     setEmail("seller@example.com");
+  //   } else {
+  //     setEmail("user@example.com");
+  //   }
+  //   setPassword("password123");
+  // }, [isSellerView]);
 
   const handleSignIn = async () => {
     setIsLoading(true);
-    // DEMO MODE
-    setTimeout(() => {
-      const isSeller = email.toLowerCase() === 'seller@example.com';
-      const name = isSeller ? 'Demo Seller' : 'Demo User';
-      const city = isSeller ? 'Grand City' : 'Curryville';
-
-      localStorage.setItem("token", "mock-token-for-demo");
-      localStorage.setItem("userName", name);
-      localStorage.setItem("userCity", city);
-
-      toast({
-        title: "Login Successful!",
-        description: `Welcome back, ${name}! Redirecting...`,
+    try {
+      const response = await fetch('/api/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
-      
-      if (isSeller) {
-        router.push('/sell');
-      } else {
-        router.push("/dashboard");
-      }
-      setIsLoading(false);
-    }, 1000);
-  };
 
+      if (response.ok) {
+        const { token, user } = await response.json();
+        if (token && user) {
+          localStorage.setItem("token", token);
+          localStorage.setItem("userName", user.name);
+          localStorage.setItem("userId", user.id); // Store user ID
+          if (user.city) localStorage.setItem("userCity", user.city);
+          if (user.role) localStorage.setItem("userRole", user.role);
+
+          toast({
+            title: "Login Successful!",
+            description: `Welcome back, ${user.name}! Redirecting...`,
+          });
+          
+          if (user.role === 'seller') {
+            router.push('/sell');
+          } else {
+            router.push("/dashboard");
+          }
+        } else {
+           throw new Error("Invalid response from server.");
+        }
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Invalid credentials");
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Login Failed",
+        description: (error as Error).message,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
   const title = isSellerView ? 'Seller Sign In' : 'Welcome Back!';
   const description = isSellerView ? 'Sign in to your seller dashboard.' : 'Sign in to continue to Tiffin Box.';
   const signupLink = isSellerView ? '/auth/signup?type=seller' : '/auth/signup';

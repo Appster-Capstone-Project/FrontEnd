@@ -16,12 +16,6 @@ interface DishCardProps {
 const DishCard: React.FC<DishCardProps> = ({ dish }) => {
   const { addToCart } = useCart();
   
-  const portionsText = dish.portionsAvailable !== undefined
-    ? dish.portionsAvailable > 0
-      ? `${dish.portionsAvailable} portion${dish.portionsAvailable > 1 ? 's' : ''} left`
-      : 'Sold out'
-    : null;
-
   const handleAddToCart = () => {
     addToCart(dish);
   };
@@ -31,34 +25,35 @@ const DishCard: React.FC<DishCardProps> = ({ dish }) => {
       <CardHeader className="p-0 relative">
         <Image
           src={dish.imageUrl || 'https://placehold.co/300x200.png'}
-          alt={dish.name}
+          alt={dish.title}
           width={300}
           height={200}
           className="w-full h-40 object-cover"
           data-ai-hint={dish.dataAiHint || 'food dish'}
         />
+         <Badge 
+            variant={dish.available ? "default" : "destructive"} 
+            className="absolute top-2 right-2 text-xs"
+        >
+            <Package className="h-3 w-3 mr-1" />
+            {dish.available ? 'Available' : 'Sold out'}
+        </Badge>
       </CardHeader>
       <CardContent className="p-4 flex-grow">
-        <CardTitle className="font-headline text-lg mb-1">{dish.name}</CardTitle>
+        <CardTitle className="font-headline text-lg mb-1">{dish.title}</CardTitle>
         <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{dish.description}</p>
         <div className="flex items-center justify-between mb-2">
           <Badge variant="default" className="text-base bg-accent text-accent-foreground">${dish.price.toFixed(2)}</Badge>
-          {portionsText && (
-            <Badge variant={dish.portionsAvailable === 0 ? "destructive" : "outline"} className="text-xs">
-              <Package className="h-3 w-3 mr-1" />
-              {portionsText}
-            </Badge>
-          )}
         </div>
       </CardContent>
       <CardFooter className="p-4 border-t">
         <Button 
           className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" 
-          disabled={!dish.portionsAvailable || dish.portionsAvailable === 0}
+          disabled={!dish.available}
           onClick={handleAddToCart}
         >
           <ShoppingCart className="mr-2 h-4 w-4" />
-          {!dish.portionsAvailable || dish.portionsAvailable === 0 ? 'Unavailable' : 'Add to Cart'}
+          {dish.available ? 'Add to Cart' : 'Unavailable'}
         </Button>
       </CardFooter>
     </Card>
