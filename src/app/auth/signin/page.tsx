@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, Suspense, useEffect } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from "next/link";
 
@@ -30,16 +30,6 @@ function SignInCard() {
   const userType = searchParams.get('type');
   const isSellerView = userType === 'seller';
   
-  // No longer needed in API mode, but useful for quick demo switching if re-enabled
-  // useEffect(() => {
-  //   if (isSellerView) {
-  //     setEmail("seller@example.com");
-  //   } else {
-  //     setEmail("user@example.com");
-  //   }
-  //   setPassword("password123");
-  // }, [isSellerView]);
-
   const handleSignIn = async () => {
     setIsLoading(true);
     try {
@@ -49,33 +39,63 @@ function SignInCard() {
         body: JSON.stringify({ email, password }),
       });
 
-      if (response.ok) {
-        const { token, user } = await response.json();
-        if (token && user) {
-          localStorage.setItem("token", token);
-          localStorage.setItem("userName", user.name);
-          localStorage.setItem("userId", user.id); // Store user ID
-          if (user.city) localStorage.setItem("userCity", user.city);
-          if (user.role) localStorage.setItem("userRole", user.role);
-
-          toast({
-            title: "Login Successful!",
-            description: `Welcome back, ${user.name}! Redirecting...`,
-          });
-          
-          if (user.role === 'seller') {
-            router.push('/sell');
-          } else {
-            router.push("/dashboard");
-          }
-        } else {
-           throw new Error("Invalid response from server.");
-        }
-      } else {
+      if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Invalid credentials");
       }
+
+      const { token } = await response.json();
+      if (!token) {
+        throw new Error("Login failed: No token received.");
+      }
+      
+      localStorage.setItem("token", token);
+
+      // After getting token, fetch profile
+      const profileResponse = await fetch('/api/users/profile', {
+          headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (!profileResponse.ok) {
+          throw new Error("Failed to fetch user profile.");
+      }
+      
+      const user = await profileResponse.json();
+
+      localStorage.setItem("userName", user.name);
+      localStorage.setItem("userId", user.id);
+      
+      // Now, determine if the user is a seller to redirect correctly
+      const sellerCheckResponse = await fetch(`/api/sellers/${user.id}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      let userRole = 'user';
+      if (sellerCheckResponse.ok) {
+          const sellerData = await sellerCheckResponse.json();
+          // Additional check to be sure
+          if(sellerData && sellerData.id === user.id){
+              userRole = 'seller';
+          }
+      }
+      
+      localStorage.setItem("userRole", userRole);
+      // City is not available from the backend, so we remove it or handle it gracefully
+      localStorage.removeItem("userCity"); 
+
+      toast({
+        title: "Login Successful!",
+        description: `Welcome back, ${user.name}! Redirecting...`,
+      });
+      
+      if (userRole === 'seller') {
+        router.push('/sell');
+      } else {
+        router.push("/dashboard");
+      }
+
     } catch (error) {
+      localStorage.removeItem('token'); // Clear token on failure
       toast({
         variant: "destructive",
         title: "Login Failed",

@@ -1,3 +1,4 @@
+
 import type { Vendor, Dish } from '@/lib/types';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -11,23 +12,63 @@ import ReviewCard from '@/components/shared/ReviewCard';
 import SectionTitle from '@/components/shared/SectionTitle';
 import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { mockVendors } from '@/lib/data';
 
-// API fetching functions (Now using mock data for demo)
-async function getSellerById(id: string): Promise<Vendor | null> {
-  // DEMO: Find seller from mock data
-  const seller = mockVendors.find((v) => v.id === id);
-  return Promise.resolve(seller || null);
+// In a real app, these would come from environment variables
+const API_BASE_URL = 'http://172.206.209.255'; 
+
+async function getVendorData(id: string): Promise<Vendor | null> {
+  try {
+    const [sellerRes, listingsRes] = await Promise.all([
+      fetch(`${API_BASE_URL}/sellers/${id}`, { cache: 'no-store' }),
+      fetch(`${API_BASE_URL}/listings?sellerId=${id}`, { cache: 'no-store' })
+    ]);
+
+    if (!sellerRes.ok) {
+      return null; // Seller not found
+    }
+
+    const seller = await sellerRes.json();
+    const listings = listingsRes.ok ? await listingsRes.json() : [];
+    
+    // Map the backend data to the frontend Vendor type, filling in placeholders
+    return {
+      id: seller.id,
+      name: seller.name,
+      phone: seller.phone,
+      type: 'Home Cook', // Placeholder
+      description: `A passionate cook from your neighborhood. Contact them for more details!`, // Placeholder
+      rating: 4.7, // Placeholder
+      address: 'Location not provided', // Placeholder
+      city: 'Community', // Placeholder
+      imageUrl: 'https://placehold.co/600x400.png',
+      dataAiHint: 'food vendor',
+      menu: Array.isArray(listings) ? listings.map((dish: any) => ({ ...dish, dataAiHint: 'food dish' })) : [],
+      reviews: [], // Placeholder for reviews
+      specialty: 'Local Delicacies', // Placeholder
+      operatingHours: '9 AM - 9 PM', // Placeholder
+      deliveryOptions: ['Pickup', 'Local Delivery'], // Placeholder
+    };
+  } catch (error) {
+    console.error("Failed to fetch vendor data:", error);
+    return null;
+  }
 }
 
-async function getAllSellers(): Promise<Vendor[]> {
-  // DEMO: Return all mock sellers for static path generation
-  return Promise.resolve(mockVendors);
+
+async function getAllSellers(): Promise<{id: string}[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/sellers`, { cache: 'no-store' });
+    if (!res.ok) return [];
+    const sellers = await res.json();
+    return Array.isArray(sellers) ? sellers.map((seller: any) => ({ id: seller.id })) : [];
+  } catch (error) {
+    console.error("Failed to fetch all sellers for static params:", error);
+    return [];
+  }
 }
 
 async function submitReview(formData: FormData) {
   "use server";
-  // In a real app, you'd get the user's auth token from their session/cookie
   const rawFormData = {
     rating: formData.get('rating'),
     comment: formData.get('comment'),
@@ -35,13 +76,7 @@ async function submitReview(formData: FormData) {
   };
   
   console.log("Review Submitted (Server Action Demo):", rawFormData);
-  // Example API call:
-  // await fetch(`/api/reviews`, {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ...` },
-  //   body: JSON.stringify(rawFormData),
-  // });
-  // You would then revalidate the path to show the new review, e.g., revalidatePath(`/vendors/${vendorId}`)
+  // This is where you would POST to a /reviews endpoint
 }
 
 export async function generateStaticParams() {
@@ -53,7 +88,7 @@ export async function generateStaticParams() {
 
 
 export default async function VendorDetailPage({ params }: { params: { id: string } }) {
-  const vendor = await getSellerById(params.id);
+  const vendor = await getVendorData(params.id);
 
   if (!vendor) {
     notFound();
@@ -112,9 +147,13 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
                 </div>
               )}
             </div>
-            <Button size="sm" variant="outline">
-              <Phone className="h-4 w-4 mr-2"/> Contact Seller
-            </Button>
+            {vendor.phone && (
+                <Button size="sm" variant="outline" asChild>
+                    <a href={`tel:${vendor.phone}`}>
+                        <Phone className="h-4 w-4 mr-2"/> Contact Seller
+                    </a>
+                </Button>
+            )}
           </div>
         </div>
       </Card>

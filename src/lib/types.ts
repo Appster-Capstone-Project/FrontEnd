@@ -31,6 +31,7 @@ export interface Vendor {
   rating: number; // Average rating
   address: string;
   city: string;
+  phone?: string;
   imageUrl?: string;
   dataAiHint?: string;
   profileImageUrl?: string;

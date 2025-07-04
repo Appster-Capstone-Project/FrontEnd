@@ -22,6 +22,7 @@ function SignUpCard() {
     email: "",
     password: "",
     confirmPassword: "",
+    phone: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,15 +33,19 @@ function SignUpCard() {
     }));
   };
 
+  const userType = searchParams.get('type');
+  const isSeller = userType === 'seller';
+
   const handleSignUp = async () => {
     setIsLoading(true);
-    const { name, email, password, confirmPassword } = formData;
+    const { name, email, password, confirmPassword, phone } = formData;
+    const role = isSeller ? 'seller' : 'user';
 
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name || !email || !password || !confirmPassword || (isSeller && !phone)) {
       toast({
         variant: "destructive",
         title: "Missing Information",
-        description: "Please fill in all fields.",
+        description: "Please fill in all required fields.",
       });
       setIsLoading(false);
       return;
@@ -56,21 +61,39 @@ function SignUpCard() {
       return;
     }
     
-    const role = searchParams.get('type') === 'seller' ? 'seller' : 'user';
+    const endpoint = isSeller ? '/api/sellers/register' : '/api/users/register';
+    const payload = isSeller 
+        ? { name, email, phone, password } // Assume backend /sellers/register can handle password
+        : { name, email, password };
 
-    // DEMO: Mock API call
-    setTimeout(() => {
-      toast({
-        title: "Registration Successful!",
-        description: "This is a demo. You can now sign in.",
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
-      router.push(`/auth/signin?type=${role}`);
+
+      if (response.status === 201) {
+        toast({
+          title: "Registration Successful!",
+          description: "You can now sign in with your credentials.",
+        });
+        router.push(`/auth/signin?type=${role}`);
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Registration failed.");
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Registration Failed",
+        description: (error as Error).message,
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
-  const userType = searchParams.get('type');
-  const isSeller = userType === 'seller';
   const title = isSeller ? 'Create a Seller Account' : 'Create an Account';
   const description = isSeller ? 'Start selling your homemade food today.' : 'Join Tiffin Box to discover amazing food.';
   const signInLink = isSeller ? '/auth/signin?type=seller' : '/auth/signin';
@@ -90,6 +113,12 @@ function SignUpCard() {
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" placeholder="you@example.com" onChange={handleChange} disabled={isLoading} />
           </div>
+           {isSeller && (
+            <div className="space-y-2">
+              <Label htmlFor="phone">Phone Number</Label>
+              <Input id="phone" type="tel" placeholder="Your phone number" onChange={handleChange} disabled={isLoading} />
+            </div>
+          )}
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <Input id="password" type="password" placeholder="••••••••" onChange={handleChange} disabled={isLoading} />
@@ -130,6 +159,10 @@ const AuthCardSkeleton = () => (
                 <Skeleton className="h-10 w-full" />
             </div>
             <div className="space-y-2">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-10 w-full" />
+            </div>
+             <div className="space-y-2">
                 <Skeleton className="h-4 w-16" />
                 <Skeleton className="h-10 w-full" />
             </div>
