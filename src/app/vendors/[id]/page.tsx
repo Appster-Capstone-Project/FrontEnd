@@ -1,5 +1,6 @@
 
-import type { Vendor, Dish } from '@/lib/types';
+import { getVendorById } from '@/lib/data';
+import type { Vendor } from '@/lib/types';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,59 +14,6 @@ import SectionTitle from '@/components/shared/SectionTitle';
 import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
-// In a real app, these would come from environment variables
-const API_BASE_URL = 'http://172.206.209.255:8080'; 
-
-async function getVendorData(id: string): Promise<Vendor | null> {
-  try {
-    const [sellerRes, listingsRes] = await Promise.all([
-      fetch(`${API_BASE_URL}/sellers/${id}`, { cache: 'no-store' }),
-      fetch(`${API_BASE_URL}/listings?sellerId=${id}`, { cache: 'no-store' })
-    ]);
-
-    if (!sellerRes.ok) {
-      return null; // Seller not found
-    }
-
-    const seller = await sellerRes.json();
-    const listings = listingsRes.ok ? await listingsRes.json() : [];
-    
-    // Map the backend data to the frontend Vendor type, filling in placeholders
-    return {
-      id: seller.id,
-      name: seller.name,
-      phone: seller.phone,
-      type: 'Home Cook', // Placeholder
-      description: `A passionate cook from your neighborhood. Contact them for more details!`, // Placeholder
-      rating: 4.7, // Placeholder
-      address: 'Location not provided', // Placeholder
-      city: 'Community', // Placeholder
-      imageUrl: 'https://placehold.co/600x400.png',
-      dataAiHint: 'food vendor',
-      menu: Array.isArray(listings) ? listings.map((dish: any) => ({ ...dish, dataAiHint: 'food dish' })) : [],
-      reviews: [], // Placeholder for reviews
-      specialty: 'Local Delicacies', // Placeholder
-      operatingHours: '9 AM - 9 PM', // Placeholder
-      deliveryOptions: ['Pickup', 'Local Delivery'], // Placeholder
-    };
-  } catch (error) {
-    console.error("Failed to fetch vendor data:", error);
-    return null;
-  }
-}
-
-
-async function getAllSellers(): Promise<{id: string}[]> {
-  try {
-    const res = await fetch(`${API_BASE_URL}/sellers`, { cache: 'no-store' });
-    if (!res.ok) return [];
-    const sellers = await res.json();
-    return Array.isArray(sellers) ? sellers.map((seller: any) => ({ id: seller.id })) : [];
-  } catch (error) {
-    console.error("Failed to fetch all sellers for static params:", error);
-    return [];
-  }
-}
 
 async function submitReview(formData: FormData) {
   "use server";
@@ -79,16 +27,9 @@ async function submitReview(formData: FormData) {
   // This is where you would POST to a /reviews endpoint
 }
 
-export async function generateStaticParams() {
-  const sellers = await getAllSellers();
-  return sellers.map((seller) => ({
-    id: seller.id,
-  }));
-}
 
-
-export default async function VendorDetailPage({ params }: { params: { id: string } }) {
-  const vendor = await getVendorData(params.id);
+export default function VendorDetailPage({ params }: { params: { id: string } }) {
+  const vendor = getVendorById(params.id);
 
   if (!vendor) {
     notFound();
