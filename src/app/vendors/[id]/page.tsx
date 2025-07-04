@@ -1,4 +1,3 @@
-
 import type { Vendor, Dish } from '@/lib/types';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
