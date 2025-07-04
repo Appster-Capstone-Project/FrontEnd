@@ -39,7 +39,6 @@ function SignUpCard() {
   const handleSignUp = async () => {
     setIsLoading(true);
     const { name, email, password, confirmPassword, phone } = formData;
-    const role = isSeller ? 'seller' : 'user';
 
     if (!name || !email || !password || !confirmPassword || (isSeller && !phone)) {
       toast({
@@ -61,41 +60,85 @@ function SignUpCard() {
       return;
     }
     
-    const endpoint = isSeller ? '/api/sellers/register' : '/api/users/register';
-    const payload = isSeller 
-        ? { name, email, phone, password } // Assume backend /sellers/register can handle password
-        : { name, email, password };
+    if (isSeller) {
+      // Seller registration is a two-step process
+      try {
+        // 1. Register the user for authentication purposes
+        const userPayload = { name, email, password };
+        const userResponse = await fetch('/api/users/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(userPayload),
+        });
 
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+        if (userResponse.status !== 201) {
+          const errorData = await userResponse.json();
+          throw new Error(errorData.error || "Failed to create user account. The email might already be in use.");
+        }
 
-      if (response.status === 201) {
+        // 2. Register the seller profile
+        const sellerPayload = { name, email, phone };
+        const sellerResponse = await fetch('/api/sellers/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(sellerPayload),
+        });
+
+        if (sellerResponse.status !== 201) {
+          const errorData = await sellerResponse.json();
+          // In a real-world scenario, you might want to handle the orphaned user account here
+          throw new Error(errorData.error || "User account created, but failed to create seller profile.");
+        }
+
         toast({
-          title: "Registration Successful!",
+          title: "Seller Registration Successful!",
           description: "You can now sign in with your credentials.",
         });
-        router.push(`/auth/signin?type=${role}`);
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Registration failed.");
+        router.push(`/auth/signin?type=seller`);
+
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Registration Failed",
+          description: (error as Error).message,
+        });
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Registration Failed",
-        description: (error as Error).message,
-      });
-    } finally {
-      setIsLoading(false);
+    } else {
+      // Regular user registration
+      const payload = { name, email, password };
+      try {
+        const response = await fetch('/api/users/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (response.status === 201) {
+          toast({
+            title: "Registration Successful!",
+            description: "You can now sign in with your credentials.",
+          });
+          router.push(`/auth/signin`);
+        } else {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Registration failed. The email might already be in use.");
+        }
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Registration Failed",
+          description: (error as Error).message,
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
   const title = isSeller ? 'Create a Seller Account' : 'Create an Account';
-  const description = isSeller ? 'Start selling your homemade food today.' : 'Join Tiffin Box to discover amazing food.';
+  const description = isSeller ? 'Start selling your homemade food today.' : 'Join HomePalate to discover amazing food.';
   const signInLink = isSeller ? '/auth/signin?type=seller' : '/auth/signin';
 
   return (
