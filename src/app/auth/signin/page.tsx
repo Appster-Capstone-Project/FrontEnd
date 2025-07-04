@@ -91,7 +91,7 @@ function SignInCard() {
       if (userRole === 'seller') {
         router.push('/sell');
       } else {
-        router.push("/dashboard");
+        router.push("/vendors");
       }
 
     } catch (error) {

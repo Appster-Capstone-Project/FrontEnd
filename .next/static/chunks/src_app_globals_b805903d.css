@@ -386,10 +386,6 @@ h1, h2, h3, h4, h5, h6 {
   visibility: hidden;
 }
 
-.static {
-  position: static;
-}
-
 .fixed {
   position: fixed;
 }
@@ -444,10 +440,6 @@ h1, h2, h3, h4, h5, h6 {
   left: .5rem;
 }
 
-.left-4 {
-  left: 1rem;
-}
-
 .left-\[50\%\] {
   left: 50%;
 }
@@ -478,10 +470,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .top-1\.5 {
   top: .375rem;
-}
-
-.top-1\/2 {
-  top: 50%;
 }
 
 .top-2 {
@@ -727,10 +715,6 @@ h1, h2, h3, h4, h5, h6 {
   height: 125px;
 }
 
-.h-\[192px\] {
-  height: 192px;
-}
-
 .h-\[1px\] {
   height: 1px;
 }
@@ -955,10 +939,6 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 1536px;
 }
 
-.max-w-xl {
-  max-width: 36rem;
-}
-
 .flex-1 {
   flex: 1;
 }
@@ -986,11 +966,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .-translate-x-px {
   --tw-translate-x: -1px;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
-.-translate-y-1\/2 {
-  --tw-translate-y: -50%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -1503,11 +1478,6 @@ h1, h2, h3, h4, h5, h6 {
   padding-bottom: .625rem;
 }
 
-.py-3 {
-  padding-top: .75rem;
-  padding-bottom: .75rem;
-}
-
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -1536,10 +1506,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .pl-1 {
   padding-left: .25rem;
-}
-
-.pl-12 {
-  padding-left: 3rem;
 }
 
 .pl-8 {

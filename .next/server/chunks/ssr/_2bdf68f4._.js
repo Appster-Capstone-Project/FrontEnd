@@ -418,41 +418,45 @@ const mockVendors = [
         menu: [
             {
                 id: 'd1-1',
-                name: 'Butter Chicken',
+                title: 'Butter Chicken',
+                sellerId: '1',
                 description: 'Creamy and rich tomato-based curry with tender chicken pieces.',
                 price: 14.99,
                 category: 'Main Course',
-                portionsAvailable: 8,
+                available: true,
                 imageUrl: 'https://placehold.co/300x200.png',
                 dataAiHint: 'butter chicken'
             },
             {
                 id: 'd1-2',
-                name: 'Palak Paneer',
+                title: 'Palak Paneer',
+                sellerId: '1',
                 description: 'Soft paneer cheese in a smooth, creamy spinach gravy.',
                 price: 12.99,
                 category: 'Main Course',
-                portionsAvailable: 12,
+                available: true,
                 imageUrl: 'https://placehold.co/300x200.png',
                 dataAiHint: 'palak paneer'
             },
             {
                 id: 'd1-3',
-                name: 'Garlic Naan',
+                title: 'Garlic Naan',
+                sellerId: '1',
                 description: 'Soft and fluffy flatbread topped with garlic and butter.',
                 price: 3.50,
                 category: 'Breads',
-                portionsAvailable: 20,
+                available: true,
                 imageUrl: 'https://placehold.co/300x200.png',
                 dataAiHint: 'garlic naan'
             },
             {
                 id: 'd1-4',
-                name: 'Samosas (2 pcs)',
+                title: 'Samosas (2 pcs)',
+                sellerId: '1',
                 description: 'Crispy pastry filled with spiced potatoes and peas.',
                 price: 5.00,
                 category: 'Appetizer',
-                portionsAvailable: 0,
+                available: false,
                 imageUrl: 'https://placehold.co/300x200.png',
                 dataAiHint: 'samosas'
             }
@@ -496,31 +500,34 @@ const mockVendors = [
         menu: [
             {
                 id: 'd2-1',
-                name: 'Weekly Veg Tiffin',
+                title: 'Weekly Veg Tiffin',
+                sellerId: '2',
                 description: 'A week of delicious vegetarian meals, delivered daily. Includes roti, sabzi, dal, and rice.',
                 price: 85.00,
                 category: 'Subscription',
-                portionsAvailable: 30,
+                available: true,
                 imageUrl: 'https://placehold.co/300x200.png',
                 dataAiHint: 'veg thali'
             },
             {
                 id: 'd2-2',
-                name: 'Monthly Non-Veg Tiffin',
+                title: 'Monthly Non-Veg Tiffin',
+                sellerId: '2',
                 description: 'A full month of veg and non-veg meals. Chicken/fish twice a week.',
                 price: 350.00,
                 category: 'Subscription',
-                portionsAvailable: 15,
+                available: true,
                 imageUrl: 'https://placehold.co/300x200.png',
                 dataAiHint: 'tiffin box meal'
             },
             {
                 id: 'd2-3',
-                name: 'Trial Meal (Veg)',
+                title: 'Trial Meal (Veg)',
+                sellerId: '2',
                 description: 'Try one of our wholesome vegetarian thalis for a day.',
                 price: 12.00,
                 category: 'Trial',
-                portionsAvailable: 10,
+                available: true,
                 imageUrl: 'https://placehold.co/300x200.png',
                 dataAiHint: 'vegetarian meal'
             }
@@ -564,31 +571,34 @@ const mockVendors = [
         menu: [
             {
                 id: 'd3-1',
-                name: 'Classic Beef Lasagna',
+                title: 'Classic Beef Lasagna',
+                sellerId: '3',
                 description: 'Layers of fresh pasta, rich bolognese sauce, and creamy béchamel.',
                 price: 18.00,
                 category: 'Main Course',
-                portionsAvailable: 5,
+                available: true,
                 imageUrl: 'https://placehold.co/300x200.png',
                 dataAiHint: 'lasagna slice'
             },
             {
                 id: 'd3-2',
-                name: 'Fettuccine Alfredo',
+                title: 'Fettuccine Alfredo',
+                sellerId: '3',
                 description: 'Silky fettuccine in a classic parmesan and cream sauce.',
                 price: 15.50,
                 category: 'Main Course',
-                portionsAvailable: 7,
+                available: true,
                 imageUrl: 'https://placehold.co/300x200.png',
                 dataAiHint: 'fettuccine alfredo'
             },
             {
                 id: 'd3-3',
-                name: 'Tiramisu',
+                title: 'Tiramisu',
+                sellerId: '3',
                 description: 'The perfect pick-me-up. Coffee-soaked ladyfingers and mascarpone cream.',
                 price: 7.50,
                 category: 'Dessert',
-                portionsAvailable: 10,
+                available: true,
                 imageUrl: 'https://placehold.co/300x200.png',
                 dataAiHint: 'tiramisu dessert'
             }
