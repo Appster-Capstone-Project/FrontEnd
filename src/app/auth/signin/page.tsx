@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from "next/link";
 
@@ -23,28 +23,27 @@ function SignInCard() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
-  const [email, setEmail] = useState("user@example.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("password123");
   const [isLoading, setIsLoading] = useState(false);
 
+  const userType = searchParams.get('type');
+  const isSellerView = userType === 'seller';
+
+  useEffect(() => {
+    // Pre-fill email for demo purposes
+    if (isSellerView) {
+      setEmail("seller@example.com");
+    } else {
+      setEmail("user@example.com");
+    }
+  }, [isSellerView]);
+
   const handleSignIn = async () => {
     setIsLoading(true);
-
-    if (!email || !password) {
-       toast({
-          variant: "destructive",
-          title: "Login Failed",
-          description: "Please enter email and password.",
-       });
-       setIsLoading(false);
-       return;
-    }
-    
-    // DEMO: Mock API call for demonstration purposes.
-    // Use 'seller@example.com' to log in as a seller.
+    // DEMO MODE
     setTimeout(() => {
       const isSeller = email.toLowerCase() === 'seller@example.com';
-      const role = isSeller ? 'seller' : 'user';
       const name = isSeller ? 'Demo Seller' : 'Demo User';
       const city = isSeller ? 'Grand City' : 'Curryville';
 
@@ -56,8 +55,8 @@ function SignInCard() {
         title: "Login Successful!",
         description: `Welcome back, ${name}! Redirecting...`,
       });
-
-      if (role === 'seller') {
+      
+      if (isSeller) {
         router.push('/sell');
       } else {
         router.push("/dashboard");
@@ -66,10 +65,9 @@ function SignInCard() {
     }, 1000);
   };
 
-  const userType = searchParams.get('type');
-  const title = userType === 'seller' ? 'Seller Sign In' : 'Welcome Back!';
-  const description = userType === 'seller' ? 'Sign in to your seller dashboard.' : 'Sign in to continue to Tiffin Box.';
-  const signupLink = userType === 'seller' ? '/auth/signup?type=seller' : '/auth/signup';
+  const title = isSellerView ? 'Seller Sign In' : 'Welcome Back!';
+  const description = isSellerView ? 'Sign in to your seller dashboard.' : 'Sign in to continue to Tiffin Box.';
+  const signupLink = isSellerView ? '/auth/signup?type=seller' : '/auth/signup';
 
   return (
       <Card className="w-full max-w-md shadow-xl">
@@ -83,7 +81,7 @@ function SignInCard() {
             <Input
               id="email"
               type="email"
-              placeholder="user@example.com or seller@example.com"
+              placeholder={isSellerView ? "seller@example.com" : "user@example.com"}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={isLoading}
@@ -109,15 +107,25 @@ function SignInCard() {
           >
             {isLoading ? "Signing In..." : "Sign In"}
           </Button>
-          <p className="text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
-            <Link
-              href={signupLink}
-              className="font-medium text-primary hover:underline"
-            >
-              Sign Up
-            </Link>
-          </p>
+          <div className="w-full text-center text-sm text-muted-foreground space-y-2">
+            <p>
+              Don&apos;t have an account?{" "}
+              <Link
+                href={signupLink}
+                className="font-medium text-primary hover:underline"
+              >
+                Sign Up
+              </Link>
+            </p>
+             <p>
+                <Link
+                  href={isSellerView ? "/auth/signin" : "/auth/signin?type=seller"}
+                  className="font-medium text-primary hover:underline text-xs"
+                >
+                  {isSellerView ? "Not a seller? Sign in as a customer." : "Are you a seller? Sign in here."}
+                </Link>
+              </p>
+          </div>
         </CardFooter>
       </Card>
   );
