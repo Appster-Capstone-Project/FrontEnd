@@ -15,8 +15,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import ReviewCard from "@/components/shared/ReviewCard";
-import type { Review } from "@/lib/types";
+import type { Review, Dish } from "@/lib/types";
 import { useRouter } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const mockReviews: Review[] = [
     { id: 'r1-1', userName: 'Raj K.', rating: 5, comment: 'Best butter chicken I\'ve had in ages!', date: '2024-07-15T10:00:00Z', userImageUrl: 'https://placehold.co/40x40.png', dataAiHintUser: 'man smiling' },
@@ -32,47 +33,119 @@ export default function SellPage() {
   const [portions, setPortions] = React.useState("");
   const [date, setDate] = React.useState<Date>();
   const [isLoading, setIsLoading] = React.useState(false);
+  
+  const [listings, setListings] = React.useState<Dish[]>([]);
+  const [isListingsLoading, setIsListingsLoading] = React.useState(true);
   const sellerReviews = mockReviews; // Replace with API call in future
 
+  const fetchListings = React.useCallback(async () => {
+    setIsListingsLoading(true);
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setIsListingsLoading(false);
+      return;
+    }
+    try {
+      const response = await fetch('/api/listings', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setListings(Array.isArray(data) ? data : []);
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Failed to fetch listings",
+          description: "Could not load your current dishes.",
+        });
+        setListings([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch listings", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "An error occurred while fetching your listings.",
+      });
+    } finally {
+      setIsListingsLoading(false);
+    }
+  }, [toast]);
+
   React.useEffect(() => {
-    // In a real app, you'd verify the token with the backend. For demo, just check existence.
     const token = localStorage.getItem('token');
     if (!token) {
       router.push('/auth/signin?type=seller');
+    } else {
+      fetchListings();
     }
-  }, [router]);
+  }, [router, fetchListings]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    // DEMO: Mock API call
-    setTimeout(() => {
-      if (!dishName || !description || !price || !portions || !date) {
-        toast({
-          variant: "destructive",
-          title: "Missing Information",
-          description: "Please fill out all fields to add a dish.",
-        });
-        setIsLoading(false);
-        return;
-      }
-
+    if (!dishName || !price || !date) {
       toast({
-        title: "Dish Added (Demo)!",
-        description: `${dishName} has been added to your menu. This is a demonstration and the dish is not saved.`
+        variant: "destructive",
+        title: "Missing Information",
+        description: "Dish Name, Price, and Cooking Date are required.",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    const token = localStorage.getItem('token');
+
+    const listingData = {
+      name: dishName,
+      price: parseFloat(price),
+      available_at: date.toISOString(),
+      ...(description && { description }),
+      ...(portions && { portions_available: parseInt(portions, 10) }),
+    };
+
+    try {
+      const response = await fetch('/api/listings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(listingData),
       });
 
-      // Reset form
-      setDishName("");
-      setDescription("");
-      setPrice("");
-      setPortions("");
-      setDate(undefined);
-
+      if (response.ok) {
+        toast({
+          title: "Dish Added Successfully!",
+          description: `${dishName} has been added to your menu.`,
+        });
+        // Reset form
+        setDishName("");
+        setDescription("");
+        setPrice("");
+        setPortions("");
+        setDate(undefined);
+        // Refetch listings
+        fetchListings();
+      } else {
+        const errorData = await response.json();
+        toast({
+          variant: "destructive",
+          title: "Failed to Add Dish",
+          description: errorData.error || "An unknown error occurred.",
+        });
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Network Error",
+        description: "Could not connect to the server. Please try again.",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
+
 
   return (
     <div className="container py-8 md:py-12">
@@ -97,7 +170,7 @@ export default function SellPage() {
                   <Input id="dishName" placeholder="e.g., Butter Chicken" value={dishName} onChange={e => setDishName(e.target.value)} disabled={isLoading} />
                 </div>
                 <div>
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description">Description (Optional)</Label>
                   <Textarea id="description" placeholder="Describe your dish..." value={description} onChange={e => setDescription(e.target.value)} disabled={isLoading} />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -106,7 +179,7 @@ export default function SellPage() {
                     <Input id="price" type="number" step="0.01" placeholder="12.99" value={price} onChange={e => setPrice(e.target.value)} disabled={isLoading} />
                   </div>
                   <div>
-                    <Label htmlFor="portions">Portions Available</Label>
+                    <Label htmlFor="portions">Portions Available (Optional)</Label>
                     <Input id="portions" type="number" placeholder="10" value={portions} onChange={e => setPortions(e.target.value)} disabled={isLoading} />
                   </div>
                    <div>
@@ -169,7 +242,23 @@ export default function SellPage() {
               <CardTitle className="font-headline text-lg">Your Active Listings</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground text-sm">You have 3 active dishes.</p>
+              {isListingsLoading ? (
+                  <div className="space-y-2">
+                      <Skeleton className="h-5 w-4/5" />
+                      <Skeleton className="h-5 w-3/5" />
+                  </div>
+              ) : listings.length > 0 ? (
+                  <ul className="space-y-2 text-sm">
+                      {listings.map((listing) => (
+                          <li key={listing.id} className="flex justify-between items-center border-b pb-1">
+                              <span>{listing.name}</span>
+                              <span className="font-mono text-muted-foreground">${listing.price.toFixed(2)}</span>
+                          </li>
+                      ))}
+                  </ul>
+              ) : (
+                  <p className="text-muted-foreground text-sm">You have no active dishes.</p>
+              )}
               <Button variant="link" className="p-0 h-auto mt-2 text-primary">Manage Listings</Button>
             </CardContent>
           </Card>
@@ -205,3 +294,5 @@ export default function SellPage() {
     </div>
   );
 }
+
+    

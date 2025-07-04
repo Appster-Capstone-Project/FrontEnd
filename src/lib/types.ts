@@ -4,11 +4,11 @@ import type { LucideIcon } from 'lucide-react';
 export interface Dish {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   price: number;
   imageUrl?: string;
   dataAiHint?: string;
-  category: string;
+  category?: string;
   portionsAvailable?: number;
   portionsTotal?: number;
 }
@@ -46,3 +46,5 @@ export interface Vendor {
 export interface CartItem extends Dish {
   quantity: number;
 }
+
+    
