@@ -32,6 +32,13 @@ function SignInCard() {
   
   const handleSignIn = async () => {
     setIsLoading(true);
+    // Always clear previous session data on a new login attempt
+    localStorage.removeItem('token');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('sellerId');
+
     try {
       const response = await fetch('/api/users/login', {
         method: 'POST',
@@ -51,7 +58,7 @@ function SignInCard() {
       
       localStorage.setItem("token", token);
 
-      // After getting token, fetch profile
+      // After getting token, fetch profile to get user details
       const profileResponse = await fetch('/api/users/profile', {
           headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -65,16 +72,18 @@ function SignInCard() {
       localStorage.setItem("userName", user.name);
       localStorage.setItem("userId", user.id);
       
-      // Now, determine if the user is a seller to redirect correctly
-      const sellerCheckResponse = await fetch(`/api/sellers/${user.id}`);
-
+      // Determine if the user is a seller by checking if a seller account exists with the same email
+      const allSellersResponse = await fetch('/api/sellers');
       let userRole = 'user';
-      if (sellerCheckResponse.ok) {
-          const sellerData = await sellerCheckResponse.json();
-          // Additional check to be sure it's a valid seller object
-          if(sellerData && sellerData.id === user.id){
-              userRole = 'seller';
-          }
+      if (allSellersResponse.ok) {
+        const sellers = await allSellersResponse.json();
+        const matchingSeller = Array.isArray(sellers) ? sellers.find(seller => seller.email === user.email) : undefined;
+        
+        if (matchingSeller) {
+          userRole = 'seller';
+          // Store the specific seller ID to be used for creating listings
+          localStorage.setItem("sellerId", matchingSeller.id);
+        }
       }
       
       localStorage.setItem("userRole", userRole);
@@ -91,7 +100,13 @@ function SignInCard() {
       }
 
     } catch (error) {
-      localStorage.removeItem('token'); // Clear token on failure
+      // Clear any partial login data on failure
+      localStorage.removeItem('token');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('sellerId');
+      
       toast({
         variant: "destructive",
         title: "Login Failed",

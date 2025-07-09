@@ -121,6 +121,7 @@ export default function DashboardPage() {
           localStorage.removeItem('userName');
           localStorage.removeItem('userId');
           localStorage.removeItem('userRole');
+          localStorage.removeItem('sellerId'); // Clear sellerId on logout
           router.push('/auth/signin');
         }} variant="outline">
           Log Out

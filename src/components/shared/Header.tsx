@@ -63,6 +63,7 @@ const Header = () => {
     localStorage.removeItem('userName');
     localStorage.removeItem('userId');
     localStorage.removeItem('userRole');
+    localStorage.removeItem('sellerId'); // Clear sellerId on logout
     setIsLoggedIn(false);
     setUserName('');
     setUserRole(null);

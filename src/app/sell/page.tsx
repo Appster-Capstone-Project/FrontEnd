@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { PlusCircle, Star, CheckCircle, XCircle, List } from "lucide-react";
+import { PlusCircle, CheckCircle, XCircle, List } from "lucide-react";
 import SectionTitle from "@/components/shared/SectionTitle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -31,13 +31,13 @@ export default function SellPage() {
   const fetchListings = React.useCallback(async () => {
     setIsListingsLoading(true);
     const token = localStorage.getItem('token');
-    const sellerId = localStorage.getItem('userId');
+    const sellerId = localStorage.getItem('sellerId'); // Use sellerId
 
     if (!token || !sellerId) {
       toast({
         variant: "destructive",
         title: "Authentication Error",
-        description: "Please sign in to view your dashboard.",
+        description: "Please sign in as a seller to view this page.",
       });
       router.push('/auth/signin?type=seller');
       return;
@@ -80,7 +80,7 @@ export default function SellPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const sellerId = localStorage.getItem("userId");
+    const sellerId = localStorage.getItem("sellerId"); // Use sellerId
     const token = localStorage.getItem('token');
 
     if (!title || !price || !description) {
@@ -107,7 +107,7 @@ export default function SellPage() {
       price: parseFloat(price),
       description,
       available,
-      sellerId,
+      sellerId, // This now holds the correct seller ID
     };
 
     try {
