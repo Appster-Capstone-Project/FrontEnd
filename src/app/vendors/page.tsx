@@ -1,12 +1,16 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from 'next/link';
 import SectionTitle from "@/components/shared/SectionTitle";
 import VendorCard from "@/components/shared/VendorCard";
 import type { Vendor } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import CategoryTabs from "@/components/shared/CategoryTabs";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ChefHat } from "lucide-react";
 
 // Helper to augment seller data from the API with placeholder data for the UI
 const augmentSellerData = (seller): Vendor => ({
@@ -38,9 +42,13 @@ export default function VendorsPage() {
   const [filteredVendors, setFilteredVendors] = useState<Vendor[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<Vendor['type'] | 'all'>('all');
+  const [userRole, setUserRole] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
+    const role = localStorage.getItem('userRole');
+    setUserRole(role);
+
     const fetchVendors = async () => {
       setIsLoading(true);
       try {
@@ -50,7 +58,6 @@ export default function VendorsPage() {
         }
         const sellers = await response.json();
         
-        // Use helper to augment data
         const augmentedData = Array.isArray(sellers) ? sellers.map(augmentSellerData) : [];
         
         setAllVendors(augmentedData);
@@ -81,6 +88,19 @@ export default function VendorsPage() {
   
   return (
     <div className="container py-12 md:py-16">
+      {userRole === 'seller' && (
+        <Alert className="mb-8 bg-secondary border-primary/50 text-secondary-foreground">
+          <ChefHat className="h-5 w-5 text-accent" />
+          <AlertTitle className="font-headline text-lg text-foreground">You are viewing as a Seller</AlertTitle>
+          <AlertDescription className="text-foreground/80">
+            This page is for browsing all vendors on HomePalate. To manage your own menu and add new dishes, please visit your{' '}
+            <Link href="/sell" className="font-bold text-primary hover:underline">
+              Seller Dashboard
+            </Link>.
+          </AlertDescription>
+        </Alert>
+      )}
+
       <SectionTitle 
         title="Find Your Next Meal"
         subtitle="Browse our collection of talented home cooks and reliable tiffin services."

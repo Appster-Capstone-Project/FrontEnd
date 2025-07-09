@@ -1284,6 +1284,10 @@ h1, h2, h3, h4, h5, h6 {
   border-color: #0000;
 }
 
+.border-primary\/50 {
+  border-color: hsl(var(--primary) / .5);
+}
+
 .border-l-transparent {
   border-left-color: #0000;
 }
@@ -1746,6 +1750,10 @@ h1, h2, h3, h4, h5, h6 {
 .text-yellow-400 {
   --tw-text-opacity: 1;
   color: rgb(250 204 21 / var(--tw-text-opacity, 1));
+}
+
+.text-foreground\/80 {
+  color: hsl(var(--foreground) / .8);
 }
 
 .underline-offset-4 {
