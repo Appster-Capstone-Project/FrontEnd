@@ -11,6 +11,23 @@ import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 
+// Helper to extract a more detailed error message from an API response
+async function getApiErrorMessage(response: Response): Promise<string> {
+    try {
+        const errorData = await response.json();
+        // Backend could return error in 'error' or 'message' field
+        return errorData.error || errorData.message || `API error: ${JSON.stringify(errorData)}`;
+    } catch (e) {
+        // If the response is not JSON, return the raw text
+        const textError = await response.text();
+        if (textError) {
+            return textError;
+        }
+        return `Request failed with status ${response.status}`;
+    }
+}
+
+
 function SignUpCard() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -60,80 +77,69 @@ function SignUpCard() {
       return;
     }
     
-    if (isSeller) {
-      // Seller registration is a two-step process
-      try {
-        // 1. Register the user for authentication purposes
-        const userPayload = { name, email, password };
-        const userResponse = await fetch('/api/users/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(userPayload),
-        });
+    try {
+        if (isSeller) {
+            // Seller registration is a two-step process
+            // 1. Register the user for authentication purposes
+            const userPayload = { name, email, password };
+            const userResponse = await fetch('/api/users/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userPayload),
+            });
 
-        if (userResponse.status !== 201) {
-          const errorData = await userResponse.json();
-          throw new Error(errorData.error || "Failed to create user account. The email might already be in use.");
-        }
+            if (!userResponse.ok) {
+                const errorMessage = await getApiErrorMessage(userResponse);
+                throw new Error(errorMessage);
+            }
 
-        // 2. Register the seller profile
-        const sellerPayload = { name, email, phone };
-        const sellerResponse = await fetch('/api/sellers/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(sellerPayload),
-        });
+            // 2. Register the seller profile
+            const sellerPayload = { name, email, phone };
+            const sellerResponse = await fetch('/api/sellers/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(sellerPayload),
+            });
 
-        if (sellerResponse.status !== 201) {
-          const errorData = await sellerResponse.json();
-          // In a real-world scenario, you might want to handle the orphaned user account here
-          throw new Error(errorData.error || "User account created, but failed to create seller profile.");
-        }
+            if (!sellerResponse.ok) {
+                const errorMessage = await getApiErrorMessage(sellerResponse);
+                // In a real-world scenario, you might want to handle the orphaned user account here
+                throw new Error(`User account created, but seller profile failed: ${errorMessage}`);
+            }
 
-        toast({
-          title: "Seller Registration Successful!",
-          description: "You can now sign in with your credentials.",
-        });
-        router.push(`/auth/signin?type=seller`);
-
-      } catch (error) {
-        toast({
-          variant: "destructive",
-          title: "Registration Failed",
-          description: (error as Error).message,
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
-      // Regular user registration
-      const payload = { name, email, password };
-      try {
-        const response = await fetch('/api/users/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-
-        if (response.status === 201) {
-          toast({
-            title: "Registration Successful!",
-            description: "You can now sign in with your credentials.",
-          });
-          router.push(`/auth/signin`);
+            toast({
+                title: "Seller Registration Successful!",
+                description: "You can now sign in with your credentials.",
+            });
+            router.push(`/auth/signin?type=seller`);
         } else {
-          const errorData = await response.json();
-          throw new Error(errorData.error || "Registration failed. The email might already be in use.");
+            // Regular user registration
+            const payload = { name, email, password };
+            const response = await fetch('/api/users/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+                toast({
+                    title: "Registration Successful!",
+                    description: "You can now sign in with your credentials.",
+                });
+                router.push(`/auth/signin`);
+            } else {
+                const errorMessage = await getApiErrorMessage(response);
+                throw new Error(errorMessage);
+            }
         }
-      } catch (error) {
+    } catch (error) {
         toast({
-          variant: "destructive",
-          title: "Registration Failed",
-          description: (error as Error).message,
+            variant: "destructive",
+            title: "Registration Failed",
+            description: (error as Error).message,
         });
-      } finally {
+    } finally {
         setIsLoading(false);
-      }
     }
   };
 
