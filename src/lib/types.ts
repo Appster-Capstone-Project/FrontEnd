@@ -27,11 +27,12 @@ export interface Vendor {
   id: string;
   name: string;
   type: 'Home Cook' | 'Tiffin Service';
-  description: string;
-  rating: number; // Average rating
-  address: string;
-  city: string;
+  description?: string;
+  rating?: number; // Average rating
+  address?: string;
+  city?: string;
   phone?: string;
+  verified?: boolean;
   imageUrl?: string;
   dataAiHint?: string;
   profileImageUrl?: string;
@@ -47,5 +48,3 @@ export interface Vendor {
 export interface CartItem extends Dish {
   quantity: number;
 }
-
-    

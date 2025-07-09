@@ -1,6 +1,5 @@
 
-import { getVendorById } from '@/lib/data';
-import type { Vendor } from '@/lib/types';
+import type { Vendor, Dish, Review } from '@/lib/types';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -25,11 +24,61 @@ async function submitReview(formData: FormData) {
   
   console.log("Review Submitted (Server Action Demo):", rawFormData);
   // This is where you would POST to a /reviews endpoint
+  // Since there is no review endpoint, this is for demonstration.
 }
 
+async function getVendorDetails(id: string): Promise<Vendor | null> {
+  try {
+    const [sellerRes, listingsRes] = await Promise.all([
+      fetch(`http://172.206.209.255:8080/sellers/${id}`),
+      fetch(`http://172.206.209.255:8080/listings?sellerId=${id}`)
+    ]);
 
-export default function VendorDetailPage({ params }: { params: { id: string } }) {
-  const vendor = getVendorById(params.id);
+    if (!sellerRes.ok) {
+      return null;
+    }
+
+    const seller = await sellerRes.json();
+    const listings = listingsRes.ok ? await listingsRes.json() : [];
+
+    const augmentedListings = listings.map(listing => ({
+      ...listing,
+      imageUrl: 'https://placehold.co/300x200.png',
+      dataAiHint: 'food dish',
+    }));
+
+    // Placeholder reviews as there is no API endpoint for it
+    const mockReviews: Review[] = [
+      { id: 'r1-1', userName: 'Raj K.', rating: 5, comment: 'Best food I\'ve had in ages!', date: '2024-07-15T10:00:00Z', userImageUrl: 'https://placehold.co/40x40.png', dataAiHintUser: 'man smiling' },
+      { id: 'r1-2', userName: 'Anita S.', rating: 4, comment: 'Delicious, a bit spicy for me though.', date: '2024-07-14T18:30:00Z', userImageUrl: 'https://placehold.co/40x40.png', dataAiHintUser: 'woman portrait' },
+    ];
+    
+    // Augment the seller data with placeholder values for UI completeness
+    return {
+      id: seller.id,
+      name: seller.name,
+      phone: seller.phone,
+      type: 'Home Cook', // Default type
+      description: `Authentic meals from ${seller.name}. Browse the menu below.`,
+      rating: 4.7, // Placeholder rating
+      address: 'Location not specified',
+      city: 'City',
+      imageUrl: 'https://placehold.co/600x400.png',
+      dataAiHint: 'food vendor',
+      specialty: 'Delicious Home Food',
+      operatingHours: '10 AM - 10 PM',
+      deliveryOptions: ['Pickup', 'Delivery'],
+      menu: augmentedListings,
+      reviews: mockReviews, // Using mock reviews
+    };
+  } catch (error) {
+    console.error("Failed to fetch vendor details:", error);
+    return null;
+  }
+}
+
+export default async function VendorDetailPage({ params }: { params: { id: string } }) {
+  const vendor = await getVendorDetails(params.id);
 
   if (!vendor) {
     notFound();
@@ -114,7 +163,7 @@ export default function VendorDetailPage({ params }: { params: { id: string } })
           <SectionTitle title="Our Menu" className="text-center mb-6" />
           {vendor.menu && vendor.menu.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {vendor.menu.map((dish) => (
+              {vendor.menu.map((dish: Dish) => (
                 <DishCard key={dish.id} dish={dish} />
               ))}
             </div>
@@ -128,7 +177,7 @@ export default function VendorDetailPage({ params }: { params: { id: string } })
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               {vendor.reviews && vendor.reviews.length > 0 ? (
-                vendor.reviews.map((review) => (
+                vendor.reviews.map((review: Review) => (
                   <ReviewCard key={review.id} review={review} />
                 ))
               ) : (

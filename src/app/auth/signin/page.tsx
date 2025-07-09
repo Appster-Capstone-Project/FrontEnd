@@ -66,22 +66,18 @@ function SignInCard() {
       localStorage.setItem("userId", user.id);
       
       // Now, determine if the user is a seller to redirect correctly
-      const sellerCheckResponse = await fetch(`/api/sellers/${user.id}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const sellerCheckResponse = await fetch(`/api/sellers/${user.id}`);
 
       let userRole = 'user';
       if (sellerCheckResponse.ok) {
           const sellerData = await sellerCheckResponse.json();
-          // Additional check to be sure
+          // Additional check to be sure it's a valid seller object
           if(sellerData && sellerData.id === user.id){
               userRole = 'seller';
           }
       }
       
       localStorage.setItem("userRole", userRole);
-      // City is not available from the backend, so we remove it or handle it gracefully
-      localStorage.removeItem("userCity"); 
 
       toast({
         title: "Login Successful!",
@@ -107,7 +103,7 @@ function SignInCard() {
   };
   
   const title = isSellerView ? 'Seller Sign In' : 'Welcome Back!';
-  const description = isSellerView ? 'Sign in to your seller dashboard.' : 'Sign in to continue to Tiffin Box.';
+  const description = isSellerView ? 'Sign in to your seller dashboard.' : 'Sign in to continue to HomePalate.';
   const signupLink = isSellerView ? '/auth/signup?type=seller' : '/auth/signup';
 
   return (

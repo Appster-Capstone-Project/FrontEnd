@@ -739,6 +739,10 @@ h1, h2, h3, h4, h5, h6 {
   height: 100svh;
 }
 
+.h-\[225px\] {
+  height: 225px;
+}
+
 .max-h-96 {
   max-height: 24rem;
 }
@@ -1486,6 +1490,11 @@ h1, h2, h3, h4, h5, h6 {
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.py-16 {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
 
 .pb-2 {

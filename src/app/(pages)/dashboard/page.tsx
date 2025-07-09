@@ -5,40 +5,72 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SectionTitle from '@/components/shared/SectionTitle';
 import VendorCard from '@/components/shared/VendorCard';
-import { mockVendors } from '@/lib/data';
 import type { Vendor } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useToast } from '@/hooks/use-toast';
+
+// Helper to augment API data with placeholder UI data
+const augmentSellerData = (seller): Vendor => ({
+  id: seller.id,
+  name: seller.name,
+  phone: seller.phone,
+  type: 'Home Cook', // Default type
+  description: `Authentic meals from ${seller.name}.`, // Placeholder
+  rating: 4.5, // Placeholder
+  address: 'Location not specified', // Placeholder
+  city: 'City', // Placeholder
+  imageUrl: 'https://placehold.co/400x250.png',
+  dataAiHint: 'food vendor',
+  menu: [],
+  reviews: [],
+  specialty: 'Delicious Home Food',
+  operatingHours: '10 AM - 10 PM',
+  deliveryOptions: ['Pickup', 'Delivery'],
+});
+
 
 export default function DashboardPage() {
   const router = useRouter();
+  const { toast } = useToast();
   const [userName, setUserName] = useState<string | null>(null);
-  const [userCity, setUserCity] = useState<string | null>(null);
   const [suggestedVendors, setSuggestedVendors] = useState<Vendor[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    // In a real app, you might want to verify the token or redirect if not found
     if (!token) {
       router.push('/auth/signin');
       return;
     }
 
     const nameFromStorage = localStorage.getItem('userName');
-    const cityFromStorage = localStorage.getItem('userCity');
-    
     setUserName(nameFromStorage);
-    setUserCity(cityFromStorage);
 
-    if (cityFromStorage) {
-      const nearby = mockVendors.filter(vendor => vendor.city.toLowerCase() === cityFromStorage.toLowerCase());
-      setSuggestedVendors(nearby.length > 0 ? nearby : mockVendors.slice(0, 3));
-    } else {
-      setSuggestedVendors(mockVendors.slice(0, 3)); // Default suggestions
-    }
-    setIsLoading(false);
-  }, [router]);
+    const fetchVendors = async () => {
+      try {
+        const response = await fetch('/api/sellers');
+        if (!response.ok) {
+          throw new Error('Failed to fetch vendors');
+        }
+        const sellers = await response.json();
+        const augmentedVendors = sellers.map(augmentSellerData);
+        // Show first 3 as suggestions
+        setSuggestedVendors(augmentedVendors.slice(0, 3));
+      } catch (error) {
+        console.error("Dashboard fetch error:", error);
+        toast({
+          variant: "destructive",
+          title: "Could not load suggestions",
+          description: (error as Error).message,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchVendors();
+  }, [router, toast]);
 
   if (isLoading) {
     return (
@@ -55,7 +87,6 @@ export default function DashboardPage() {
   }
   
   if (!userName) {
-     // Fallback if user name is somehow not set after loading, or user is not "logged in"
     return (
         <div className="container py-12 text-center">
             <p className="text-lg text-muted-foreground mb-4">Please sign in to view your dashboard.</p>
@@ -68,7 +99,7 @@ export default function DashboardPage() {
     <div className="container py-12 md:py-16">
       <SectionTitle
         title={`Welcome back, ${userName}!`}
-        subtitle={userCity ? `Here are some suggestions in ${userCity}:` : "Here are some popular suggestions for you:"}
+        subtitle={"Here are some popular suggestions for you:"}
         className="mb-10 text-center md:text-left"
       />
 
@@ -80,7 +111,7 @@ export default function DashboardPage() {
         </div>
       ) : (
         <p className="text-center text-muted-foreground py-12 text-lg">
-          We couldn't find specific suggestions {userCity ? `for ${userCity}` : 'for you'} at the moment. Please check back later!
+          No vendors found at the moment. Please check back later!
         </p>
       )}
       
@@ -88,7 +119,8 @@ export default function DashboardPage() {
         <Button onClick={() => {
           localStorage.removeItem('token');
           localStorage.removeItem('userName');
-          localStorage.removeItem('userCity');
+          localStorage.removeItem('userId');
+          localStorage.removeItem('userRole');
           router.push('/auth/signin');
         }} variant="outline">
           Log Out
