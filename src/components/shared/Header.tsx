@@ -71,8 +71,6 @@ const Header = () => {
     setTimeout(() => setIsLoading(false), 50); 
   };
   
-  const dashboardHref = userRole === 'seller' ? '/sell' : '/dashboard';
-
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
@@ -107,12 +105,21 @@ const Header = () => {
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                   <Link href={dashboardHref}>
-                    <LayoutDashboard className="mr-2 h-4 w-4" />
-                    <span>Dashboard</span>
-                   </Link>
-                </DropdownMenuItem>
+                {userRole === 'seller' ? (
+                   <DropdownMenuItem asChild>
+                     <Link href="/sell">
+                       <ChefHat className="mr-2 h-4 w-4" />
+                       <span>Seller Dashboard</span>
+                     </Link>
+                   </DropdownMenuItem>
+                ) : (
+                  <DropdownMenuItem asChild>
+                     <Link href="/dashboard">
+                       <LayoutDashboard className="mr-2 h-4 w-4" />
+                       <span>Dashboard</span>
+                     </Link>
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem asChild>
                   <Link href="/orders">
                     <ListOrdered className="mr-2 h-4 w-4" />
