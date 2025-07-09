@@ -2,15 +2,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import SectionTitle from "@/components/shared/SectionTitle";
 import VendorCard from "@/components/shared/VendorCard";
 import type { Vendor } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import CategoryTabs from "@/components/shared/CategoryTabs";
 import { useToast } from "@/hooks/use-toast";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ChefHat } from "lucide-react";
 
 // Helper to augment seller data from the API with placeholder data for the UI
 const augmentSellerData = (seller): Vendor => ({
@@ -38,16 +36,26 @@ const categories = [
 ];
 
 export default function VendorsPage() {
+  const router = useRouter();
   const [allVendors, setAllVendors] = useState<Vendor[]>([]);
   const [filteredVendors, setFilteredVendors] = useState<Vendor[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isReady, setIsReady] = useState(false); // State to control rendering after role check
   const [activeCategory, setActiveCategory] = useState<Vendor['type'] | 'all'>('all');
-  const [userRole, setUserRole] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
     const role = localStorage.getItem('userRole');
-    setUserRole(role);
+
+    // If the current user is a seller, they should not be on this page.
+    // Redirect them to their own dashboard immediately.
+    if (role === 'seller') {
+      router.replace('/sell');
+      return; // Stop further execution in this component
+    }
+
+    // If not a seller, proceed to render the page and fetch data
+    setIsReady(true);
 
     const fetchVendors = async () => {
       setIsLoading(true);
@@ -75,7 +83,7 @@ export default function VendorsPage() {
     };
 
     fetchVendors();
-  }, [toast]);
+  }, [router, toast]);
 
   const handleCategoryChange = (category: Vendor['type'] | 'all') => {
     setActiveCategory(category);
@@ -86,21 +94,19 @@ export default function VendorsPage() {
     }
   };
   
+  // Render a loading state until the role check is complete to prevent content flashing.
+  if (!isReady) {
+    return (
+      <div className="container py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container py-12 md:py-16">
-      {userRole === 'seller' && (
-        <Alert className="mb-8 bg-secondary border-primary/50 text-secondary-foreground">
-          <ChefHat className="h-5 w-5 text-accent" />
-          <AlertTitle className="font-headline text-lg text-foreground">You are viewing as a Seller</AlertTitle>
-          <AlertDescription className="text-foreground/80">
-            This page is for browsing all vendors on HomePalate. To manage your own menu and add new dishes, please visit your{' '}
-            <Link href="/sell" className="font-bold text-primary hover:underline">
-              Seller Dashboard
-            </Link>.
-          </AlertDescription>
-        </Alert>
-      )}
-
       <SectionTitle 
         title="Find Your Next Meal"
         subtitle="Browse our collection of talented home cooks and reliable tiffin services."
