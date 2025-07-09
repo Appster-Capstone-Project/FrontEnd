@@ -85,11 +85,11 @@ export default function SellPage() {
     e.preventDefault();
     const sellerId = localStorage.getItem("userId");
 
-    if (!title || !price) {
+    if (!title || !price || !description) {
       toast({
         variant: "destructive",
         title: "Missing Information",
-        description: "Dish Title and Price are required.",
+        description: "Dish Title, Price, and Description are required.",
       });
       return;
     }
@@ -185,7 +185,7 @@ export default function SellPage() {
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="description">Description (Optional)</Label>
+                  <Label htmlFor="description">Description</Label>
                   <Textarea id="description" placeholder="Describe your dish..." value={description} onChange={e => setDescription(e.target.value)} disabled={isLoading} />
                 </div>
                 <div className="flex items-center space-x-3">
