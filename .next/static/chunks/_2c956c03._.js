@@ -576,6 +576,7 @@ __turbopack_context__.s({
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/navigation.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$shared$2f$SectionTitle$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/shared/SectionTitle.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$shared$2f$VendorCard$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/shared/VendorCard.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/skeleton.tsx [app-client] (ecmascript)");
@@ -584,6 +585,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$use$2d$toast
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
+;
 ;
 ;
 ;
@@ -624,13 +626,24 @@ const categories = [
 ];
 function VendorsPage() {
     _s();
+    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     const [allVendors, setAllVendors] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [filteredVendors, setFilteredVendors] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
+    const [isReady, setIsReady] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false); // State to control rendering after role check
     const [activeCategory, setActiveCategory] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('all');
     const { toast } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useToast"])();
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "VendorsPage.useEffect": ()=>{
+            const role = localStorage.getItem('userRole');
+            // If the current user is a seller, they should not be on this page.
+            // Redirect them to their own dashboard immediately.
+            if (role === 'seller') {
+                router.replace('/sell');
+                return; // Stop further execution in this component
+            }
+            // If not a seller, proceed to render the page and fetch data
+            setIsReady(true);
             const fetchVendors = {
                 "VendorsPage.useEffect.fetchVendors": async ()=>{
                     setIsLoading(true);
@@ -640,7 +653,6 @@ function VendorsPage() {
                             throw new Error('Failed to fetch vendors from API.');
                         }
                         const sellers = await response.json();
-                        // Use helper to augment data
                         const augmentedData = Array.isArray(sellers) ? sellers.map(augmentSellerData) : [];
                         setAllVendors(augmentedData);
                         setFilteredVendors(augmentedData);
@@ -659,6 +671,7 @@ function VendorsPage() {
             fetchVendors();
         }
     }["VendorsPage.useEffect"], [
+        router,
         toast
     ]);
     const handleCategoryChange = (category)=>{
@@ -669,6 +682,30 @@ function VendorsPage() {
             setFilteredVendors(allVendors.filter((vendor)=>vendor.type === category));
         }
     };
+    // Render a loading state until the role check is complete to prevent content flashing.
+    if (!isReady) {
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "container py-12 md:py-16",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
+                children: [
+                    ...Array(6)
+                ].map((_, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CardSkeleton, {}, i, false, {
+                        fileName: "[project]/src/app/vendors/page.tsx",
+                        lineNumber: 102,
+                        columnNumber: 42
+                    }, this))
+            }, void 0, false, {
+                fileName: "[project]/src/app/vendors/page.tsx",
+                lineNumber: 101,
+                columnNumber: 9
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/src/app/vendors/page.tsx",
+            lineNumber: 100,
+            columnNumber: 7
+        }, this);
+    }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "container py-12 md:py-16",
         children: [
@@ -678,7 +715,7 @@ function VendorsPage() {
                 className: "text-center"
             }, void 0, false, {
                 fileName: "[project]/src/app/vendors/page.tsx",
-                lineNumber: 84,
+                lineNumber: 110,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -689,12 +726,12 @@ function VendorsPage() {
                     onCategoryChange: handleCategoryChange
                 }, void 0, false, {
                     fileName: "[project]/src/app/vendors/page.tsx",
-                    lineNumber: 90,
+                    lineNumber: 116,
                     columnNumber: 10
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/vendors/page.tsx",
-                lineNumber: 89,
+                lineNumber: 115,
                 columnNumber: 7
             }, this),
             isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -703,12 +740,12 @@ function VendorsPage() {
                     ...Array(6)
                 ].map((_, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CardSkeleton, {}, i, false, {
                         fileName: "[project]/src/app/vendors/page.tsx",
-                        lineNumber: 99,
+                        lineNumber: 125,
                         columnNumber: 42
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/src/app/vendors/page.tsx",
-                lineNumber: 98,
+                lineNumber: 124,
                 columnNumber: 9
             }, this) : filteredVendors.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
@@ -716,12 +753,12 @@ function VendorsPage() {
                         vendor: vendor
                     }, vendor.id, false, {
                         fileName: "[project]/src/app/vendors/page.tsx",
-                        lineNumber: 104,
+                        lineNumber: 130,
                         columnNumber: 13
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/src/app/vendors/page.tsx",
-                lineNumber: 102,
+                lineNumber: 128,
                 columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "text-center py-16",
@@ -734,23 +771,24 @@ function VendorsPage() {
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/vendors/page.tsx",
-                    lineNumber: 109,
+                    lineNumber: 135,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/vendors/page.tsx",
-                lineNumber: 108,
+                lineNumber: 134,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/vendors/page.tsx",
-        lineNumber: 83,
+        lineNumber: 109,
         columnNumber: 5
     }, this);
 }
-_s(VendorsPage, "XAhq87d+GDNAOaP1r1xxqnbOej4=", false, function() {
+_s(VendorsPage, "YoNrFoqMPIv+IaHDqvreSl8oz8Y=", false, function() {
     return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useToast"]
     ];
 });
@@ -762,7 +800,7 @@ const CardSkeleton = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$pr
                 className: "h-[225px] w-full rounded-xl"
             }, void 0, false, {
                 fileName: "[project]/src/app/vendors/page.tsx",
-                lineNumber: 120,
+                lineNumber: 146,
                 columnNumber: 5
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -772,26 +810,26 @@ const CardSkeleton = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$pr
                         className: "h-4 w-4/5"
                     }, void 0, false, {
                         fileName: "[project]/src/app/vendors/page.tsx",
-                        lineNumber: 122,
+                        lineNumber: 148,
                         columnNumber: 7
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Skeleton"], {
                         className: "h-4 w-3/5"
                     }, void 0, false, {
                         fileName: "[project]/src/app/vendors/page.tsx",
-                        lineNumber: 123,
+                        lineNumber: 149,
                         columnNumber: 7
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/vendors/page.tsx",
-                lineNumber: 121,
+                lineNumber: 147,
                 columnNumber: 5
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/vendors/page.tsx",
-        lineNumber: 119,
+        lineNumber: 145,
         columnNumber: 3
     }, this);
 _c1 = CardSkeleton;

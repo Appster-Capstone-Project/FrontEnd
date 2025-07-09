@@ -9,13 +9,16 @@ import type { Vendor } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import CategoryTabs from "@/components/shared/CategoryTabs";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ChefHat } from "lucide-react";
 
 // Helper to augment seller data from the API with placeholder data for the UI
 const augmentSellerData = (seller): Vendor => ({
   id: seller.id,
   name: seller.name,
   phone: seller.phone,
-  verified: seller.verified,
   // Add placeholder data for fields not in the API response
   type: 'Home Cook', // Default type, can be enhanced if API provides it
   description: `Authentic meals from ${seller.name}. Explore a variety of delicious home-cooked food.`,
@@ -40,12 +43,14 @@ export default function VendorsPage() {
   const [allVendors, setAllVendors] = useState<Vendor[]>([]);
   const [filteredVendors, setFilteredVendors] = useState<Vendor[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [userRole, setUserRole] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false); // State to control rendering after role check
   const [activeCategory, setActiveCategory] = useState<Vendor['type'] | 'all'>('all');
   const { toast } = useToast();
 
   useEffect(() => {
     const role = localStorage.getItem('userRole');
+    setUserRole(role);
 
     // If the current user is a seller, they should not be on this page.
     // Redirect them to their own dashboard immediately.
