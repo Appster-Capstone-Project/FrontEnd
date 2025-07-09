@@ -2053,6 +2053,10 @@ body {
   width: 2px;
 }
 
+.last\:border-b-0:last-child {
+  border-bottom-width: 0;
+}
+
 .focus-within\:relative:focus-within {
   position: relative;
 }
