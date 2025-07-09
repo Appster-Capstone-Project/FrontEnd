@@ -28,6 +28,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Header = () => {
   const { getItemCount } = useCart();
@@ -36,23 +37,33 @@ const Header = () => {
   
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // This check runs only on the client-side
+    // This effect runs on the client and checks the login status.
     const token = localStorage.getItem('token');
     const name = localStorage.getItem('userName');
-    if (token) {
+    if (token && name) {
       setIsLoggedIn(true);
-      setUserName(name || 'User');
+      setUserName(name);
+    } else {
+      setIsLoggedIn(false);
+      setUserName('');
     }
+    setIsLoading(false);
   }, []);
 
   const handleLogout = () => {
+    setIsLoading(true);
     localStorage.removeItem('token');
     localStorage.removeItem('userName');
-    localStorage.removeItem('userCity');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userRole');
     setIsLoggedIn(false);
+    setUserName('');
     router.push('/auth/signin');
+    // A small delay to ensure state updates before the loading indicator is removed on the next page
+    setTimeout(() => setIsLoading(false), 50); 
   };
 
   return (
@@ -74,7 +85,11 @@ const Header = () => {
             </Link>
           </Button>
 
-          {isLoggedIn ? (
+          {isLoading ? (
+            <div className="flex items-center space-x-2">
+              <Skeleton className="h-9 w-24 rounded-md" />
+            </div>
+          ) : isLoggedIn ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="flex items-center space-x-2">
