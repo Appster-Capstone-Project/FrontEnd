@@ -30,8 +30,8 @@ async function submitReview(formData: FormData) {
 async function getVendorDetails(id: string): Promise<Vendor | null> {
   try {
     const [sellerRes, listingsRes] = await Promise.all([
-      fetch(`http://172.206.209.255:8080/sellers/${id}`),
-      fetch(`http://172.206.209.255:8080/listings?sellerId=${id}`)
+      fetch(`http://52.179.100.231:8080/sellers/${id}`),
+      fetch(`http://52.179.100.231:8080/listings?sellerId=${id}`)
     ]);
 
     if (!sellerRes.ok) {
