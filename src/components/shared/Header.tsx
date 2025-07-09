@@ -37,18 +37,22 @@ const Header = () => {
   
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
+  const [userRole, setUserRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // This effect runs on the client and checks the login status.
     const token = localStorage.getItem('token');
     const name = localStorage.getItem('userName');
-    if (token && name) {
+    const role = localStorage.getItem('userRole');
+    if (token && name && role) {
       setIsLoggedIn(true);
       setUserName(name);
+      setUserRole(role);
     } else {
       setIsLoggedIn(false);
       setUserName('');
+      setUserRole(null);
     }
     setIsLoading(false);
   }, []);
@@ -61,10 +65,13 @@ const Header = () => {
     localStorage.removeItem('userRole');
     setIsLoggedIn(false);
     setUserName('');
+    setUserRole(null);
     router.push('/auth/signin');
     // A small delay to ensure state updates before the loading indicator is removed on the next page
     setTimeout(() => setIsLoading(false), 50); 
   };
+  
+  const dashboardHref = userRole === 'seller' ? '/sell' : '/dashboard';
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -101,7 +108,7 @@ const Header = () => {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                   <Link href="/dashboard">
+                   <Link href={dashboardHref}>
                     <LayoutDashboard className="mr-2 h-4 w-4" />
                     <span>Dashboard</span>
                    </Link>
