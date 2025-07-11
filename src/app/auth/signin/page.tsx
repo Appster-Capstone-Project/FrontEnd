@@ -161,12 +161,12 @@ function SignInCard() {
           </Button>
           <div className="w-full text-center text-sm text-muted-foreground space-y-2">
             <p>
-              Don&apos;t have an account?{" "}
+              {isSellerView ? "Not a seller yet? " : "Don't have an account? "}
               <Link
                 href={signupLink}
                 className="font-medium text-primary hover:underline"
               >
-                Sign Up
+                {isSellerView ? "Sign up as a seller and start earning!" : "Sign Up"}
               </Link>
             </p>
              <p>
