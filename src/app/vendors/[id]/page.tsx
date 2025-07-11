@@ -30,22 +30,26 @@ async function submitReview(formData: FormData) {
 async function getVendorDetails(id: string): Promise<Vendor | null> {
   try {
     const [sellerRes, listingsRes] = await Promise.all([
-      fetch(`http://20.121.187.205:8080/sellers/${id}`),
-      fetch(`http://20.121.187.205:8080/listings?sellerId=${id}`)
+      fetch(`http://20.121.187.205/sellers/${id}`),
+      fetch(`http://20.121.187.205/listings?sellerId=${id}`)
     ]);
 
     if (!sellerRes.ok) {
-      return null;
+      if (sellerRes.status === 404) {
+        console.log(`Vendor with ID ${id} not found.`);
+        return null;
+      }
+      throw new Error(`Failed to fetch seller: ${sellerRes.statusText}`);
     }
 
     const seller = await sellerRes.json();
     const listings = listingsRes.ok ? await listingsRes.json() : [];
 
-    const augmentedListings = listings.map(listing => ({
+    const augmentedListings: Dish[] = Array.isArray(listings) ? listings.map(listing => ({
       ...listing,
       imageUrl: 'https://placehold.co/300x200.png',
       dataAiHint: 'food dish',
-    }));
+    })) : [];
 
     // Placeholder reviews as there is no API endpoint for it
     const mockReviews: Review[] = [
@@ -63,6 +67,7 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
       rating: 4.7, // Placeholder rating
       address: 'Location not specified',
       city: 'City',
+      verified: seller.verified,
       imageUrl: 'https://placehold.co/600x400.png',
       dataAiHint: 'food vendor',
       specialty: 'Delicious Home Food',
@@ -108,7 +113,7 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
                 <VendorIcon className="mr-1 h-4 w-4" />
                 {vendor.type}
               </Badge>
-              <StarRating rating={vendor.rating} size={20} showText />
+              <StarRating rating={vendor.rating || 0} size={20} showText />
             </div>
             <h1 className="font-headline text-3xl md:text-4xl font-bold text-primary mb-2">{vendor.name}</h1>
             <p className="text-muted-foreground mb-4">{vendor.description}</p>

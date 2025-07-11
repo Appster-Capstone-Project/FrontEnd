@@ -31,7 +31,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://172.190.162.213/:path*', // your backend IP with port
+        destination: 'http://20.172.176.82/:path*', // your backend IP with port
       },
     ];
   },
