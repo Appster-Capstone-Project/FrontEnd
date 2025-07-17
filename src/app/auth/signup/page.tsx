@@ -31,7 +31,7 @@ async function getApiErrorMessage(response: Response): Promise<string> {
 
 function AuthToggle({ isSellerView }: { isSellerView: boolean }) {
   const baseClass = "flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors";
-  const activeClass = "bg-primary/10 text-primary border-b-2 border-primary";
+  const activeClass = "bg-primary/20 text-primary border-b-2 border-primary font-semibold";
   const inactiveClass = "text-muted-foreground hover:bg-muted/50";
 
   return (

@@ -440,10 +440,6 @@ h1, h2, h3, h4, h5, h6 {
   left: .5rem;
 }
 
-.left-3 {
-  left: .75rem;
-}
-
 .left-\[50\%\] {
   left: 50%;
 }
@@ -476,10 +472,6 @@ h1, h2, h3, h4, h5, h6 {
   top: .375rem;
 }
 
-.top-1\/2 {
-  top: 50%;
-}
-
 .top-2 {
   top: .5rem;
 }
@@ -493,6 +485,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .top-\[50\%\] {
+  top: 50%;
+}
+
+.left-3 {
+  left: .75rem;
+}
+
+.top-1\/2 {
   top: 50%;
 }
 
@@ -551,6 +551,10 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: .25rem;
 }
 
+.mb-10 {
+  margin-bottom: 2.5rem;
+}
+
 .mb-2 {
   margin-bottom: .5rem;
 }
@@ -591,6 +595,10 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: .25rem;
 }
 
+.mt-12 {
+  margin-top: 3rem;
+}
+
 .mt-2 {
   margin-top: .5rem;
 }
@@ -599,12 +607,12 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 1rem;
 }
 
-.mt-8 {
-  margin-top: 2rem;
-}
-
 .mt-auto {
   margin-top: auto;
+}
+
+.mt-8 {
+  margin-top: 2rem;
 }
 
 .line-clamp-2 {
@@ -663,10 +671,6 @@ h1, h2, h3, h4, h5, h6 {
   height: 3rem;
 }
 
-.h-14 {
-  height: 3.5rem;
-}
-
 .h-16 {
   height: 4rem;
 }
@@ -685,10 +689,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .h-3\.5 {
   height: .875rem;
-}
-
-.h-32 {
-  height: 8rem;
 }
 
 .h-4 {
@@ -727,6 +727,10 @@ h1, h2, h3, h4, h5, h6 {
   height: 2.25rem;
 }
 
+.h-\[125px\] {
+  height: 125px;
+}
+
 .h-\[1px\] {
   height: 1px;
 }
@@ -749,6 +753,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .h-svh {
   height: 100svh;
+}
+
+.h-14 {
+  height: 3.5rem;
+}
+
+.h-32 {
+  height: 8rem;
 }
 
 .max-h-96 {
@@ -875,10 +887,6 @@ h1, h2, h3, h4, h5, h6 {
   width: 14rem;
 }
 
-.w-6 {
-  width: 1.5rem;
-}
-
 .w-64 {
   width: 16rem;
 }
@@ -915,6 +923,14 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
 }
 
+.w-2\/3 {
+  width: 66.6667%;
+}
+
+.w-6 {
+  width: 1.5rem;
+}
+
 .w-14 {
   width: 3.5rem;
 }
@@ -943,10 +959,6 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 42rem;
 }
 
-.max-w-4xl {
-  max-width: 56rem;
-}
-
 .max-w-\[--skeleton-width\] {
   max-width: var(--skeleton-width);
 }
@@ -961,6 +973,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .max-w-screen-2xl {
   max-width: 1536px;
+}
+
+.max-w-4xl {
+  max-width: 56rem;
 }
 
 .max-w-xs {
@@ -997,11 +1013,6 @@ h1, h2, h3, h4, h5, h6 {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.-translate-y-1\/2 {
-  --tw-translate-y: -50%;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
 .-translate-y-1\/4 {
   --tw-translate-y: -25%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
@@ -1022,7 +1033,7 @@ h1, h2, h3, h4, h5, h6 {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.translate-y-\[-50\%\] {
+.translate-y-\[-50\%\], .-translate-y-1\/2 {
   --tw-translate-y: -50%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
@@ -1203,6 +1214,12 @@ h1, h2, h3, h4, h5, h6 {
   --tw-space-y-reverse: 0;
   margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
+}
+
+.space-y-0 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0px * var(--tw-space-y-reverse));
 }
 
 .space-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -1388,10 +1405,6 @@ h1, h2, h3, h4, h5, h6 {
   background-color: hsl(var(--muted));
 }
 
-.bg-muted\/40 {
-  background-color: hsl(var(--muted) / .4);
-}
-
 .bg-muted\/50 {
   background-color: hsl(var(--muted) / .5);
 }
@@ -1420,8 +1433,16 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #0000;
 }
 
+.bg-muted\/40 {
+  background-color: hsl(var(--muted) / .4);
+}
+
 .bg-primary\/10 {
   background-color: hsl(var(--primary) / .1);
+}
+
+.bg-primary\/20 {
+  background-color: hsl(var(--primary) / .2);
 }
 
 .bg-cover {
@@ -1569,14 +1590,6 @@ h1, h2, h3, h4, h5, h6 {
   padding-bottom: 1rem;
 }
 
-.pb-6 {
-  padding-bottom: 1.5rem;
-}
-
-.pl-10 {
-  padding-left: 2.5rem;
-}
-
 .pl-8 {
   padding-left: 2rem;
 }
@@ -1609,20 +1622,28 @@ h1, h2, h3, h4, h5, h6 {
   padding-top: .75rem;
 }
 
-.pt-4 {
-  padding-top: 1rem;
+.pt-6 {
+  padding-top: 1.5rem;
+}
+
+.pb-6 {
+  padding-bottom: 1.5rem;
 }
 
 .pt-5 {
   padding-top: 1.25rem;
 }
 
-.pt-6 {
-  padding-top: 1.5rem;
+.pt-4 {
+  padding-top: 1rem;
 }
 
 .pt-8 {
   padding-top: 2rem;
+}
+
+.pl-10 {
+  padding-left: 2.5rem;
 }
 
 .text-left {
@@ -1659,11 +1680,6 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 2.25rem;
 }
 
-.text-4xl {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
-}
-
 .text-\[0\.8rem\] {
   font-size: .8rem;
 }
@@ -1691,6 +1707,11 @@ h1, h2, h3, h4, h5, h6 {
 .text-xs {
   font-size: .75rem;
   line-height: 1rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 .font-bold {
@@ -2133,10 +2154,6 @@ body {
   background-color: hsl(var(--destructive) / .9);
 }
 
-.hover\:bg-muted:hover {
-  background-color: hsl(var(--muted));
-}
-
 .hover\:bg-muted\/50:hover {
   background-color: hsl(var(--muted) / .5);
 }
@@ -2163,6 +2180,10 @@ body {
 
 .hover\:bg-sidebar-accent:hover {
   background-color: hsl(var(--sidebar-accent));
+}
+
+.hover\:bg-muted:hover {
+  background-color: hsl(var(--muted));
 }
 
 .hover\:text-accent-foreground:hover {
@@ -2984,12 +3005,12 @@ body {
     margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
   }
 
-  .md\:p-4 {
-    padding: 1rem;
-  }
-
   .md\:p-8 {
     padding: 2rem;
+  }
+
+  .md\:p-4 {
+    padding: 1rem;
   }
 
   .md\:py-0 {
@@ -3058,6 +3079,10 @@ body {
 }
 
 @media (width >= 1024px) {
+  .lg\:col-span-2 {
+    grid-column: span 2 / span 2;
+  }
+
   .lg\:h-\[60px\] {
     height: 60px;
   }
