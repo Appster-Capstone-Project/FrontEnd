@@ -56,40 +56,49 @@ function SignInCard() {
       }
       
       localStorage.setItem("token", token);
-
-      // After getting token, fetch profile to get user details
-      // Note: We assume both user and seller profiles can be fetched via /api/users/profile for name/id
-      const profileResponse = await fetch('/api/users/profile', {
-          headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      if (!profileResponse.ok) {
-          throw new Error("Failed to fetch user profile.");
-      }
-      
-      const user = await profileResponse.json();
-
-      localStorage.setItem("userName", user.name);
-      localStorage.setItem("userId", user.id);
       
       if (isSellerView) {
-        // If it's a seller login, we need to find the seller ID to store it
-        const allSellersResponse = await fetch('/api/sellers');
-         if (allSellersResponse.ok) {
-            const sellers = await allSellersResponse.json();
-            const matchingSeller = Array.isArray(sellers) ? sellers.find(s => s.email === email) : undefined;
-            if (matchingSeller) {
-                localStorage.setItem("sellerId", matchingSeller.id);
-            }
-         }
+        // For sellers, we fetch their details from the /sellers list
+        const sellersResponse = await fetch('/api/sellers', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!sellersResponse.ok) {
+            throw new Error("Failed to fetch seller profile.");
+        }
+        
+        const sellers = await sellersResponse.json();
+        const sellerProfile = Array.isArray(sellers) ? sellers.find(s => s.email === email) : null;
+
+        if (!sellerProfile) {
+            throw new Error("Could not find seller profile for the given email.");
+        }
+
+        localStorage.setItem("userName", sellerProfile.name);
+        localStorage.setItem("sellerId", sellerProfile.id);
         localStorage.setItem("userRole", "seller");
+
         toast({
             title: "Seller Login Successful!",
-            description: `Welcome back, ${user.name}! Redirecting to your dashboard...`,
+            description: `Welcome back, ${sellerProfile.name}! Redirecting to your dashboard...`,
         });
         router.push('/sell');
       } else {
+        // For users, we fetch their details from the /users/profile endpoint
+        const profileResponse = await fetch('/api/users/profile', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!profileResponse.ok) {
+            throw new Error("Failed to fetch user profile.");
+        }
+        
+        const user = await profileResponse.json();
+
+        localStorage.setItem("userName", user.name);
+        localStorage.setItem("userId", user.id);
         localStorage.setItem("userRole", "user");
+
         toast({
             title: "Login Successful!",
             description: `Welcome back, ${user.name}!`,
