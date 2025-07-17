@@ -128,7 +128,7 @@ function SignUpCard() {
   const signInLink = isSeller ? '/auth/signin?type=seller' : '/auth/signin';
 
   return (
-      <Card className="w-full max-w-md shadow-xl border-2 border-primary/20">
+      <Card className="w-full max-w-md shadow-xl border-4 border-primary/20">
         <CardHeader className="text-center">
             <div className="relative mx-auto flex items-center justify-center mb-4">
               <Package className="h-14 w-14 text-primary" />
