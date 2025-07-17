@@ -29,9 +29,10 @@ async function submitReview(formData: FormData) {
 
 async function getVendorDetails(id: string): Promise<Vendor | null> {
   try {
+    // Use relative paths to leverage Next.js rewrites configured in next.config.ts
     const [sellerRes, listingsRes] = await Promise.all([
-      fetch(`http://20.121.187.205/sellers/${id}`),
-      fetch(`http://20.121.187.205/listings?sellerId=${id}`)
+      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sellers/${id}`),
+      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/listings?sellerId=${id}`)
     ]);
 
     if (!sellerRes.ok) {
@@ -78,7 +79,11 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     };
   } catch (error) {
     console.error("Failed to fetch vendor details:", error);
-    return null;
+    // Re-throwing the error is important for the error boundary to catch it
+    if (error instanceof Error) {
+        throw new Error(`Network request failed: ${error.message}`);
+    }
+    throw new Error('An unknown network error occurred.');
   }
 }
 
