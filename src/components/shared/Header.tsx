@@ -80,7 +80,7 @@ const Header = () => {
             <Package className="h-7 w-7 text-primary" />
             <Heart className="absolute top-0 right-0 h-3.5 w-3.5 text-accent fill-accent transform translate-x-1/4 -translate-y-1/4" />
           </div>
-          <span className="font-headline text-2xl font-bold text-foreground">Tiffin Box</span>
+          <span className="font-headline text-2xl font-bold text-foreground">HomePalate</span>
         </Link>
         
         <nav className="flex items-center space-x-2 md:space-x-4">

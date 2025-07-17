@@ -89,7 +89,7 @@ export default function SellerLayout({
                 <Package className="h-7 w-7 text-primary" />
                 <Heart className="absolute top-0 right-0 h-3.5 w-3.5 text-accent fill-accent transform translate-x-1/4 -translate-y-1/4" />
               </div>
-              <span className="font-headline text-xl">Tiffin Box</span>
+              <span className="font-headline text-xl">HomePalate</span>
             </Link>
           </div>
           <div className="flex-1">
@@ -133,9 +133,7 @@ export default function SellerLayout({
       </div>
       <div className="flex flex-col">
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
-          {/* Mobile Nav could go here if needed */}
           <div className="w-full flex-1">
-            {/* Can add a search bar here if needed */}
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -157,7 +155,8 @@ export default function SellerLayout({
                 Logout
               </DropdownMenuItem>
             </DropdownMenuContent>
-          </header>
+          </DropdownMenu>
+        </header>
         <main className="flex-grow bg-background overflow-auto">
             {children}
         </main>
