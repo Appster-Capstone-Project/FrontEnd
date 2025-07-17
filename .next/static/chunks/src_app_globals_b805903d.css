@@ -599,6 +599,10 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 1rem;
 }
 
+.mt-auto {
+  margin-top: auto;
+}
+
 .line-clamp-2 {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -737,6 +741,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .h-svh {
   height: 100svh;
+}
+
+.h-14 {
+  height: 3.5rem;
+}
+
+.h-32 {
+  height: 8rem;
 }
 
 .max-h-96 {
@@ -937,6 +949,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .max-w-screen-2xl {
   max-width: 1536px;
+}
+
+.max-w-4xl {
+  max-width: 56rem;
 }
 
 .flex-1 {
@@ -1356,6 +1372,10 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #0000;
 }
 
+.bg-muted\/40 {
+  background-color: hsl(var(--muted) / .4);
+}
+
 .bg-cover {
   background-size: cover;
 }
@@ -1530,6 +1550,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .pt-6 {
   padding-top: 1.5rem;
+}
+
+.pb-6 {
+  padding-bottom: 1.5rem;
+}
+
+.pt-5 {
+  padding-top: 1.25rem;
 }
 
 .text-left {
@@ -2061,6 +2089,10 @@ body {
 
 .hover\:bg-sidebar-accent:hover {
   background-color: hsl(var(--sidebar-accent));
+}
+
+.hover\:bg-muted:hover {
+  background-color: hsl(var(--muted));
 }
 
 .hover\:text-accent-foreground:hover {
@@ -2860,8 +2892,16 @@ body {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .md\:grid-cols-\[220px_1fr\] {
+    grid-template-columns: 220px 1fr;
+  }
+
   .md\:flex-row {
     flex-direction: row;
+  }
+
+  .md\:gap-8 {
+    gap: 2rem;
   }
 
   .md\:space-x-4 > :not([hidden]) ~ :not([hidden]) {
@@ -2872,6 +2912,10 @@ body {
 
   .md\:p-8 {
     padding: 2rem;
+  }
+
+  .md\:p-4 {
+    padding: 1rem;
   }
 
   .md\:py-0 {
@@ -2887,6 +2931,10 @@ body {
   .md\:py-16 {
     padding-top: 4rem;
     padding-bottom: 4rem;
+  }
+
+  .md\:pt-0 {
+    padding-top: 0;
   }
 
   .md\:text-left {
@@ -2940,12 +2988,30 @@ body {
     grid-column: span 2 / span 2;
   }
 
+  .lg\:h-\[60px\] {
+    height: 60px;
+  }
+
   .lg\:w-1\/3 {
     width: 33.3333%;
   }
 
   .lg\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lg\:grid-cols-\[280px_1fr\] {
+    grid-template-columns: 280px 1fr;
+  }
+
+  .lg\:px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .lg\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 }
 
