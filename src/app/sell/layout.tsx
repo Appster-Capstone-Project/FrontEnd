@@ -11,6 +11,7 @@ import {
   Heart,
   LogOut,
   User,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -89,7 +90,7 @@ export default function SellerLayout({
                 <Package className="h-7 w-7 text-primary" />
                 <Heart className="absolute top-0 right-0 h-3.5 w-3.5 text-accent fill-accent transform translate-x-1/4 -translate-y-1/4" />
               </div>
-              <span className="font-headline text-xl">HomePalate</span>
+              <span className="font-headline text-xl">TiffinBox</span>
             </Link>
           </div>
           <div className="flex-1">
@@ -146,7 +147,8 @@ export default function SellerLayout({
               <DropdownMenuLabel>{userName || "My Account"}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => router.push("/")}>
-                View Storefront
+                 <ExternalLink className="mr-2 h-4 w-4" />
+                View Site
               </DropdownMenuItem>
               <DropdownMenuItem disabled>Support</DropdownMenuItem>
               <DropdownMenuSeparator />

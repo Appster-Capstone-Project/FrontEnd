@@ -1,0 +1,150 @@
+/* [project]/src/app/loading/loading.css [app-client] (css) */
+.tiffin-box-container {
+  width: 150px;
+  height: 200px;
+  position: relative;
+}
+
+.tiffin-box {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tiffin-box .handle {
+  border: 8px solid hsl(var(--primary));
+  border-bottom: none;
+  border-radius: 40px 40px 0 0;
+  width: 80px;
+  height: 40px;
+  animation: 2s ease-in-out infinite alternate handle-swing;
+  position: absolute;
+  top: -65px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tiffin-box .lid {
+  background-color: hsl(var(--accent));
+  transform-origin: 100% 100%;
+  border-radius: 10px 10px 0 0;
+  width: 120px;
+  height: 25px;
+  animation: 1.5s ease-in-out .5s forwards open-lid;
+  position: absolute;
+  top: -25px;
+  left: 50%;
+}
+
+.tiffin-box .box {
+  background-color: hsl(var(--secondary));
+  border: 5px solid hsl(var(--primary));
+  border-radius: 5px;
+  width: 100px;
+  height: 80px;
+}
+
+.hearts {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.heart {
+  color: hsl(var(--primary) / .8);
+  fill: hsl(var(--primary) / .8);
+  opacity: 0;
+  animation: 1.5s ease-out 1s forwards float-up;
+  position: absolute;
+}
+
+.heart.h1 {
+  width: 28px;
+  height: 28px;
+  animation-delay: 1.2s;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.heart.h2 {
+  width: 20px;
+  height: 20px;
+  animation-delay: 1.5s;
+  left: 20%;
+}
+
+.heart.h3 {
+  width: 24px;
+  height: 24px;
+  animation-delay: 1.8s;
+  left: 80%;
+}
+
+.heart.h4 {
+  width: 18px;
+  height: 18px;
+  animation-delay: 2.1s;
+  left: 35%;
+}
+
+.heart.h5 {
+  width: 22px;
+  height: 22px;
+  animation-delay: 2.4s;
+  left: 65%;
+}
+
+@keyframes open-lid {
+  0% {
+    transform: translateX(-50%)rotate(0);
+  }
+
+  100% {
+    transform: translateX(-50%)rotate(-110deg);
+  }
+}
+
+@keyframes handle-swing {
+  from {
+    transform: translateX(-50%)rotate(-5deg);
+  }
+
+  to {
+    transform: translateX(-50%)rotate(5deg);
+  }
+}
+
+@keyframes float-up {
+  0% {
+    opacity: 1;
+    transform: translateY(0)scale(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-120px)scale(1.2);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: 1s ease-out .5s both fade-in-up;
+}
+
+
+/*# sourceMappingURL=src_app_loading_loading_c57dbbf9.css.map*/

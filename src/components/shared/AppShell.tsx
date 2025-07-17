@@ -1,3 +1,4 @@
+
 "use client";
 
 import { usePathname } from 'next/navigation';
@@ -9,7 +10,8 @@ export default function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   // Define paths that should NOT have the main header and footer
-  const noShellRoutes = ['/auth', '/sell'];
+  // as they have their own dedicated layouts.
+  const noShellRoutes = ['/auth', '/sell', '/dashboard', '/orders', '/promotions', '/loading'];
 
   const showShell = !noShellRoutes.some(path => pathname.startsWith(path));
 

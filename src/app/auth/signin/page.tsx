@@ -57,6 +57,9 @@ function SignInCard() {
       
       localStorage.setItem("token", token);
       
+      // Store a flag to show splash screen
+      localStorage.setItem('showSplash', 'true');
+
       if (isSellerView) {
         // For sellers, we fetch their details from the /sellers list
         const sellersResponse = await fetch('/api/sellers', {
@@ -77,12 +80,8 @@ function SignInCard() {
         localStorage.setItem("userName", sellerProfile.name);
         localStorage.setItem("sellerId", sellerProfile.id);
         localStorage.setItem("userRole", "seller");
-
-        toast({
-            title: "Seller Login Successful!",
-            description: `Welcome back, ${sellerProfile.name}! Redirecting to your dashboard...`,
-        });
-        router.push('/sell');
+        
+        router.push('/loading');
       } else {
         // For users, we fetch their details from the /users/profile endpoint
         const profileResponse = await fetch('/api/users/profile', {
@@ -99,11 +98,7 @@ function SignInCard() {
         localStorage.setItem("userId", user.id);
         localStorage.setItem("userRole", "user");
 
-        toast({
-            title: "Login Successful!",
-            description: `Welcome back, ${user.name}!`,
-        });
-        router.push("/vendors");
+        router.push("/loading");
       }
 
     } catch (error) {
@@ -121,7 +116,7 @@ function SignInCard() {
   };
   
   const title = isSellerView ? 'Seller Sign In' : 'Welcome Back!';
-  const description = isSellerView ? 'Sign in to your seller dashboard.' : 'Sign in to continue to HomePalate.';
+  const description = isSellerView ? 'Sign in to your seller dashboard.' : 'Sign in to continue to TiffinBox.';
   const signupLink = isSellerView ? '/auth/signup?type=seller' : '/auth/signup';
   const signupHint = isSellerView ? "Not a seller yet? " : "Don't have an account? ";
   const signupActionText = isSellerView ? "Sign up as a seller and start earning!" : "Sign Up";

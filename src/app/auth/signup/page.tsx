@@ -123,7 +123,7 @@ function SignUpCard() {
   };
 
   const title = isSeller ? 'Create a Seller Account' : 'Create an Account';
-  const description = isSeller ? 'Start selling your homemade food today.' : 'Join HomePalate to discover amazing food.';
+  const description = isSeller ? 'Start selling your homemade food today.' : 'Join TiffinBox to discover amazing food.';
   const signInLink = isSeller ? '/auth/signin?type=seller' : '/auth/signin';
 
   return (

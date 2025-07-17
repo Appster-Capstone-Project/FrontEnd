@@ -93,14 +93,14 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$Providers$
 ;
 ;
 const metadata = {
-    title: 'HomePalate',
-    description: 'HomePalate: Discover nearby home cooks and tiffin services. Browse menus, read reviews, and enjoy authentic homemade meals.',
+    title: 'TiffinBox',
+    description: 'TiffinBox: Discover nearby home cooks and tiffin services. Browse menus, read reviews, and enjoy authentic homemade meals.',
     // manifest: '/manifest.json', // Removed to let next-pwa handle injection
     viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover',
     // Apple PWA Tags
     appleWebAppCapable: 'yes',
     appleWebAppStatusBarStyle: 'default',
-    appleWebAppTitle: 'HomePalate',
+    appleWebAppTitle: 'TiffinBox',
     formatDetection: {
         telephone: false
     },

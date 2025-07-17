@@ -9,10 +9,9 @@ import type { Vendor } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import CategoryTabs from "@/components/shared/CategoryTabs";
 import { useToast } from "@/hooks/use-toast";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ChefHat } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
+
 
 // Helper to augment seller data from the API with placeholder data for the UI
 const augmentSellerData = (seller): Vendor => ({
@@ -46,6 +45,7 @@ export default function VendorsPage() {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false); // State to control rendering after role check
   const [activeCategory, setActiveCategory] = useState<Vendor['type'] | 'all'>('all');
+  const [searchTerm, setSearchTerm] = useState('');
   const { toast } = useToast();
 
   useEffect(() => {
@@ -90,13 +90,27 @@ export default function VendorsPage() {
     fetchVendors();
   }, [router, toast]);
 
+  const filterVendors = () => {
+    let vendors = allVendors;
+
+    if (activeCategory !== 'all') {
+      vendors = vendors.filter(vendor => vendor.type === activeCategory);
+    }
+
+    if (searchTerm) {
+      vendors = vendors.filter(vendor =>
+        vendor.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    setFilteredVendors(vendors);
+  }
+
+  useEffect(() => {
+    filterVendors();
+  }, [searchTerm, activeCategory, allVendors]);
+
   const handleCategoryChange = (category: Vendor['type'] | 'all') => {
     setActiveCategory(category);
-    if (category === 'all') {
-      setFilteredVendors(allVendors);
-    } else {
-      setFilteredVendors(allVendors.filter(vendor => vendor.type === category));
-    }
   };
   
   // Render a loading state until the role check is complete to prevent content flashing.
@@ -117,12 +131,24 @@ export default function VendorsPage() {
         subtitle="Browse our collection of talented home cooks and reliable tiffin services."
         className="text-center"
       />
-      <div className="flex justify-center">
-         <CategoryTabs 
-            categories={categories}
-            activeCategory={activeCategory}
-            onCategoryChange={handleCategoryChange}
-        />
+      
+      <div className="max-w-2xl mx-auto w-full space-y-4">
+        <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input 
+                placeholder="Search by vendor name..."
+                className="pl-10"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
+        </div>
+        <div className="flex justify-center">
+            <CategoryTabs 
+                categories={categories}
+                activeCategory={activeCategory}
+                onCategoryChange={handleCategoryChange}
+            />
+        </div>
       </div>
       
       {isLoading ? (
@@ -138,7 +164,7 @@ export default function VendorsPage() {
       ) : (
         <div className="text-center py-16">
           <p className="text-lg text-muted-foreground">
-            No vendors found for the category "{activeCategory}".
+            No vendors found.
           </p>
         </div>
       )}

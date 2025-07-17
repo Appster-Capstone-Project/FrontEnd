@@ -1,139 +1,173 @@
 
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
-import SectionTitle from '@/components/shared/SectionTitle';
-import VendorCard from '@/components/shared/VendorCard';
-import type { Vendor } from '@/lib/types';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useToast } from '@/hooks/use-toast';
+import SectionTitle from "@/components/shared/SectionTitle";
+import VendorCard from "@/components/shared/VendorCard";
+import type { Vendor } from "@/lib/types";
+import { Skeleton } from "@/components/ui/skeleton";
+import CategoryTabs from "@/components/shared/CategoryTabs";
+import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
-// Helper to augment API data with placeholder UI data
+// Helper to augment seller data from the API with placeholder data for the UI
 const augmentSellerData = (seller): Vendor => ({
   id: seller.id,
   name: seller.name,
   phone: seller.phone,
-  type: 'Home Cook', // Default type
-  description: `Authentic meals from ${seller.name}.`, // Placeholder
-  rating: 4.5, // Placeholder
-  address: 'Location not specified', // Placeholder
-  city: 'City', // Placeholder
+  // Add placeholder data for fields not in the API response
+  type: 'Home Cook', // Default type, can be enhanced if API provides it
+  description: `Authentic meals from ${seller.name}. Explore a variety of delicious home-cooked food.`,
+  rating: 4.5, // Placeholder rating
+  address: 'Location not available',
+  city: 'Online',
   imageUrl: 'https://placehold.co/400x250.png',
   dataAiHint: 'food vendor',
   menu: [],
   reviews: [],
-  specialty: 'Delicious Home Food',
-  operatingHours: '10 AM - 10 PM',
-  deliveryOptions: ['Pickup', 'Delivery'],
+  specialty: 'Home-style Cooking',
 });
 
+const categories = [
+  { name: 'All', value: 'all' as const },
+  { name: 'Home Cooks', value: 'Home Cook' as const },
+  { name: 'Tiffin Services', value: 'Tiffin Service' as const },
+];
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { toast } = useToast();
-  const [userName, setUserName] = useState<string | null>(null);
-  const [suggestedVendors, setSuggestedVendors] = useState<Vendor[]>([]);
+  const [allVendors, setAllVendors] = useState<Vendor[]>([]);
+  const [filteredVendors, setFilteredVendors] = useState<Vendor[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [isReady, setIsReady] = useState(false); // State to control rendering after role check
+  const [activeCategory, setActiveCategory] = useState<Vendor['type'] | 'all'>('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const { toast } = useToast();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      router.push('/auth/signin');
-      return;
+    const role = localStorage.getItem('userRole');
+    setUserRole(role);
+
+    if (role === 'seller') {
+      router.replace('/sell');
+      return; 
     }
 
-    const nameFromStorage = localStorage.getItem('userName');
-    setUserName(nameFromStorage);
+    setIsReady(true);
 
     const fetchVendors = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch('/api/sellers');
         if (!response.ok) {
-          throw new Error('Failed to fetch vendors');
+          throw new Error('Failed to fetch vendors from API.');
         }
         const sellers = await response.json();
-        const augmentedVendors = sellers.map(augmentSellerData);
-        // Show first 3 as suggestions
-        setSuggestedVendors(augmentedVendors.slice(0, 3));
+        
+        const augmentedData = Array.isArray(sellers) ? sellers.map(augmentSellerData) : [];
+        
+        setAllVendors(augmentedData);
+        setFilteredVendors(augmentedData);
       } catch (error) {
-        console.error("Dashboard fetch error:", error);
+        console.error("Failed to fetch vendors:", error);
         toast({
-          variant: "destructive",
-          title: "Could not load suggestions",
-          description: (error as Error).message,
+            variant: "destructive",
+            title: "Error fetching vendors",
+            description: (error as Error).message,
         });
       } finally {
         setIsLoading(false);
       }
     };
-    
+
     fetchVendors();
   }, [router, toast]);
+  
+  const filterVendors = () => {
+    let vendors = allVendors;
 
-  if (isLoading) {
+    if (activeCategory !== 'all') {
+      vendors = vendors.filter(vendor => vendor.type === activeCategory);
+    }
+
+    if (searchTerm) {
+      vendors = vendors.filter(vendor =>
+        vendor.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    setFilteredVendors(vendors);
+  }
+
+  useEffect(() => {
+    filterVendors();
+  }, [searchTerm, activeCategory, allVendors]);
+
+  const handleCategoryChange = (category: Vendor['type'] | 'all') => {
+    setActiveCategory(category);
+  };
+  
+  if (!isReady) {
     return (
       <div className="container py-12 md:py-16">
-        <Skeleton className="h-10 w-1/2 mb-4" />
-        <Skeleton className="h-6 w-3/4 mb-10" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[...Array(3)].map((_, i) => (
-            <CardSkeleton key={i} />
-          ))}
+            {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
       </div>
-    );
-  }
-  
-  if (!userName) {
-    return (
-        <div className="container py-12 text-center">
-            <p className="text-lg text-muted-foreground mb-4">Please sign in to view your dashboard.</p>
-            <Button onClick={() => router.push('/auth/signin')}>Go to Sign In</Button>
-        </div>
     );
   }
 
   return (
-    <div className="container py-12 md:py-16">
-      <SectionTitle
-        title={`Welcome back, ${userName}!`}
-        subtitle={"Here are some popular suggestions for you:"}
-        className="mb-10 text-center md:text-left"
+    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
+      <SectionTitle 
+        title="Find Your Next Meal"
+        subtitle="Browse our collection of talented home cooks and reliable tiffin services."
       />
-
-      {suggestedVendors.length > 0 ? (
+      <div className="space-y-4">
+        <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input 
+                placeholder="Search by vendor name..."
+                className="pl-10"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
+        </div>
+        <div className="flex justify-center">
+         <CategoryTabs 
+            categories={categories}
+            activeCategory={activeCategory}
+            onCategoryChange={handleCategoryChange}
+        />
+      </div>
+      </div>
+      
+      {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {suggestedVendors.map((vendor) => (
+            {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
+        </div>
+      ) : filteredVendors.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredVendors.map((vendor) => (
             <VendorCard key={vendor.id} vendor={vendor} />
           ))}
         </div>
       ) : (
-        <p className="text-center text-muted-foreground py-12 text-lg">
-          No vendors found at the moment. Please check back later!
-        </p>
+        <div className="text-center py-16">
+          <p className="text-lg text-muted-foreground">
+            No vendors found.
+          </p>
+        </div>
       )}
-      
-      <div className="mt-12 text-center">
-        <Button onClick={() => {
-          localStorage.removeItem('token');
-          localStorage.removeItem('userName');
-          localStorage.removeItem('userId');
-          localStorage.removeItem('userRole');
-          localStorage.removeItem('sellerId'); // Clear sellerId on logout
-          router.push('/auth/signin');
-        }} variant="outline">
-          Log Out
-        </Button>
-      </div>
     </div>
   );
 }
 
 const CardSkeleton = () => (
   <div className="flex flex-col space-y-3">
-    <Skeleton className="h-[125px] w-full rounded-xl" />
+    <Skeleton className="h-[225px] w-full rounded-xl" />
     <div className="space-y-2">
       <Skeleton className="h-4 w-4/5" />
       <Skeleton className="h-4 w-3/5" />

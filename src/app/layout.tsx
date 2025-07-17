@@ -5,15 +5,15 @@ import { Toaster } from "@/components/ui/toaster";
 import { Providers } from '@/context/Providers';
 
 export const metadata: Metadata = {
-  title: 'HomePalate',
-  description: 'HomePalate: Discover nearby home cooks and tiffin services. Browse menus, read reviews, and enjoy authentic homemade meals.',
+  title: 'TiffinBox',
+  description: 'TiffinBox: Discover nearby home cooks and tiffin services. Browse menus, read reviews, and enjoy authentic homemade meals.',
   // manifest: '/manifest.json', // Removed to let next-pwa handle injection
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover',
   
   // Apple PWA Tags
   appleWebAppCapable: 'yes',
   appleWebAppStatusBarStyle: 'default',
-  appleWebAppTitle: 'HomePalate',
+  appleWebAppTitle: 'TiffinBox',
   
   formatDetection: {
     telephone: false,
