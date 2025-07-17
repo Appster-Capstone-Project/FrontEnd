@@ -4,6 +4,7 @@
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from "next/link";
+import { Package, Heart } from 'lucide-react';
 
 import { Button } from "@/components/ui/button";
 import {
@@ -122,8 +123,12 @@ function SignInCard() {
   const signupActionText = isSellerView ? "Sign up as a seller and start earning!" : "Sign Up";
 
   return (
-      <Card className="w-full max-w-md shadow-xl">
+      <Card className="w-full max-w-md shadow-xl border-2 border-primary/20">
         <CardHeader className="text-center">
+            <div className="relative mx-auto flex items-center justify-center mb-4">
+              <Package className="h-14 w-14 text-primary" />
+              <Heart className="absolute top-0 right-0 h-7 w-7 text-accent fill-accent transform translate-x-1/4 -translate-y-1/4" />
+            </div>
           <CardTitle className="font-headline text-2xl">{title}</CardTitle>
           <CardDescription>{description}</CardDescription>
         </CardHeader>

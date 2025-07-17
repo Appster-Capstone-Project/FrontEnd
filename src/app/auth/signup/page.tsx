@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Heart, Package } from "lucide-react";
 
 // Helper to extract a more detailed error message from an API response
 async function getApiErrorMessage(response: Response): Promise<string> {
@@ -127,8 +128,12 @@ function SignUpCard() {
   const signInLink = isSeller ? '/auth/signin?type=seller' : '/auth/signin';
 
   return (
-      <Card className="w-full max-w-md shadow-xl">
+      <Card className="w-full max-w-md shadow-xl border-2 border-primary/20">
         <CardHeader className="text-center">
+            <div className="relative mx-auto flex items-center justify-center mb-4">
+              <Package className="h-14 w-14 text-primary" />
+              <Heart className="absolute top-0 right-0 h-7 w-7 text-accent fill-accent transform translate-x-1/4 -translate-y-1/4" />
+            </div>
           <CardTitle className="font-headline text-2xl">{title}</CardTitle>
           <CardDescription>{description}</CardDescription>
         </CardHeader>

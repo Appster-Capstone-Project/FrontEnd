@@ -2,10 +2,13 @@
 .tiffin-box-container {
   width: 150px;
   height: 200px;
+  transform-style: preserve-3d;
+  perspective: 1000px;
   position: relative;
 }
 
 .tiffin-box {
+  animation: 3s ease-in-out infinite box-bob;
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -14,11 +17,12 @@
 
 .tiffin-box .handle {
   border: 8px solid hsl(var(--primary));
+  transform-origin: bottom;
   border-bottom: none;
   border-radius: 40px 40px 0 0;
   width: 80px;
   height: 40px;
-  animation: 2s ease-in-out infinite alternate handle-swing;
+  animation: 3s ease-in-out infinite handle-swing;
   position: absolute;
   top: -65px;
   left: 50%;
@@ -31,7 +35,7 @@
   border-radius: 10px 10px 0 0;
   width: 120px;
   height: 25px;
-  animation: 1.5s ease-in-out .5s forwards open-lid;
+  animation: 2.5s cubic-bezier(.68, -.55, .27, 1.55) .5s forwards open-lid;
   position: absolute;
   top: -25px;
   left: 50%;
@@ -58,7 +62,7 @@
   color: hsl(var(--primary) / .8);
   fill: hsl(var(--primary) / .8);
   opacity: 0;
-  animation: 1.5s ease-out 1s forwards float-up;
+  animation: 1.5s ease-out forwards float-up;
   position: absolute;
 }
 
@@ -109,12 +113,22 @@
 }
 
 @keyframes handle-swing {
-  from {
+  0%, 100% {
     transform: translateX(-50%)rotate(-5deg);
   }
 
-  to {
+  50% {
     transform: translateX(-50%)rotate(5deg);
+  }
+}
+
+@keyframes box-bob {
+  0%, 100% {
+    transform: translateX(-50%)translateY(0);
+  }
+
+  50% {
+    transform: translateX(-50%)translateY(-10px);
   }
 }
 
@@ -126,7 +140,7 @@
 
   100% {
     opacity: 0;
-    transform: translateY(-120px)scale(1.2);
+    transform: translateY(-120px)scale(1.2)rotate(15deg);
   }
 }
 

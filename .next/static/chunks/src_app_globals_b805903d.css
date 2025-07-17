@@ -931,6 +931,10 @@ h1, h2, h3, h4, h5, h6 {
   width: 1.5rem;
 }
 
+.w-14 {
+  width: 3.5rem;
+}
+
 .min-w-0 {
   min-width: 0;
 }
@@ -1330,6 +1334,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .border-transparent {
   border-color: #0000;
+}
+
+.border-primary\/20 {
+  border-color: hsl(var(--primary) / .2);
 }
 
 .border-l-transparent {
