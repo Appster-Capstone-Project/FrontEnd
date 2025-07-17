@@ -10,7 +10,8 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Heart, Package } from "lucide-react";
+import { Heart, Package, User, Briefcase } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // Helper to extract a more detailed error message from an API response
 async function getApiErrorMessage(response: Response): Promise<string> {
@@ -28,6 +29,24 @@ async function getApiErrorMessage(response: Response): Promise<string> {
     }
 }
 
+function AuthToggle({ isSellerView }: { isSellerView: boolean }) {
+  const baseClass = "flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors";
+  const activeClass = "bg-primary/10 text-primary border-b-2 border-primary";
+  const inactiveClass = "text-muted-foreground hover:bg-muted/50";
+
+  return (
+    <div className="flex w-full mb-4 rounded-t-lg overflow-hidden border-b">
+        <Link href="/auth/signup" className={cn(baseClass, !isSellerView ? activeClass : inactiveClass)}>
+            <User className="h-4 w-4" />
+            Customer
+        </Link>
+        <Link href="/auth/signup?type=seller" className={cn(baseClass, isSellerView ? activeClass : inactiveClass)}>
+            <Briefcase className="h-4 w-4" />
+            Seller
+        </Link>
+    </div>
+  )
+}
 
 function SignUpCard() {
   const router = useRouter();
@@ -128,8 +147,9 @@ function SignUpCard() {
   const signInLink = isSeller ? '/auth/signin?type=seller' : '/auth/signin';
 
   return (
-      <Card className="w-full max-w-md shadow-xl border-4 border-primary/20">
-        <CardHeader className="text-center">
+      <Card className="w-full max-w-md shadow-xl border-4 border-primary/20 overflow-hidden">
+        <AuthToggle isSellerView={isSeller} />
+        <CardHeader className="text-center pt-2">
             <div className="relative mx-auto flex items-center justify-center mb-4">
               <Package className="h-14 w-14 text-primary" />
               <Heart className="absolute top-0 right-0 h-7 w-7 text-accent fill-accent transform translate-x-1/4 -translate-y-1/4" />

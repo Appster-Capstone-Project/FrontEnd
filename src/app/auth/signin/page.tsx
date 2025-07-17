@@ -4,7 +4,7 @@
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from "next/link";
-import { Package, Heart } from 'lucide-react';
+import { Package, Heart, User, Briefcase } from 'lucide-react';
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +19,26 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
+
+function AuthToggle({ isSellerView }: { isSellerView: boolean }) {
+  const baseClass = "flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors";
+  const activeClass = "bg-primary/10 text-primary border-b-2 border-primary";
+  const inactiveClass = "text-muted-foreground hover:bg-muted/50";
+
+  return (
+    <div className="flex w-full mb-4 rounded-t-lg overflow-hidden border-b">
+        <Link href="/auth/signin" className={cn(baseClass, !isSellerView ? activeClass : inactiveClass)}>
+            <User className="h-4 w-4" />
+            Customer
+        </Link>
+        <Link href="/auth/signin?type=seller" className={cn(baseClass, isSellerView ? activeClass : inactiveClass)}>
+            <Briefcase className="h-4 w-4" />
+            Seller
+        </Link>
+    </div>
+  )
+}
 
 function SignInCard() {
   const router = useRouter();
@@ -117,14 +137,15 @@ function SignInCard() {
   };
   
   const title = isSellerView ? 'Seller Sign In' : 'Welcome Back!';
-  const description = isSellerView ? 'Sign in to your seller dashboard.' : 'Sign in to continue to TiffinBox.';
+  const description = isSellerView ? 'Access your dashboard to manage listings and orders.' : 'Sign in to continue to TiffinBox.';
   const signupLink = isSellerView ? '/auth/signup?type=seller' : '/auth/signup';
-  const signupHint = isSellerView ? "Not a seller yet? " : "Don't have an account? ";
-  const signupActionText = isSellerView ? "Sign up as a seller and start earning!" : "Sign Up";
+  const signupHint = isSellerView ? "Don't have a seller account? " : "Don't have an account? ";
+  const signupActionText = "Sign Up";
 
   return (
-      <Card className="w-full max-w-md shadow-xl border-4 border-primary/20">
-        <CardHeader className="text-center">
+      <Card className="w-full max-w-md shadow-xl border-4 border-primary/20 overflow-hidden">
+        <AuthToggle isSellerView={isSellerView} />
+        <CardHeader className="text-center pt-2">
             <div className="relative mx-auto flex items-center justify-center mb-4">
               <Package className="h-14 w-14 text-primary" />
               <Heart className="absolute top-0 right-0 h-7 w-7 text-accent fill-accent transform translate-x-1/4 -translate-y-1/4" />
@@ -164,7 +185,7 @@ function SignInCard() {
           >
             {isLoading ? "Signing In..." : "Sign In"}
           </Button>
-          <div className="w-full text-center text-sm text-muted-foreground space-y-2">
+          <div className="w-full text-center text-sm text-muted-foreground">
             <p>
               {signupHint}
               <Link
@@ -174,14 +195,6 @@ function SignInCard() {
                 {signupActionText}
               </Link>
             </p>
-             <p>
-                <Link
-                  href={isSellerView ? "/auth/signin" : "/auth/signin?type=seller"}
-                  className="font-medium text-primary hover:underline text-xs"
-                >
-                  {isSellerView ? "Not a seller? Sign in as a customer." : "Are you a seller? Sign in here."}
-                </Link>
-              </p>
           </div>
         </CardFooter>
       </Card>
