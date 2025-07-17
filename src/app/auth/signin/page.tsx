@@ -33,17 +33,16 @@ function SignInCard() {
   const handleSignIn = async () => {
     setIsLoading(true);
     // Always clear previous session data on a new login attempt
-    localStorage.removeItem('token');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('sellerId');
+    localStorage.clear();
+
+    const endpoint = isSellerView ? '/api/sellers/login' : '/api/users/login';
+    const body = JSON.stringify({ email, password });
 
     try {
-      const response = await fetch('/api/users/login', {
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: body,
       });
 
       if (!response.ok) {
@@ -59,6 +58,7 @@ function SignInCard() {
       localStorage.setItem("token", token);
 
       // After getting token, fetch profile to get user details
+      // Note: We assume both user and seller profiles can be fetched via /api/users/profile for name/id
       const profileResponse = await fetch('/api/users/profile', {
           headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -72,40 +72,34 @@ function SignInCard() {
       localStorage.setItem("userName", user.name);
       localStorage.setItem("userId", user.id);
       
-      // Determine if the user is a seller by checking if a seller account exists with the same email
-      const allSellersResponse = await fetch('/api/sellers');
-      let userRole = 'user';
-      if (allSellersResponse.ok) {
-        const sellers = await allSellersResponse.json();
-        const matchingSeller = Array.isArray(sellers) ? sellers.find(seller => seller.email === user.email) : undefined;
-        
-        if (matchingSeller) {
-          userRole = 'seller';
-          // Store the specific seller ID to be used for creating listings
-          localStorage.setItem("sellerId", matchingSeller.id);
-        }
-      }
-      
-      localStorage.setItem("userRole", userRole);
-
-      toast({
-        title: "Login Successful!",
-        description: `Welcome back, ${user.name}! Redirecting...`,
-      });
-      
-      if (userRole === 'seller') {
+      if (isSellerView) {
+        // If it's a seller login, we need to find the seller ID to store it
+        const allSellersResponse = await fetch('/api/sellers');
+         if (allSellersResponse.ok) {
+            const sellers = await allSellersResponse.json();
+            const matchingSeller = Array.isArray(sellers) ? sellers.find(s => s.email === email) : undefined;
+            if (matchingSeller) {
+                localStorage.setItem("sellerId", matchingSeller.id);
+            }
+         }
+        localStorage.setItem("userRole", "seller");
+        toast({
+            title: "Seller Login Successful!",
+            description: `Welcome back, ${user.name}! Redirecting to your dashboard...`,
+        });
         router.push('/sell');
       } else {
+        localStorage.setItem("userRole", "user");
+        toast({
+            title: "Login Successful!",
+            description: `Welcome back, ${user.name}!`,
+        });
         router.push("/vendors");
       }
 
     } catch (error) {
       // Clear any partial login data on failure
-      localStorage.removeItem('token');
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userId');
-      localStorage.removeItem('userRole');
-      localStorage.removeItem('sellerId');
+      localStorage.clear();
       
       toast({
         variant: "destructive",
@@ -120,6 +114,8 @@ function SignInCard() {
   const title = isSellerView ? 'Seller Sign In' : 'Welcome Back!';
   const description = isSellerView ? 'Sign in to your seller dashboard.' : 'Sign in to continue to HomePalate.';
   const signupLink = isSellerView ? '/auth/signup?type=seller' : '/auth/signup';
+  const signupHint = isSellerView ? "Not a seller yet? " : "Don't have an account? ";
+  const signupActionText = isSellerView ? "Sign up as a seller and start earning!" : "Sign Up";
 
   return (
       <Card className="w-full max-w-md shadow-xl">
@@ -161,12 +157,12 @@ function SignInCard() {
           </Button>
           <div className="w-full text-center text-sm text-muted-foreground space-y-2">
             <p>
-              {isSellerView ? "Not a seller yet? " : "Don't have an account? "}
+              {signupHint}
               <Link
                 href={signupLink}
                 className="font-medium text-primary hover:underline"
               >
-                {isSellerView ? "Sign up as a seller and start earning!" : "Sign Up"}
+                {signupActionText}
               </Link>
             </p>
              <p>

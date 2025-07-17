@@ -574,9 +574,10 @@ const $$RSC_SERVER_ACTION_0 = async function submitReview(formData) {
 var submitReview = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])($$RSC_SERVER_ACTION_0, "4037096e53c3dae36eab2cdc63b454eef1617dc230", null);
 async function getVendorDetails(id) {
     try {
+        // Use relative paths to leverage Next.js rewrites configured in next.config.ts
         const [sellerRes, listingsRes] = await Promise.all([
-            fetch(`http://20.121.187.205/sellers/${id}`),
-            fetch(`http://20.121.187.205/listings?sellerId=${id}`)
+            fetch(`${("TURBOPACK compile-time value", "http://localhost:3000")}/api/sellers/${id}`),
+            fetch(`${("TURBOPACK compile-time value", "http://localhost:3000")}/api/listings?sellerId=${id}`)
         ]);
         if (!sellerRes.ok) {
             if (sellerRes.status === 404) {
@@ -637,7 +638,11 @@ async function getVendorDetails(id) {
         };
     } catch (error) {
         console.error("Failed to fetch vendor details:", error);
-        return null;
+        // Re-throwing the error is important for the error boundary to catch it
+        if (error instanceof Error) {
+            throw new Error(`Network request failed: ${error.message}`);
+        }
+        throw new Error('An unknown network error occurred.');
     }
 }
 async function VendorDetailPage({ params }) {
@@ -666,12 +671,12 @@ async function VendorDetailPage({ params }) {
                                 "data-ai-hint": vendor.dataAiHint || "food vendor"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                lineNumber: 100,
+                                lineNumber: 105,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                            lineNumber: 99,
+                            lineNumber: 104,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -688,14 +693,14 @@ async function VendorDetailPage({ params }) {
                                                     className: "mr-1 h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                    lineNumber: 113,
+                                                    lineNumber: 118,
                                                     columnNumber: 17
                                                 }, this),
                                                 vendor.type
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                            lineNumber: 112,
+                                            lineNumber: 117,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$shared$2f$StarRating$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["default"], {
@@ -704,13 +709,13 @@ async function VendorDetailPage({ params }) {
                                             showText: true
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                            lineNumber: 116,
+                                            lineNumber: 121,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                    lineNumber: 111,
+                                    lineNumber: 116,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -718,7 +723,7 @@ async function VendorDetailPage({ params }) {
                                     children: vendor.name
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                    lineNumber: 118,
+                                    lineNumber: 123,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -726,7 +731,7 @@ async function VendorDetailPage({ params }) {
                                     children: vendor.description
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                    lineNumber: 119,
+                                    lineNumber: 124,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -739,7 +744,7 @@ async function VendorDetailPage({ params }) {
                                                     className: "h-4 w-4 mr-2 text-accent"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                    lineNumber: 124,
+                                                    lineNumber: 129,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -747,7 +752,7 @@ async function VendorDetailPage({ params }) {
                                                     children: "Specialty:"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                    lineNumber: 125,
+                                                    lineNumber: 130,
                                                     columnNumber: 19
                                                 }, this),
                                                 " ",
@@ -755,7 +760,7 @@ async function VendorDetailPage({ params }) {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                            lineNumber: 123,
+                                            lineNumber: 128,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -765,7 +770,7 @@ async function VendorDetailPage({ params }) {
                                                     className: "h-4 w-4 mr-2 text-accent"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                    lineNumber: 129,
+                                                    lineNumber: 134,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -773,7 +778,7 @@ async function VendorDetailPage({ params }) {
                                                     children: "Location:"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                    lineNumber: 130,
+                                                    lineNumber: 135,
                                                     columnNumber: 17
                                                 }, this),
                                                 " ",
@@ -783,7 +788,7 @@ async function VendorDetailPage({ params }) {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                            lineNumber: 128,
+                                            lineNumber: 133,
                                             columnNumber: 15
                                         }, this),
                                         vendor.operatingHours && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -793,7 +798,7 @@ async function VendorDetailPage({ params }) {
                                                     className: "h-4 w-4 mr-2 text-accent"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                    lineNumber: 134,
+                                                    lineNumber: 139,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -801,7 +806,7 @@ async function VendorDetailPage({ params }) {
                                                     children: "Hours:"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                    lineNumber: 135,
+                                                    lineNumber: 140,
                                                     columnNumber: 20
                                                 }, this),
                                                 " ",
@@ -809,7 +814,7 @@ async function VendorDetailPage({ params }) {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                            lineNumber: 133,
+                                            lineNumber: 138,
                                             columnNumber: 17
                                         }, this),
                                         vendor.deliveryOptions && vendor.deliveryOptions.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -819,7 +824,7 @@ async function VendorDetailPage({ params }) {
                                                     className: "h-4 w-4 mr-2 text-accent"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                    lineNumber: 140,
+                                                    lineNumber: 145,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -827,7 +832,7 @@ async function VendorDetailPage({ params }) {
                                                     children: "Delivery:"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                    lineNumber: 141,
+                                                    lineNumber: 146,
                                                     columnNumber: 19
                                                 }, this),
                                                 " ",
@@ -835,13 +840,13 @@ async function VendorDetailPage({ params }) {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                            lineNumber: 139,
+                                            lineNumber: 144,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                    lineNumber: 121,
+                                    lineNumber: 126,
                                     columnNumber: 13
                                 }, this),
                                 vendor.phone && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Button"], {
@@ -855,36 +860,36 @@ async function VendorDetailPage({ params }) {
                                                 className: "h-4 w-4 mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                lineNumber: 148,
+                                                lineNumber: 153,
                                                 columnNumber: 25
                                             }, this),
                                             " Contact Seller"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                        lineNumber: 147,
+                                        lineNumber: 152,
                                         columnNumber: 21
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                    lineNumber: 146,
+                                    lineNumber: 151,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                            lineNumber: 110,
+                            lineNumber: 115,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                    lineNumber: 98,
+                    lineNumber: 103,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                lineNumber: 97,
+                lineNumber: 102,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Tabs"], {
@@ -902,14 +907,14 @@ async function VendorDetailPage({ params }) {
                                         className: "mr-2 h-5 w-5"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                        lineNumber: 160,
+                                        lineNumber: 165,
                                         columnNumber: 13
                                     }, this),
                                     " Menu"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                lineNumber: 159,
+                                lineNumber: 164,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["TabsTrigger"], {
@@ -920,7 +925,7 @@ async function VendorDetailPage({ params }) {
                                         className: "mr-2 h-5 w-5"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                        lineNumber: 163,
+                                        lineNumber: 168,
                                         columnNumber: 13
                                     }, this),
                                     " Reviews (",
@@ -929,13 +934,13 @@ async function VendorDetailPage({ params }) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                lineNumber: 162,
+                                lineNumber: 167,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                        lineNumber: 158,
+                        lineNumber: 163,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["TabsContent"], {
@@ -946,7 +951,7 @@ async function VendorDetailPage({ params }) {
                                 className: "text-center mb-6"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                lineNumber: 168,
+                                lineNumber: 173,
                                 columnNumber: 11
                             }, this),
                             vendor.menu && vendor.menu.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -955,25 +960,25 @@ async function VendorDetailPage({ params }) {
                                         dish: dish
                                     }, dish.id, false, {
                                         fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                        lineNumber: 172,
+                                        lineNumber: 177,
                                         columnNumber: 17
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                lineNumber: 170,
+                                lineNumber: 175,
                                 columnNumber: 13
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 className: "text-center text-muted-foreground py-8",
                                 children: "This vendor hasn't added any dishes to their menu yet."
                             }, void 0, false, {
                                 fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                lineNumber: 176,
+                                lineNumber: 181,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                        lineNumber: 167,
+                        lineNumber: 172,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["TabsContent"], {
@@ -984,7 +989,7 @@ async function VendorDetailPage({ params }) {
                                 className: "text-center mb-6"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                lineNumber: 181,
+                                lineNumber: 186,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -995,19 +1000,19 @@ async function VendorDetailPage({ params }) {
                                                 review: review
                                             }, review.id, false, {
                                                 fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                lineNumber: 186,
+                                                lineNumber: 191,
                                                 columnNumber: 19
                                             }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             className: "text-center text-muted-foreground py-8",
                                             children: "No reviews yet. Be the first to leave one!"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                            lineNumber: 189,
+                                            lineNumber: 194,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                        lineNumber: 183,
+                                        lineNumber: 188,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Card"], {
@@ -1020,7 +1025,7 @@ async function VendorDetailPage({ params }) {
                                                         children: "Write a Review"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                        lineNumber: 194,
+                                                        lineNumber: 199,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["CardDescription"], {
@@ -1030,13 +1035,13 @@ async function VendorDetailPage({ params }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                        lineNumber: 195,
+                                                        lineNumber: 200,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                lineNumber: 193,
+                                                lineNumber: 198,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -1050,7 +1055,7 @@ async function VendorDetailPage({ params }) {
                                                             value: vendor.id
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                            lineNumber: 199,
+                                                            lineNumber: 204,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1061,7 +1066,7 @@ async function VendorDetailPage({ params }) {
                                                                     children: "Your Rating"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                                    lineNumber: 201,
+                                                                    lineNumber: 206,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1075,7 +1080,7 @@ async function VendorDetailPage({ params }) {
                                                                             children: "Select rating"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                                            lineNumber: 208,
+                                                                            lineNumber: 213,
                                                                             columnNumber: 23
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1083,7 +1088,7 @@ async function VendorDetailPage({ params }) {
                                                                             children: "5 Stars - Excellent"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                                            lineNumber: 209,
+                                                                            lineNumber: 214,
                                                                             columnNumber: 23
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1091,7 +1096,7 @@ async function VendorDetailPage({ params }) {
                                                                             children: "4 Stars - Very Good"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                                            lineNumber: 210,
+                                                                            lineNumber: 215,
                                                                             columnNumber: 23
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1099,7 +1104,7 @@ async function VendorDetailPage({ params }) {
                                                                             children: "3 Stars - Good"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                                            lineNumber: 211,
+                                                                            lineNumber: 216,
                                                                             columnNumber: 23
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1107,7 +1112,7 @@ async function VendorDetailPage({ params }) {
                                                                             children: "2 Stars - Fair"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                                            lineNumber: 212,
+                                                                            lineNumber: 217,
                                                                             columnNumber: 23
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1115,19 +1120,19 @@ async function VendorDetailPage({ params }) {
                                                                             children: "1 Star - Poor"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                                            lineNumber: 213,
+                                                                            lineNumber: 218,
                                                                             columnNumber: 23
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                                    lineNumber: 202,
+                                                                    lineNumber: 207,
                                                                     columnNumber: 21
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                            lineNumber: 200,
+                                                            lineNumber: 205,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1138,7 +1143,7 @@ async function VendorDetailPage({ params }) {
                                                                     children: "Your Comment"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                                    lineNumber: 217,
+                                                                    lineNumber: 222,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -1149,13 +1154,13 @@ async function VendorDetailPage({ params }) {
                                                                     required: true
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                                    lineNumber: 218,
+                                                                    lineNumber: 223,
                                                                     columnNumber: 21
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                            lineNumber: 216,
+                                                            lineNumber: 221,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Button"], {
@@ -1164,48 +1169,48 @@ async function VendorDetailPage({ params }) {
                                                             children: "Submit Review"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                            lineNumber: 220,
+                                                            lineNumber: 225,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                    lineNumber: 198,
+                                                    lineNumber: 203,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                                lineNumber: 197,
+                                                lineNumber: 202,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                        lineNumber: 192,
+                                        lineNumber: 197,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                                lineNumber: 182,
+                                lineNumber: 187,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                        lineNumber: 180,
+                        lineNumber: 185,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/vendors/[id]/page.tsx",
-                lineNumber: 157,
+                lineNumber: 162,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/vendors/[id]/page.tsx",
-        lineNumber: 95,
+        lineNumber: 100,
         columnNumber: 5
     }, this);
 }

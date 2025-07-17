@@ -78,60 +78,39 @@ function SignUpCard() {
     }
     
     try {
-        if (isSeller) {
-            // Seller registration is a two-step process
-            // 1. Register the user for authentication purposes
-            const userPayload = { name, email, password };
-            const userResponse = await fetch('/api/users/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(userPayload),
-            });
+      let endpoint = '';
+      let payload = {};
+      let successMessage = '';
+      let redirectPath = '';
 
-            if (!userResponse.ok) {
-                const errorMessage = await getApiErrorMessage(userResponse);
-                throw new Error(errorMessage);
-            }
+      if (isSeller) {
+        endpoint = '/api/sellers/register';
+        payload = { name, email, phone, password };
+        successMessage = "Seller Registration Successful!";
+        redirectPath = '/auth/signin?type=seller';
+      } else {
+        endpoint = '/api/users/register';
+        payload = { name, email, password };
+        successMessage = "Registration Successful!";
+        redirectPath = '/auth/signin';
+      }
 
-            // 2. Register the seller profile
-            const sellerPayload = { name, email, phone };
-            const sellerResponse = await fetch('/api/sellers/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(sellerPayload),
-            });
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
 
-            if (!sellerResponse.ok) {
-                const errorMessage = await getApiErrorMessage(sellerResponse);
-                // In a real-world scenario, you might want to handle the orphaned user account here
-                throw new Error(`User account created, but seller profile failed: ${errorMessage}`);
-            }
-
-            toast({
-                title: "Seller Registration Successful!",
-                description: "You can now sign in with your credentials.",
-            });
-            router.push(`/auth/signin?type=seller`);
-        } else {
-            // Regular user registration
-            const payload = { name, email, password };
-            const response = await fetch('/api/users/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
-
-            if (response.ok) {
-                toast({
-                    title: "Registration Successful!",
-                    description: "You can now sign in with your credentials.",
-                });
-                router.push(`/auth/signin`);
-            } else {
-                const errorMessage = await getApiErrorMessage(response);
-                throw new Error(errorMessage);
-            }
-        }
+      if (response.ok) {
+        toast({
+          title: successMessage,
+          description: "You can now sign in with your credentials.",
+        });
+        router.push(redirectPath);
+      } else {
+        const errorMessage = await getApiErrorMessage(response);
+        throw new Error(errorMessage);
+      }
     } catch (error) {
         toast({
             variant: "destructive",
