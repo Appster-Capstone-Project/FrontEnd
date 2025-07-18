@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { List, PlusCircle, CheckCircle, XCircle } from "lucide-react";
+import { List, PlusCircle, CheckCircle, XCircle, Edit } from "lucide-react";
 import SectionTitle from "@/components/shared/SectionTitle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -98,24 +98,34 @@ export default function SellDashboardPage() {
             <CardContent>
               {isListingsLoading ? (
                   <div className="space-y-3">
-                      {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-8 w-full" />)}
+                      {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-10 w-full" />)}
                   </div>
               ) : listings.length > 0 ? (
                   <ul className="space-y-3 text-sm">
                       {listings.map((listing) => (
                           <li key={listing.id} className="flex justify-between items-center border-b pb-2 last:border-b-0">
-                              <div>
-                                <span className="font-medium text-foreground">{listing.title}</span>
-                                <div className="flex items-center text-xs text-muted-foreground">
-                                    {listing.available ? (
-                                        <CheckCircle className="h-4 w-4 mr-1 text-green-500" />
-                                    ) : (
-                                        <XCircle className="h-4 w-4 mr-1 text-red-500" />
-                                    )}
-                                    {listing.available ? 'Available' : 'Unavailable'}
+                              <div className="flex items-center gap-4">
+                                <div>
+                                    <span className="font-medium text-foreground">{listing.title}</span>
+                                    <div className="flex items-center text-xs text-muted-foreground">
+                                        {listing.available ? (
+                                            <CheckCircle className="h-4 w-4 mr-1 text-green-500" />
+                                        ) : (
+                                            <XCircle className="h-4 w-4 mr-1 text-red-500" />
+                                        )}
+                                        {listing.available ? 'Available' : 'Unavailable'}
+                                    </div>
                                 </div>
                               </div>
-                              <span className="font-mono text-foreground">${listing.price.toFixed(2)}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono text-foreground">${listing.price.toFixed(2)}</span>
+                                <Button variant="outline" size="icon" asChild>
+                                    <Link href={`/sell/edit/${listing.id}`}>
+                                        <Edit className="h-4 w-4" />
+                                        <span className="sr-only">Edit {listing.title}</span>
+                                    </Link>
+                                </Button>
+                              </div>
                           </li>
                       ))}
                   </ul>
