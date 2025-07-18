@@ -1,11 +1,10 @@
-import { getVendorById, mockVendors } from '@/lib/data'; // Added mockVendors
-import type { Vendor } from '@/lib/types';
+
+import type { Vendor, Dish, Review } from '@/lib/types';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import StarRating from '@/components/shared/StarRating';
 import DishCard from '@/components/shared/DishCard';
@@ -13,28 +12,83 @@ import ReviewCard from '@/components/shared/ReviewCard';
 import SectionTitle from '@/components/shared/SectionTitle';
 import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-// Placeholder for a form component if we were to use react-hook-form
-// import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
-// Dummy submit review action
+
 async function submitReview(formData: FormData) {
   "use server";
-  // In a real app, you'd process this data, save to DB, etc.
-  console.log("Review Submitted:");
-  console.log("Rating:", formData.get("rating"));
-  console.log("Comment:", formData.get("comment"));
-  // Potentially revalidatePath or redirect
+  const rawFormData = {
+    rating: formData.get('rating'),
+    comment: formData.get('comment'),
+    vendorId: formData.get('vendorId'),
+  };
+  
+  console.log("Review Submitted (Server Action Demo):", rawFormData);
+  // This is where you would POST to a /reviews endpoint
+  // Since there is no review endpoint, this is for demonstration.
 }
 
-export async function generateStaticParams() {
-  return mockVendors.map((vendor) => ({
-    id: vendor.id,
-  }));
-}
+async function getVendorDetails(id: string): Promise<Vendor | null> {
+  try {
+    // Use relative paths to leverage Next.js rewrites configured in next.config.ts
+    const [sellerRes, listingsRes] = await Promise.all([
+      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sellers/${id}`),
+      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/listings?sellerId=${id}`)
+    ]);
 
+    if (!sellerRes.ok) {
+      if (sellerRes.status === 404) {
+        console.log(`Vendor with ID ${id} not found.`);
+        return null;
+      }
+      throw new Error(`Failed to fetch seller: ${sellerRes.statusText}`);
+    }
+
+    const seller = await sellerRes.json();
+    const listings = listingsRes.ok ? await listingsRes.json() : [];
+
+    const augmentedListings: Dish[] = Array.isArray(listings) ? listings.map(listing => ({
+      ...listing,
+      imageUrl: 'https://placehold.co/300x200.png',
+      dataAiHint: 'food dish',
+    })) : [];
+
+    // Placeholder reviews as there is no API endpoint for it
+    const mockReviews: Review[] = [
+      { id: 'r1-1', userName: 'Raj K.', rating: 5, comment: 'Best food I\'ve had in ages!', date: '2024-07-15T10:00:00Z', userImageUrl: 'https://placehold.co/40x40.png', dataAiHintUser: 'man smiling' },
+      { id: 'r1-2', userName: 'Anita S.', rating: 4, comment: 'Delicious, a bit spicy for me though.', date: '2024-07-14T18:30:00Z', userImageUrl: 'https://placehold.co/40x40.png', dataAiHintUser: 'woman portrait' },
+    ];
+    
+    // Augment the seller data with placeholder values for UI completeness
+    return {
+      id: seller.id,
+      name: seller.name,
+      phone: seller.phone,
+      type: 'Home Cook', // Default type
+      description: `Authentic meals from ${seller.name}. Browse the menu below.`,
+      rating: 4.7, // Placeholder rating
+      address: 'Location not specified',
+      city: 'City',
+      verified: seller.verified,
+      imageUrl: 'https://placehold.co/600x400.png',
+      dataAiHint: 'food vendor',
+      specialty: 'Delicious Home Food',
+      operatingHours: '10 AM - 10 PM',
+      deliveryOptions: ['Pickup', 'Delivery'],
+      menu: augmentedListings,
+      reviews: mockReviews, // Using mock reviews
+    };
+  } catch (error) {
+    console.error("Failed to fetch vendor details:", error);
+    // Re-throwing the error is important for the error boundary to catch it
+    if (error instanceof Error) {
+        throw new Error(`Network request failed: ${error.message}`);
+    }
+    throw new Error('An unknown network error occurred.');
+  }
+}
 
 export default async function VendorDetailPage({ params }: { params: { id: string } }) {
-  const vendor = getVendorById(params.id);
+  const vendor = await getVendorDetails(params.id);
 
   if (!vendor) {
     notFound();
@@ -49,7 +103,7 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
         <div className="md:flex">
           <div className="md:w-1/3 relative">
             <Image
-              src={vendor.imageUrl}
+              src={vendor.imageUrl || 'https://placehold.co/600x400.png'}
               alt={vendor.name}
               width={600}
               height={400}
@@ -64,7 +118,7 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
                 <VendorIcon className="mr-1 h-4 w-4" />
                 {vendor.type}
               </Badge>
-              <StarRating rating={vendor.rating} size={20} showText />
+              <StarRating rating={vendor.rating || 0} size={20} showText />
             </div>
             <h1 className="font-headline text-3xl md:text-4xl font-bold text-primary mb-2">{vendor.name}</h1>
             <p className="text-muted-foreground mb-4">{vendor.description}</p>
@@ -93,9 +147,13 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
                 </div>
               )}
             </div>
-            <Button size="sm" variant="outline">
-              <Phone className="h-4 w-4 mr-2"/> Contact Seller
-            </Button>
+            {vendor.phone && (
+                <Button size="sm" variant="outline" asChild>
+                    <a href={`tel:${vendor.phone}`}>
+                        <Phone className="h-4 w-4 mr-2"/> Contact Seller
+                    </a>
+                </Button>
+            )}
           </div>
         </div>
       </Card>
@@ -107,15 +165,15 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
             <Utensils className="mr-2 h-5 w-5" /> Menu
           </TabsTrigger>
           <TabsTrigger value="reviews" className="text-base py-2.5">
-            <MessageSquare className="mr-2 h-5 w-5" /> Reviews ({vendor.reviews.length})
+            <MessageSquare className="mr-2 h-5 w-5" /> Reviews ({vendor.reviews ? vendor.reviews.length : 0})
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="menu">
           <SectionTitle title="Our Menu" className="text-center mb-6" />
-          {vendor.menu.length > 0 ? (
+          {vendor.menu && vendor.menu.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {vendor.menu.map((dish) => (
+              {vendor.menu.map((dish: Dish) => (
                 <DishCard key={dish.id} dish={dish} />
               ))}
             </div>
@@ -128,8 +186,8 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
           <SectionTitle title="Customer Reviews" className="text-center mb-6" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              {vendor.reviews.length > 0 ? (
-                vendor.reviews.map((review) => (
+              {vendor.reviews && vendor.reviews.length > 0 ? (
+                vendor.reviews.map((review: Review) => (
                   <ReviewCard key={review.id} review={review} />
                 ))
               ) : (
@@ -143,9 +201,9 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
               </CardHeader>
               <CardContent>
                 <form action={submitReview} className="space-y-4">
+                  <input type="hidden" name="vendorId" value={vendor.id} />
                   <div>
                     <label htmlFor="rating" className="block text-sm font-medium text-foreground mb-1">Your Rating</label>
-                    {/* Basic select for rating, can be replaced with a star input component */}
                     <select 
                       id="rating" 
                       name="rating"

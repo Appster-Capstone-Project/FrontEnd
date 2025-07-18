@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Vendor } from '@/lib/types';
@@ -17,7 +18,7 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
     <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
       <CardHeader className="p-0 relative">
         <Image
-          src={vendor.imageUrl}
+          src={vendor.imageUrl || 'https://placehold.co/400x250.png'}
           alt={vendor.name}
           width={400}
           height={250}
