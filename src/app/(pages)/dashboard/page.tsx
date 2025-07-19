@@ -7,6 +7,7 @@ import SectionTitle from "@/components/shared/SectionTitle";
 import VendorCard from "@/components/shared/VendorCard";
 import DishCard from "@/components/shared/DishCard";
 import type { Vendor, Dish } from "@/lib/types";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import CategoryTabs from "@/components/shared/CategoryTabs";
 import { useToast } from "@/hooks/use-toast";
@@ -49,7 +50,6 @@ export default function DashboardPage() {
         const sortedDishes = mockDishes.sort((a, b) => new Date(b.cookingDate).getTime() - new Date(a.cookingDate).getTime());
         setAllVendors(mockVendors);
         setAllDishes(sortedDishes);
-        setFilteredItems([...sortedDishes, ...mockVendors.filter(v => v.type === 'Tiffin Service')]);
         setIsLoading(false);
       }, 500);
     };
@@ -57,44 +57,43 @@ export default function DashboardPage() {
     fetchData();
   }, [router]);
   
-  const filterItems = () => {
-    let items: (Vendor | Dish)[] = [];
-
-    if (activeCategory === 'all') {
-      // Show all dishes and all tiffin services
-      items = [...allDishes, ...allVendors.filter(v => v.type === 'Tiffin Service')];
-    } else if (activeCategory === 'Home Cook') {
-      // Show only dishes from home cooks
-      items = allDishes;
-    } else if (activeCategory === 'Tiffin Service') {
-      // Show only tiffin service vendors
-      items = allVendors.filter(vendor => vendor.type === 'Tiffin Service');
-    }
-    
-    if (searchTerm) {
-      items = items.filter(item => {
-        if ('type' in item) { // It's a Vendor
-          return item.name.toLowerCase().includes(searchTerm.toLowerCase());
-        } else { // It's a Dish
-          return item.title.toLowerCase().includes(searchTerm.toLowerCase());
-        }
-      });
-    }
-
-    // Sort combined list so Tiffin services appear after dishes
-    items.sort((a, b) => {
-        const aIsVendor = 'type' in a;
-        const bIsVendor = 'type' in b;
-        if (aIsVendor && !bIsVendor) return 1;
-        if (!aIsVendor && bIsVendor) return -1;
-        return 0;
-    });
-
-
-    setFilteredItems(items);
-  }
-
   useEffect(() => {
+    const filterItems = () => {
+      let items: (Vendor | Dish)[] = [];
+
+      if (activeCategory === 'all') {
+        // Show all dishes from home cooks and all tiffin service vendors
+        items = [...allDishes, ...allVendors.filter(v => v.type === 'Tiffin Service')];
+      } else if (activeCategory === 'Home Cook') {
+        // Show only dishes from home cooks
+        items = allDishes;
+      } else if (activeCategory === 'Tiffin Service') {
+        // Show only tiffin service vendors
+        items = allVendors.filter(vendor => vendor.type === 'Tiffin Service');
+      }
+      
+      if (searchTerm) {
+        items = items.filter(item => {
+          if ('type' in item) { // It's a Vendor
+            return item.name.toLowerCase().includes(searchTerm.toLowerCase());
+          } else { // It's a Dish
+            return item.title.toLowerCase().includes(searchTerm.toLowerCase());
+          }
+        });
+      }
+
+      // Sort combined list: dishes first, then tiffin services
+      items.sort((a, b) => {
+          const aIsDish = 'slotsTotal' in a;
+          const bIsDish = 'slotsTotal' in b;
+          if (aIsDish && !bIsDish) return -1;
+          if (!aIsDish && bIsDish) return 1;
+          return 0;
+      });
+
+
+      setFilteredItems(items);
+    }
     filterItems();
   }, [searchTerm, activeCategory, allVendors, allDishes]);
 
@@ -104,9 +103,9 @@ export default function DashboardPage() {
   
   if (!isReady) {
     return (
-      <div className="container py-12 md:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {[...Array(8)].map((_, i) => <CardSkeleton key={i} />)}
+      <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
+        <div className="space-y-6">
+            {[...Array(5)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
       </div>
     );
@@ -138,17 +137,17 @@ export default function DashboardPage() {
       </div>
       
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {[...Array(8)].map((_, i) => <CardSkeleton key={i} />)}
+        <div className="space-y-6">
+            {[...Array(5)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
       ) : filteredItems.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="space-y-6">
           {filteredItems.map((item) => {
              if ('type' in item) { // It's a Vendor
-                return <VendorCard key={item.id} vendor={item} />
+                return <VendorCard key={`vendor-${item.id}`} vendor={item} />
              } else { // It's a Dish
                 const vendor = allVendors.find(v => v.id === item.sellerId);
-                return <DishCard key={item.id} dish={item} vendor={vendor} />
+                return <DishCard key={`dish-${item.id}`} dish={item} vendor={vendor} />
              }
           })}
         </div>
@@ -164,16 +163,22 @@ export default function DashboardPage() {
 }
 
 const CardSkeleton = () => (
-   <Card>
-      <CardHeader className="p-0 relative">
-        <Skeleton className="w-full h-40" />
-      </CardHeader>
-      <CardContent className="p-4">
-        <Skeleton className="h-4 w-1/3 mb-2" />
-        <Skeleton className="h-6 w-3/4 mb-1" />
-        <Skeleton className="h-4 w-full mb-2" />
-        <Skeleton className="h-4 w-1/2 mb-2" />
-        <Skeleton className="h-9 w-full mt-2" />
-      </CardContent>
+   <Card className="overflow-hidden">
+      <div className="flex flex-col md:flex-row">
+        <Skeleton className="h-48 w-full md:w-1/3" />
+        <div className="w-full md:w-2/3 p-6 flex flex-col">
+          <CardHeader className="p-0">
+            <Skeleton className="h-4 w-1/4 mb-2" />
+            <Skeleton className="h-8 w-3/4 mb-2" />
+          </CardHeader>
+          <CardContent className="p-0 flex-grow">
+            <Skeleton className="h-4 w-full mb-1" />
+            <Skeleton className="h-4 w-5/6 mb-4" />
+          </CardContent>
+          <div className="p-0 pt-4">
+            <Skeleton className="h-10 w-40" />
+          </div>
+        </div>
+      </div>
     </Card>
 );
