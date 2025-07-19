@@ -12,16 +12,16 @@
       "static/css/app/loading.css",
       "static/chunks/app/loading.js"
     ],
-    "/install/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/install/page.js"
-    ],
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/page.css",
       "static/chunks/app/page.js"
+    ],
+    "/install/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/install/page.js"
     ],
     "/(pages)/layout": [
       "static/chunks/webpack.js",
@@ -33,45 +33,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(pages)/welcome/page.js"
     ],
-    "/(pages)/orders/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(pages)/orders/page.js"
-    ],
     "/(pages)/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(pages)/dashboard/page.js"
     ],
-    "/sell/layout": [
+    "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/sell/layout.js"
-    ],
-    "/sell/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/sell/page.js"
-    ],
-    "/sell/add/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/sell/add/page.js"
-    ],
-    "/vendors/[id]/error": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/vendors/[id]/error.js"
-    ],
-    "/vendors/[id]/loading": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/vendors/[id]/loading.js"
-    ],
-    "/vendors/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/vendors/[id]/page.js"
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }

@@ -8,16 +8,20 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
 import { ArrowRight, Share, PlusSquare, Copy } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
+import Loading from '../loading';
 
 export default function InstallPage() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isStandalone, setIsStandalone] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
-    // Check if the app is running in standalone mode (installed)
+    // If the app is already running in standalone mode, redirect to the main app
     if (window.matchMedia('(display-mode: standalone)').matches) {
-      setIsStandalone(true);
+      router.replace('/welcome');
+      return; // Stop further execution
     }
 
     const handler = (e: Event) => {
@@ -26,11 +30,12 @@ export default function InstallPage() {
     };
 
     window.addEventListener('beforeinstallprompt', handler);
+    setIsReady(true); // Component is ready to be displayed
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handler);
     };
-  }, []);
+  }, [router]);
   
   const handleInstallClick = () => {
     if (!deferredPrompt) {
@@ -82,29 +87,11 @@ export default function InstallPage() {
     localStorage.setItem('homepalate_installed', 'true');
   }
 
-  // If already installed, just provide a link to the dashboard
-  if (isStandalone) {
-      return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
-             <Card className="max-w-md w-full text-center">
-                <CardHeader>
-                    <div className="mx-auto mb-4">
-                        <Image src="/icons/icon.svg" width={80} height={80} alt="HomePalate Logo" />
-                    </div>
-                    <CardTitle className="font-headline text-2xl">Welcome to HomePalate!</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-muted-foreground mb-6">You have the app installed. Let's find some food!</p>
-                    <Link href="/welcome" passHref>
-                        <Button className="w-full">
-                            Go to App <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                    </Link>
-                </CardContent>
-            </Card>
-        </div>
-      )
+  // Show a loading state until the client-side check is complete
+  if (!isReady) {
+      return <Loading />;
   }
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4 font-body">
