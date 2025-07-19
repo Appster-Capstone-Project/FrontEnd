@@ -63,9 +63,9 @@ export default function HomePage() {
                 className="pl-10 h-12 text-base border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
               />
             </div>
-            <Link href="/dashboard" passHref asChild>
-              <Button asChild size="lg" className="w-full sm:w-auto h-12 bg-primary hover:bg-primary/90 text-primary-foreground">
-                <a>Find Food</a>
+            <Link href="/dashboard" asChild>
+              <Button size="lg" className="w-full sm:w-auto h-12 bg-primary hover:bg-primary/90 text-primary-foreground">
+                Find Food
               </Button>
             </Link>
           </div>
@@ -104,8 +104,7 @@ export default function HomePage() {
           />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-12">
             {categories.map((category) => (
-               <Link href="/dashboard" key={category.name} className="group" passHref asChild>
-                <a>
+               <Link href="/dashboard" key={category.name} className="group">
                   <div className="relative h-40 w-full overflow-hidden rounded-lg">
                       <Image 
                           src={`https://placehold.co/300x300.png`}
@@ -121,7 +120,6 @@ export default function HomePage() {
                           </div>
                       </div>
                   </div>
-                  </a>
               </Link>
             ))}
           </div>
@@ -138,12 +136,10 @@ export default function HomePage() {
                 Join our community of passionate cooks, share your delicious creations, and earn from your kitchen.
               </p>
               <div className="mt-8">
-                <Link href="/auth/signup?type=seller" passHref asChild>
-                    <Button asChild size="lg">
-                      <a>
+                <Link href="/auth/signup?type=seller" asChild>
+                    <Button size="lg">
                         Become a Seller
                         <ChefHat className="ml-2 h-5 w-5" />
-                      </a>
                     </Button>
                 </Link>
               </div>
