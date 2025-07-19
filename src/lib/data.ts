@@ -50,12 +50,12 @@ export const mockTiffinPlans: TiffinPlan[] = [
 
 
 export const mockDishes: Dish[] = [
-  { id: 'd1-1', sellerId: 'v1', title: 'Butter Chicken Meal', description: 'Creamy tomato curry with tender chicken, served with rice and naan.', price: 14.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'butter chicken', available: true, cookingDate: tomorrow.toISOString(), slotsTotal: 10, slotsFilled: 7, postedAt: new Date(now.getTime() - 5 * 60 * 1000).toISOString() },
-  { id: 'd1-2', sellerId: 'v1', title: 'Palak Paneer Special', description: 'Fresh spinach puree with soft cottage cheese, includes 2 rotis.', price: 12.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'palak paneer', available: true, cookingDate: tomorrow.toISOString(), slotsTotal: 8, slotsFilled: 8, postedAt: new Date(now.getTime() - 15 * 60 * 1000).toISOString() },
-  { id: 'd1-3', sellerId: 'v1', title: 'Weekend Biryani', description: 'Aromatic basmati rice cooked with spices and chicken.', price: 15.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'chicken biryani', available: true, cookingDate: dayAfter.toISOString(), slotsTotal: 15, slotsFilled: 3, postedAt: new Date(now.getTime() - 30 * 60 * 1000).toISOString() },
-  { id: 'd3-1', sellerId: 'v3', title: 'Homemade Lasagna Dinner', description: 'Classic beef lasagna with ricotta and mozzarella. Feeds 2.', price: 22.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'lasagna dish', available: true, cookingDate: tomorrow.toISOString(), slotsTotal: 5, slotsFilled: 1, postedAt: new Date(now.getTime() - 60 * 60 * 1000).toISOString() },
-  { id: 'd3-2', sellerId: 'v3', title: 'Pasta Carbonara Kit', description: 'Fresh pasta and ingredients to make your own Carbonara.', price: 18.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'pasta carbonara', available: false, cookingDate: today.toISOString(), slotsTotal: 10, slotsFilled: 10, postedAt: new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString() },
-  { id: 'd4-1', sellerId: 'v4', title: 'Idli Sambar Breakfast', description: '4 steamed rice cakes served with a flavorful lentil stew.', price: 8.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'idli sambar', available: true, cookingDate: breakfastTomorrow.toISOString(), slotsTotal: 20, slotsFilled: 18, postedAt: new Date(now.getTime() - 25 * 60 * 1000).toISOString() },
+  { id: 'd1-1', sellerId: 'v1', title: 'Butter Chicken Meal', description: 'Creamy tomato curry with tender chicken, served with rice and naan.', price: 14.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'butter chicken', available: true, cookingDate: tomorrow.toISOString(), slotsTotal: 10, slotsFilled: 7, postedAt: new Date(now.getTime() - 5 * 60 * 1000).toISOString(), latitude: 49.2827, longitude: -123.1207 },
+  { id: 'd1-2', sellerId: 'v1', title: 'Palak Paneer Special', description: 'Fresh spinach puree with soft cottage cheese, includes 2 rotis.', price: 12.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'palak paneer', available: true, cookingDate: tomorrow.toISOString(), slotsTotal: 8, slotsFilled: 8, postedAt: new Date(now.getTime() - 15 * 60 * 1000).toISOString(), latitude: 49.2827, longitude: -123.1207 },
+  { id: 'd1-3', sellerId: 'v1', title: 'Weekend Biryani', description: 'Aromatic basmati rice cooked with spices and chicken.', price: 15.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'chicken biryani', available: true, cookingDate: dayAfter.toISOString(), slotsTotal: 15, slotsFilled: 3, postedAt: new Date(now.getTime() - 30 * 60 * 1000).toISOString(), latitude: 49.2827, longitude: -123.1207 },
+  { id: 'd3-1', sellerId: 'v3', title: 'Homemade Lasagna Dinner', description: 'Classic beef lasagna with ricotta and mozzarella. Feeds 2.', price: 22.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'lasagna dish', available: true, cookingDate: tomorrow.toISOString(), slotsTotal: 5, slotsFilled: 1, postedAt: new Date(now.getTime() - 60 * 60 * 1000).toISOString(), latitude: 49.2820, longitude: -123.1210 },
+  { id: 'd3-2', sellerId: 'v3', title: 'Pasta Carbonara Kit', description: 'Fresh pasta and ingredients to make your own Carbonara.', price: 18.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'pasta carbonara', available: false, cookingDate: today.toISOString(), slotsTotal: 10, slotsFilled: 10, postedAt: new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString(), latitude: 49.2820, longitude: -123.1210 },
+  { id: 'd4-1', sellerId: 'v4', title: 'Idli Sambar Breakfast', description: '4 steamed rice cakes served with a flavorful lentil stew.', price: 8.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'idli sambar', available: true, cookingDate: breakfastTomorrow.toISOString(), slotsTotal: 20, slotsFilled: 18, postedAt: new Date(now.getTime() - 25 * 60 * 1000).toISOString(), latitude: 43.6532, longitude: -79.3832 },
 ];
 
 export const mockCombinedMenu = [...mockDishes, ...mockTiffinPlans];
@@ -86,6 +86,8 @@ export const mockVendors: Vendor[] = [
     operatingHours: '5 PM - 10 PM',
     deliveryOptions: ['Pickup', 'Delivery'],
     postedAt: new Date(now.getTime() - 5 * 60 * 1000).toISOString(),
+    latitude: 49.2827, 
+    longitude: -123.1207,
   },
   {
     id: 'v2',
@@ -106,6 +108,8 @@ export const mockVendors: Vendor[] = [
     operatingHours: '11 AM - 8 PM',
     deliveryOptions: ['Delivery'],
     postedAt: new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString(),
+    latitude: 43.6510,
+    longitude: -79.3470,
   },
   {
     id: 'v3',
@@ -126,6 +130,8 @@ export const mockVendors: Vendor[] = [
     operatingHours: '6 PM - 11 PM',
     deliveryOptions: ['Pickup'],
     postedAt: new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString(),
+    latitude: 49.2820,
+    longitude: -123.1210,
   },
    {
     id: 'v4',
@@ -146,6 +152,8 @@ export const mockVendors: Vendor[] = [
     operatingHours: '8 AM - 2 PM',
     deliveryOptions: ['Pickup', 'Delivery'],
     postedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+    latitude: 43.6532,
+    longitude: -79.3832,
   },
 ];
 

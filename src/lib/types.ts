@@ -20,6 +20,8 @@ export interface Dish extends BaseMenuItem {
   cookingDate: string; // ISO date string for when the meal is prepared
   slotsTotal: number; // The target number of portions
   slotsFilled: number; // The number of portions already claimed
+  latitude?: number;
+  longitude?: number;
 }
 
 // Specific type for a subscription plan from a Tiffin Service
@@ -61,6 +63,8 @@ export interface Vendor {
   deliveryOptions?: string[];
   Icon?: LucideIcon;
   postedAt?: string; // ISO date string
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface CartItem extends Dish {

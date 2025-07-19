@@ -2,12 +2,12 @@
 "use client";
 
 import * as React from "react";
-import { List, PlusCircle, CheckCircle, XCircle, Edit, Trash2, Send } from "lucide-react";
+import { List, PlusCircle, CheckCircle, XCircle, Edit, Trash2, Send, MapPin } from "lucide-react";
 import SectionTitle from "@/components/shared/SectionTitle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import type { Dish } from "@/lib/types";
+import type { Dish, Vendor } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
@@ -22,7 +22,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { mockDishes } from "@/lib/data";
+import { mockDishes, getVendorById } from "@/lib/data";
 import { BroadcastDialog } from "@/components/shared/BroadcastDialog";
 
 export default function SellDashboardPage() {
@@ -31,11 +31,16 @@ export default function SellDashboardPage() {
   
   const [listings, setListings] = React.useState<Dish[]>([]);
   const [isListingsLoading, setIsListingsLoading] = React.useState(true);
-  const [sellerName, setSellerName] = React.useState<string | null>(null);
+  const [seller, setSeller] = React.useState<Vendor | null>(null);
 
   const fetchListings = React.useCallback(async () => {
     setIsListingsLoading(true);
     const sellerId = localStorage.getItem('sellerId');
+
+    if (sellerId) {
+        const vendor = getVendorById(sellerId);
+        setSeller(vendor || null);
+    }
 
     // Simulate API call
     setTimeout(() => {
@@ -51,12 +56,11 @@ export default function SellDashboardPage() {
   React.useEffect(() => {
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
-    const name = localStorage.getItem('userName');
-    setSellerName(name);
-
+    
     if (!token || userRole !== 'seller') {
       router.push('/auth/signin?type=seller');
     } else {
+      const name = localStorage.getItem('userName');
       fetchListings();
     }
   }, [router, fetchListings]);
@@ -80,7 +84,7 @@ export default function SellDashboardPage() {
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
        <SectionTitle 
-        title={`Welcome, ${sellerName || 'Seller'}!`}
+        title={`Welcome, ${seller?.name || 'Seller'}!`}
         subtitle="Here's an overview of your menu."
       />
         <Card>
@@ -112,13 +116,21 @@ export default function SellDashboardPage() {
                           <li key={listing.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-3 gap-3">
                               <div className="flex-1">
                                 <span className="font-medium text-foreground">{listing.title}</span>
-                                <div className="flex items-center text-xs text-muted-foreground">
-                                    {listing.available ? (
-                                        <CheckCircle className="h-4 w-4 mr-1 text-green-500" />
-                                    ) : (
-                                        <XCircle className="h-4 w-4 mr-1 text-red-500" />
+                                <div className="flex items-center text-xs text-muted-foreground gap-x-3">
+                                    <div className="flex items-center">
+                                        {listing.available ? (
+                                            <CheckCircle className="h-4 w-4 mr-1 text-green-500" />
+                                        ) : (
+                                            <XCircle className="h-4 w-4 mr-1 text-red-500" />
+                                        )}
+                                        {listing.available ? 'Available' : 'Unavailable'}
+                                    </div>
+                                    {seller?.city && (
+                                        <div className="flex items-center">
+                                            <MapPin className="h-4 w-4 mr-1 text-accent" />
+                                            {seller.city}
+                                        </div>
                                     )}
-                                    {listing.available ? 'Available' : 'Unavailable'}
                                 </div>
                               </div>
                               <div className="flex items-center gap-2 shrink-0">
