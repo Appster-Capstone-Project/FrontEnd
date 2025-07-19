@@ -1,10 +1,13 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="512" height="512" fill="#F2E9DD"/>
-<g transform="translate(181, 196) scale(1.2)">
-    <path d="M112.5 15H37.5C35.5109 15 33.6032 15.7902 32.1967 17.1967C30.7902 18.6032 30 20.5109 30 22.5V97.5C30 99.4891 30.7902 101.397 32.1967 102.803C33.6032 104.21 35.5109 105 37.5 105H112.5C114.489 105 116.397 104.21 117.803 102.803C119.21 101.397 120 99.4891 120 97.5V22.5C120 20.5109 119.21 18.6032 117.803 17.1967C116.397 15.7902 114.489 15 112.5 15Z" stroke="#A66321" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M116.25 45H33.75" stroke="#F27405" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M75 15V7.5" stroke="#A66321" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M52.5 15L45 0" stroke="#A66321" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M97.5 15L105 0" stroke="#A66321" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<rect width="512" height="512" rx="102.4" fill="#F2E9DD"/>
+<g transform="translate(100, 120) scale(1.5)">
+    <path d="M20.57,4.35,16,2.11V14.22l4.57-2.24Z" fill="#A66321"/>
+    <path d="M11.43,4.35,16,2.11V14.22L11.43,12V4.35Z" fill="#A66321"/>
+    <path d="M29,6,16,12.2,3,6V22H29Z" fill="#F27405"/>
+    <path d="M29,22,16,28.2,3,22Z" fill="#A66321"/>
+    <path d="M16,12.2,20.57,9.95,11.43,9.95,16,12.2Z" fill="#A66321" />
+</g>
+<g transform="translate(190, 80) scale(1.2)">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 22.47l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="#F27405" stroke="#F2E9DD" stroke-width="1"/>
 </g>
 </svg>

@@ -1,8 +1,7 @@
 {
-  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/auth/signin/page": "app/auth/signin/page.js",
   "/page": "app/page.js",
+  "/(pages)/dashboard/page": "app/(pages)/dashboard/page.js",
   "/(pages)/welcome/page": "app/(pages)/welcome/page.js",
-  "/(pages)/profile/page": "app/(pages)/profile/page.js",
-  "/(pages)/dashboard/page": "app/(pages)/dashboard/page.js"
+  "/(pages)/profile/page": "app/(pages)/profile/page.js"
 }

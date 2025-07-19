@@ -754,6 +754,10 @@ video {
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
+.mx-1 {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
 .mb-1 {
   margin-bottom: 0.25rem;
 }
@@ -819,6 +823,9 @@ video {
 }
 .block {
   display: block;
+}
+.inline {
+  display: inline;
 }
 .flex {
   display: flex;
@@ -1179,6 +1186,12 @@ video {
 }
 .select-none {
   user-select: none;
+}
+.list-inside {
+  list-style-position: inside;
+}
+.list-decimal {
+  list-style-type: decimal;
 }
 .grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -2006,6 +2019,9 @@ video {
 }
 .ease-linear {
   animation-timing-function: linear;
+}
+.running {
+  animation-play-state: running;
 }
 .paused {
   animation-play-state: paused;
