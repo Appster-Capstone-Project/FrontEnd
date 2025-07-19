@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///home/user/studio/src/app/%28pages%29/layout.tsx"],"sourcesContent":["import { ReactNode } from 'react';\n\n// This layout is now simplified because the main layout shell (Header, Footer) \n// and providers are handled in the root layout via AppShell.\nexport default function PagesLayout({ children }: { children: ReactNode }) {\n  return <>{children}</>;\n}\n"],"names":[],"mappings":";;;;;AAIe,SAAS,YAAY,EAAE,QAAQ,EAA2B;IACvE,qBAAO;kBAAG;;AACZ","debugId":null}}]
-}
