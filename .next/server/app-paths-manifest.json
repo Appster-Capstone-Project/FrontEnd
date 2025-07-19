@@ -1,5 +1,6 @@
 {
   "/vendors/page": "app/vendors/page.js",
+  "/vendors/[id]/page": "app/vendors/[id]/page.js",
   "/(pages)/dashboard/page": "app/(pages)/dashboard/page.js",
   "/(pages)/promotions/page": "app/(pages)/promotions/page.js",
   "/(pages)/profile/page": "app/(pages)/profile/page.js",

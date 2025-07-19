@@ -1,5 +1,5 @@
 
-import type { Vendor, Dish, Review } from '@/lib/types';
+import type { Vendor, Dish, Review, TiffinPlan } from '@/lib/types';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,11 +8,12 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import StarRating from '@/components/shared/StarRating';
 import DishCard from '@/components/shared/DishCard';
+import TiffinPlanCard from '@/components/shared/TiffinPlanCard';
 import ReviewCard from '@/components/shared/ReviewCard';
 import SectionTitle from '@/components/shared/SectionTitle';
 import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { getVendorById } from '@/lib/data'; // Import mock data function
+import { getVendorById } from '@/lib/data'; 
 
 async function submitReview(formData: FormData) {
   "use server";
@@ -28,7 +29,6 @@ async function submitReview(formData: FormData) {
 }
 
 async function getVendorDetails(id: string): Promise<Vendor | null> {
-  // Use mock data instead of fetching from an API
   const vendor = getVendorById(id);
   if (vendor) {
     return Promise.resolve(vendor);
@@ -44,6 +44,7 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
   }
 
   const VendorIcon = vendor.type === 'Home Cook' ? ChefHat : Utensils;
+  const isTiffinService = vendor.type === 'Tiffin Service';
 
   return (
     <div className="container py-8 md:py-12">
@@ -111,7 +112,7 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
       <Tabs defaultValue="menu" className="w-full">
         <TabsList className="grid w-full grid-cols-2 md:w-1/2 lg:w-1/3 mx-auto mb-6">
           <TabsTrigger value="menu" className="text-base py-2.5">
-            <Utensils className="mr-2 h-5 w-5" /> Menu
+            <Utensils className="mr-2 h-5 w-5" /> {isTiffinService ? 'Subscription Plans' : 'Menu'}
           </TabsTrigger>
           <TabsTrigger value="reviews" className="text-base py-2.5">
             <MessageSquare className="mr-2 h-5 w-5" /> Reviews ({vendor.reviews ? vendor.reviews.length : 0})
@@ -119,13 +120,24 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
         </TabsList>
 
         <TabsContent value="menu">
-          <SectionTitle title="Our Menu" className="text-center mb-6" />
+          <SectionTitle 
+            title={isTiffinService ? 'Our Subscription Plans' : 'Our Menu'} 
+            className="text-center mb-6" 
+          />
           {vendor.menu && vendor.menu.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {vendor.menu.map((dish: Dish) => (
-                <DishCard key={dish.id} dish={dish} />
-              ))}
-            </div>
+            isTiffinService ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                {(vendor.menu as TiffinPlan[]).map((plan: TiffinPlan) => (
+                  <TiffinPlanCard key={plan.id} plan={plan} />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {(vendor.menu as Dish[]).map((dish: Dish) => (
+                  <DishCard key={dish.id} dish={dish} />
+                ))}
+              </div>
+            )
           ) : (
             <p className="text-center text-muted-foreground py-8">This vendor hasn't added any dishes to their menu yet.</p>
           )}

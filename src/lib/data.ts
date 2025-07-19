@@ -1,5 +1,5 @@
 
-import type { Vendor, Dish, Review, CartItem } from './types';
+import type { Vendor, Dish, Review, CartItem, TiffinPlan } from './types';
 
 // This file contains mock data to simulate a full backend.
 
@@ -9,17 +9,46 @@ tomorrow.setDate(tomorrow.getDate() + 1);
 const dayAfter = new Date(today);
 dayAfter.setDate(dayAfter.getDate() + 2);
 
+export const mockTiffinPlans: TiffinPlan[] = [
+  { 
+    id: 'plan-d2-1', 
+    sellerId: 'v2', 
+    title: 'Weekly Veg Plan', 
+    description: 'A week of delicious and healthy vegetarian meals, delivered daily.', 
+    price: 65.00, 
+    planType: 'Weekly',
+    mealsPerWeek: 7,
+    features: ['Vegetarian', 'Daily Delivery', 'Balanced Meals'],
+    imageUrl: 'https://placehold.co/300x200.png', 
+    dataAiHint: 'tiffin service', 
+    available: true, 
+  },
+  { 
+    id: 'plan-d2-2', 
+    sellerId: 'v2', 
+    title: 'Monthly Veg Plan', 
+    description: 'Save more with our monthly subscription. Daily changing menu of 1 curry, 4 rotis, rice, and salad.', 
+    price: 250.00, 
+    planType: 'Monthly',
+    mealsPerWeek: 7,
+    features: ['Best Value', 'Vegetarian', 'Daily Delivery', 'Varied Menu'],
+    imageUrl: 'https://placehold.co/300x200.png', 
+    dataAiHint: 'indian thali', 
+    available: true,
+  },
+];
+
 
 export const mockDishes: Dish[] = [
   { id: 'd1-1', sellerId: 'v1', title: 'Butter Chicken Meal', description: 'Creamy tomato curry with tender chicken, served with rice and naan.', price: 14.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'butter chicken', available: true, cookingDate: tomorrow.toISOString(), slotsTotal: 10, slotsFilled: 7 },
   { id: 'd1-2', sellerId: 'v1', title: 'Palak Paneer Special', description: 'Fresh spinach puree with soft cottage cheese, includes 2 rotis.', price: 12.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'palak paneer', available: true, cookingDate: tomorrow.toISOString(), slotsTotal: 8, slotsFilled: 8 },
   { id: 'd1-3', sellerId: 'v1', title: 'Weekend Biryani', description: 'Aromatic basmati rice cooked with spices and chicken.', price: 15.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'chicken biryani', available: true, cookingDate: dayAfter.toISOString(), slotsTotal: 15, slotsFilled: 3 },
-  { id: 'd2-1', sellerId: 'v2', title: 'Monthly Tiffin (Veg)', description: 'Daily changing menu of 1 curry, 4 rotis, rice, and salad. 30 meals.', price: 250.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'tiffin service', available: true, cookingDate: today.toISOString(), slotsTotal: 50, slotsFilled: 45 },
-  { id: 'd2-2', sellerId: 'v2', title: 'Weekly Tiffin (Veg)', description: 'A week of delicious vegetarian meals delivered to your door.', price: 65.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'indian thali', available: true, cookingDate: today.toISOString(), slotsTotal: 20, slotsFilled: 11 },
   { id: 'd3-1', sellerId: 'v3', title: 'Homemade Lasagna Dinner', description: 'Classic beef lasagna with ricotta and mozzarella. Feeds 2.', price: 22.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'lasagna dish', available: true, cookingDate: tomorrow.toISOString(), slotsTotal: 5, slotsFilled: 1 },
   { id: 'd3-2', sellerId: 'v3', title: 'Pasta Carbonara Kit', description: 'Fresh pasta and ingredients to make your own Carbonara.', price: 18.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'pasta carbonara', available: false, cookingDate: today.toISOString(), slotsTotal: 10, slotsFilled: 10 },
   { id: 'd4-1', sellerId: 'v4', title: 'Idli Sambar Breakfast', description: '4 steamed rice cakes served with a flavorful lentil stew.', price: 8.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'idli sambar', available: true, cookingDate: tomorrow.toISOString(), slotsTotal: 20, slotsFilled: 18 },
 ];
+
+export const mockCombinedMenu = [...mockDishes, ...mockTiffinPlans];
 
 export const mockReviews: Review[] = [
   { id: 'r1-1', userName: 'Raj K.', rating: 5, comment: 'Best butter chicken I\'ve had in ages! So authentic and flavorful.', date: '2024-07-15T10:00:00Z', userImageUrl: 'https://placehold.co/40x40.png', dataAiHintUser: 'man smiling' },
@@ -61,7 +90,7 @@ export const mockVendors: Vendor[] = [
     verified: true,
     imageUrl: 'https://placehold.co/400x250.png',
     dataAiHint: 'tiffin box meal',
-    menu: mockDishes.filter(d => d.sellerId === 'v2'),
+    menu: mockTiffinPlans.filter(d => d.sellerId === 'v2'),
     reviews: mockReviews.filter(r => r.id.startsWith('r2')),
     specialty: 'Vegetarian Thalis',
     operatingHours: '11 AM - 8 PM',
@@ -125,7 +154,6 @@ export const mockOrders = [
         status: 'Delivered',
         items: [
             {...mockDishes.find(d => d.id === 'd1-1'), quantity: 1} as CartItem,
-            {...mockDishes.find(d => d.id === 'd1-3'), quantity: 1} as CartItem
         ].filter(i => i.id)
     },
     {
@@ -135,7 +163,7 @@ export const mockOrders = [
         total: 65.00,
         status: 'Preparing',
         items: [
-             {...mockDishes.find(d => d.id === 'd2-2'), quantity: 1} as CartItem
+             {...(mockTiffinPlans.find(d => d.id === 'plan-d2-1')), quantity: 1} as any, // This needs to be 'any' for now
         ].filter(i => i.id)
     }
 ].filter(o => o.items.every(item => item && item.id)); // Filter out orders with missing items

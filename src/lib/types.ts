@@ -1,20 +1,33 @@
 
 import type { LucideIcon } from 'lucide-react';
 
-export interface Dish {
+// Base type for any item on a vendor's menu
+interface BaseMenuItem {
   id: string;
-  title: string;
   sellerId: string;
+  title: string;
   description?: string;
   price: number;
   imageUrl?: string;
   dataAiHint?: string;
+  available: boolean;
+}
+
+// Specific type for a single, pre-orderable dish from a Home Cook
+export interface Dish extends BaseMenuItem {
   category?: string;
-  available: boolean; // Can be used to manually toggle if a listing is active
   cookingDate: string; // ISO date string for when the meal is prepared
   slotsTotal: number; // The target number of portions
   slotsFilled: number; // The number of portions already claimed
 }
+
+// Specific type for a subscription plan from a Tiffin Service
+export interface TiffinPlan extends BaseMenuItem {
+  planType: 'Weekly' | 'Monthly' | 'Annually'; // The duration of the subscription
+  mealsPerWeek: number; // e.g., 5 meals per week
+  features: string[]; // e.g., ["Veg & Non-Veg option", "Free delivery"]
+}
+
 
 export interface Review {
   id: string;
@@ -40,7 +53,7 @@ export interface Vendor {
   dataAiHint?: string;
   profileImageUrl?: string;
   dataAiHintProfile?: string;
-  menu: Dish[];
+  menu: (Dish[] | TiffinPlan[]);
   reviews: Review[];
   specialty?: string;
   operatingHours?: string;
