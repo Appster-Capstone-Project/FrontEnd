@@ -7,7 +7,7 @@ import { Providers } from '@/context/Providers';
 export const metadata: Metadata = {
   title: 'TiffinBox',
   description: 'TiffinBox: Discover nearby home cooks and tiffin services. Browse menus, read reviews, and enjoy authentic homemade meals.',
-  
+  manifest: '/manifest.webmanifest',
   // Apple PWA Tags
   appleWebAppCapable: 'yes',
   appleWebAppStatusBarStyle: 'default',
@@ -30,7 +30,7 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#F27405' },
-    { media: '(prefers-color-scheme: dark)', color: '#2A2A2A' }, 
+    { media: '(prefers-color-scheme: dark)', color: '#F27405' }, 
   ],
 }
 

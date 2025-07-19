@@ -3,10 +3,10 @@ import type {NextConfig} from 'next';
 import withPWA from 'next-pwa';
 
 const withPwa = withPWA({
-  dest: '.next/pwa',
+  dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: false, // Ensure PWA is active in development
+  disable: process.env.NODE_ENV === 'development',
 });
 
 const nextConfig: NextConfig = {
@@ -25,6 +25,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'i.pravatar.cc',
+        port: '',
+        pathname: '/**',
+      }
     ],
   },
   async rewrites() {
