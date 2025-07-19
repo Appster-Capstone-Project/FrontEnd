@@ -10,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Send } from 'lucide-react';
@@ -159,17 +160,15 @@ export const ChatDialog: React.FC<ChatDialogProps> = ({ children, order }) => {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-md p-0 flex flex-col h-[70vh]">
-        <DialogHeader className="p-4 border-b">
-          <DialogTitle className="flex items-center gap-3">
-             <Avatar className="h-10 w-10 border">
-              <AvatarImage src={chatPartner.imageUrl} alt={chatPartner.name} />
-              <AvatarFallback>{chatPartner.name?.substring(0, 1)}</AvatarFallback>
-            </Avatar>
-            <div>
-             Chat with {chatPartner.name}
-             <p className="text-sm font-normal text-muted-foreground">Order ID: {order.id.slice(-6)}</p>
-            </div>
-          </DialogTitle>
+        <DialogHeader className="p-4 border-b flex flex-row items-center gap-3">
+          <Avatar className="h-10 w-10 border">
+            <AvatarImage src={chatPartner.imageUrl} alt={chatPartner.name} />
+            <AvatarFallback>{chatPartner.name?.substring(0, 1)}</AvatarFallback>
+          </Avatar>
+          <div>
+            <DialogTitle>Chat with {chatPartner.name}</DialogTitle>
+            <DialogDescription>Order ID: {order.id.slice(-6)}</DialogDescription>
+          </div>
         </DialogHeader>
         
         <ScrollArea className="flex-grow px-4" ref={scrollAreaRef}>
