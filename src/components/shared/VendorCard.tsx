@@ -12,20 +12,22 @@ import { MapPin, Utensils, ChefHat, ArrowRight, Clock } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useEffect, useState } from 'react';
 
-interface VendorCardProps {
-  vendor: Vendor;
+interface TimeAgoProps {
+  date: string;
 }
 
-const TimeAgo: React.FC<{ date: string }> = ({ date }) => {
+const TimeAgo: React.FC<TimeAgoProps> = ({ date }) => {
   const [timeAgo, setTimeAgo] = useState('');
 
   useEffect(() => {
+    // This runs only on the client, after hydration, preventing a mismatch
     if (date) {
       setTimeAgo(formatDistanceToNow(new Date(date), { addSuffix: true }));
     }
   }, [date]);
 
   if (!timeAgo) {
+    // Render a placeholder or nothing on the server and initial client render
     return null;
   }
 
@@ -36,6 +38,11 @@ const TimeAgo: React.FC<{ date: string }> = ({ date }) => {
     </div>
   );
 };
+
+
+interface VendorCardProps {
+  vendor: Vendor;
+}
 
 const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
   const VendorIcon = vendor.type === 'Home Cook' ? ChefHat : Utensils;
@@ -88,9 +95,11 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             </div>
           </CardContent>
           <div className="p-6 pt-0">
-            <Link href={`/vendors/${vendor.id}`} asChild>
-               <Button className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground">
-                  View Menu & Reviews <ArrowRight className="ml-2 h-4 w-4" />
+            <Link href={`/vendors/${vendor.id}`} passHref legacyBehavior>
+               <Button asChild className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground">
+                  <a>
+                    View Menu & Reviews <ArrowRight className="ml-2 h-4 w-4" />
+                  </a>
               </Button>
             </Link>
           </div>
@@ -101,3 +110,6 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
 };
 
 export default VendorCard;
+
+
+    
