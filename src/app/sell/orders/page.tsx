@@ -38,7 +38,7 @@ const OrderCard: React.FC<{ order: Order; onStatusChange: (id: string, status: O
   return (
     <Card className="shadow-md hover:shadow-lg transition-shadow">
       <CardHeader>
-        <div className="flex justify-between items-start">
+        <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
             <div className="flex items-center gap-4">
                 <Avatar className="h-12 w-12 border">
                     <AvatarImage src={order.buyer.imageUrl} alt={order.buyer.name} />
@@ -49,7 +49,7 @@ const OrderCard: React.FC<{ order: Order; onStatusChange: (id: string, status: O
                     <CardDescription>Order ID: {order.id.slice(-6)}</CardDescription>
                 </div>
             </div>
-            <Badge variant={currentStatus.variant} className="flex items-center">
+            <Badge variant={currentStatus.variant} className="flex items-center self-start sm:self-center mt-2 sm:mt-0">
                 {currentStatus.icon}
                 <span>{currentStatus.text}</span>
             </Badge>
@@ -144,7 +144,7 @@ export default function SellerOrdersPage() {
     };
 
   return (
-    <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+    <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
       <SectionTitle
           title="Incoming Orders"
           subtitle="Review and manage your new meal requests."

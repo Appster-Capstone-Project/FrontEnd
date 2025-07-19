@@ -78,13 +78,13 @@ export default function SellDashboardPage() {
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+    <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
        <SectionTitle 
         title={`Welcome, ${sellerName || 'Seller'}!`}
         subtitle="Here's an overview of your menu."
       />
         <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
                 <CardTitle className="font-headline text-xl flex items-center">
                     <List className="mr-2 h-5 w-5" /> Your Menu
@@ -107,7 +107,7 @@ export default function SellDashboardPage() {
               ) : listings.length > 0 ? (
                   <ul className="divide-y divide-border">
                       {listings.map((listing) => (
-                          <li key={listing.id} className="flex justify-between items-center py-3">
+                          <li key={listing.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-3 gap-3">
                               <div className="flex-1">
                                 <span className="font-medium text-foreground">{listing.title}</span>
                                 <div className="flex items-center text-xs text-muted-foreground">
@@ -119,7 +119,7 @@ export default function SellDashboardPage() {
                                     {listing.available ? 'Available' : 'Unavailable'}
                                 </div>
                               </div>
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-2 shrink-0">
                                 <span className="font-mono text-foreground mr-4">${listing.price.toFixed(2)}</span>
                                 <BroadcastDialog 
                                     onBroadcast={(message) => handleBroadcast(message, listing.title)}

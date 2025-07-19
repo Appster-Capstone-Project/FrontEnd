@@ -28,18 +28,14 @@ function AuthToggle({ isSellerView }: { isSellerView: boolean }) {
 
   return (
     <div className="flex w-full mb-4 rounded-t-lg overflow-hidden border-b">
-        <Button asChild variant="ghost" className={cn(baseClass, !isSellerView ? activeClass : inactiveClass, "rounded-none")}>
-            <Link href="/auth/signin">
-                <User className="h-4 w-4" />
-                Customer
-            </Link>
-        </Button>
-        <Button asChild variant="ghost" className={cn(baseClass, isSellerView ? activeClass : inactiveClass, "rounded-none")}>
-            <Link href="/auth/signin?type=seller">
-                <Briefcase className="h-4 w-4" />
-                Seller
-            </Link>
-        </Button>
+        <Link href="/auth/signin" passHref className={cn(baseClass, !isSellerView ? activeClass : inactiveClass, "rounded-none")}>
+            <User className="h-4 w-4" />
+            Customer
+        </Link>
+        <Link href="/auth/signin?type=seller" passHref className={cn(baseClass, isSellerView ? activeClass : inactiveClass, "rounded-none")}>
+            <Briefcase className="h-4 w-4" />
+            Seller
+        </Link>
     </div>
   )
 }
@@ -136,14 +132,13 @@ function SignInCard() {
           </Button>
           <div className="w-full text-center text-sm text-muted-foreground">
               {signupHint}
-              <Button asChild variant="link" className="p-0 h-auto">
-                <Link
-                  href={signupLink}
-                  className="font-medium text-primary hover:underline"
-                >
-                  {signupActionText}
-                </Link>
-              </Button>
+              <Link href={signupLink} passHref legacyBehavior>
+                <Button asChild variant="link" className="p-0 h-auto">
+                  <a className="font-medium text-primary hover:underline">
+                    {signupActionText}
+                  </a>
+                </Button>
+              </Link>
           </div>
         </CardFooter>
       </Card>
@@ -175,7 +170,7 @@ const AuthCardSkeleton = () => (
 
 export default function SignInPage() {
   return (
-    <div className="container flex min-h-[calc(100vh-var(--header-height)-var(--footer-height))] items-center justify-center py-12">
+    <div className="container flex min-h-[calc(100vh-var(--header-height)-var(--footer-height))] items-center justify-center py-12 px-4">
       <Suspense fallback={<AuthCardSkeleton />}>
         <SignInCard />
       </Suspense>

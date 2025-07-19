@@ -35,7 +35,6 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { cn } from '@/lib/utils';
 
 const Header = () => {
   const { getItemCount } = useCart();
@@ -72,11 +71,7 @@ const Header = () => {
 
   const handleLogout = () => {
     setIsLoading(true);
-    localStorage.removeItem('token');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('sellerId'); // Clear sellerId on logout
+    localStorage.clear();
     setIsLoggedIn(false);
     setUserName('');
     setUserRole(null);
@@ -86,32 +81,84 @@ const Header = () => {
   };
   
   const navLinks = [
-    { href: "/dashboard", label: "Browse Food", icon: Search, roles: ['user', 'guest'] },
+    { href: "/dashboard", label: "Browse Food", icon: Search, roles: ['guest'] },
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ['user'] },
     { href: "/orders", label: "My Orders", icon: ListOrdered, roles: ['user'] },
-    { href: "/promotions", label: "Promotions", icon: TicketPercent, roles: ['user'] },
+    { href: "/profile", label: "My Profile", icon: UserCircle, roles: ['user'] },
     { href: "/sell", label: "Seller Dashboard", icon: ChefHat, roles: ['seller'] },
   ];
   
   const currentRole = isLoggedIn ? userRole : 'guest';
   const visibleNavLinks = navLinks.filter(link => link.roles.includes(currentRole as string));
 
-
   const authLinks = (
-    <div className="flex flex-col space-y-3">
-       <Button variant="ghost" asChild>
-          <Link href="/auth/signin?type=seller">
+    <div className="flex flex-col space-y-3 pt-4 border-t">
+       <Link href="/auth/signin?type=seller" passHref legacyBehavior>
+        <Button asChild variant="ghost">
+          <a>
             <ChefHat className="mr-2 h-4 w-4" />
             <span>Become/Sign In as Seller</span>
-          </Link>
+          </a>
         </Button>
-        <Button variant="outline" asChild>
-          <Link href="/auth/signin">
+       </Link>
+       <Link href="/auth/signin" passHref legacyBehavior>
+        <Button asChild variant="outline">
+          <a>
             <UserCircle className="mr-2 h-4 w-4" />
             <span>Login / Sign Up</span>
-          </Link>
+          </a>
         </Button>
+       </Link>
     </div>
+  );
+  
+  const UserMenu = () => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="sm" className="flex items-center space-x-2">
+          <UserCircle className="h-5 w-5" />
+           <span className="hidden sm:inline">{userName}</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {userRole === 'seller' ? (
+           <DropdownMenuItem asChild>
+             <Link href="/sell">
+               <ChefHat className="mr-2 h-4 w-4" />
+               <span>Seller Dashboard</span>
+             </Link>
+           </DropdownMenuItem>
+        ) : (
+          <>
+          <DropdownMenuItem asChild>
+             <Link href="/dashboard">
+               <LayoutDashboard className="mr-2 h-4 w-4" />
+               <span>Dashboard</span>
+             </Link>
+          </DropdownMenuItem>
+           <DropdownMenuItem asChild>
+            <Link href="/orders">
+              <ListOrdered className="mr-2 h-4 w-4" />
+              <span>My Orders</span>
+            </Link>
+          </DropdownMenuItem>
+           <DropdownMenuItem asChild>
+             <Link href="/profile">
+               <UserCircle className="mr-2 h-4 w-4" />
+               <span>My Profile</span>
+             </Link>
+           </DropdownMenuItem>
+          </>
+        )}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={handleLogout}>
+          <LogOut className="mr-2 h-4 w-4" />
+          <span>Log Out</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 
   return (
@@ -127,76 +174,35 @@ const Header = () => {
         
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center space-x-2 md:space-x-4">
-          <Button variant="ghost" asChild>
-            <Link href="/dashboard">
-              <Search className="h-4 w-4 md:mr-2" />
-              <span className="hidden md:inline">Browse Food</span>
-            </Link>
-          </Button>
+          <Link href="/dashboard" passHref legacyBehavior>
+            <Button asChild variant="ghost">
+              <a>
+                <Search className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:inline">Browse Food</span>
+              </a>
+            </Button>
+          </Link>
 
           {isLoading ? (
               <Skeleton className="h-9 w-24 rounded-md" />
-          ) : isLoggedIn ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="flex items-center space-x-2">
-                  <UserCircle className="h-5 w-5" />
-                   <span className="hidden sm:inline">{userName}</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {userRole === 'seller' ? (
-                   <DropdownMenuItem asChild>
-                     <Link href="/sell">
-                       <ChefHat className="mr-2 h-4 w-4" />
-                       <span>Seller Dashboard</span>
-                     </Link>
-                   </DropdownMenuItem>
-                ) : (
-                  <>
-                  <DropdownMenuItem asChild>
-                     <Link href="/dashboard">
-                       <LayoutDashboard className="mr-2 h-4 w-4" />
-                       <span>Dashboard</span>
-                     </Link>
-                  </DropdownMenuItem>
-                   <DropdownMenuItem asChild>
-                    <Link href="/orders">
-                      <ListOrdered className="mr-2 h-4 w-4" />
-                      <span>My Orders</span>
-                    </Link>
-                  </DropdownMenuItem>
-                   <DropdownMenuItem asChild>
-                     <Link href="/profile">
-                       <UserCircle className="mr-2 h-4 w-4" />
-                       <span>My Profile</span>
-                     </Link>
-                   </DropdownMenuItem>
-                  </>
-                )}
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log Out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
+          ) : isLoggedIn ? <UserMenu /> : (
              <>
-              <Button variant="ghost" asChild>
-                <Link href="/auth/signin?type=seller">
-                  <ChefHat className="h-4 w-4 md:mr-2" />
-                  <span className="hidden md:inline">Become a Seller</span>
-                </Link>
-              </Button>
-              <Button variant="outline" size="sm" asChild>
-                <Link href="/auth/signin">
-                  <UserCircle className="h-4 w-4" />
-                  <span className="hidden sm:inline">Login / Sign Up</span>
-                </Link>
-              </Button>
+              <Link href="/auth/signin?type=seller" passHref legacyBehavior>
+                <Button asChild variant="ghost">
+                  <a>
+                    <ChefHat className="h-4 w-4 md:mr-2" />
+                    <span className="hidden md:inline">Become a Seller</span>
+                  </a>
+                </Button>
+              </Link>
+              <Link href="/auth/signin" passHref legacyBehavior>
+                <Button asChild variant="outline" size="sm">
+                  <a>
+                    <UserCircle className="h-4 w-4 mr-2" />
+                    <span>Login / Sign Up</span>
+                  </a>
+                </Button>
+              </Link>
             </>
           )}
 
@@ -231,25 +237,27 @@ const Header = () => {
                     <span className="sr-only">Open menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-full max-w-xs">
-                <nav className="flex flex-col space-y-4 pt-8">
+              <SheetContent side="right" className="w-full max-w-xs flex flex-col">
+                <nav className="flex-grow flex flex-col space-y-4 pt-8">
                   {visibleNavLinks.map(({ href, label, icon: Icon }) => (
-                    <Link key={href} href={href} className="flex items-center text-lg font-medium text-foreground hover:text-primary">
+                     <Link key={href} href={href} className="flex items-center text-lg font-medium text-foreground hover:text-primary">
                        <Icon className="mr-3 h-5 w-5" /> {label}
                     </Link>
                   ))}
-                  <div className="pt-4 border-t">
-                    {isLoading ? <Skeleton className="h-10 w-full" /> : 
+                </nav>
+                <div className="mt-auto">
+                    {isLoading ? <Skeleton className="h-20 w-full" /> : 
                       isLoggedIn ? (
-                        <Button onClick={handleLogout} variant="outline" className="w-full">
-                          <LogOut className="mr-2 h-4 w-4" />
-                          Log Out ({userName})
-                        </Button>
+                        <div className="pt-4 border-t">
+                           <Button onClick={handleLogout} variant="outline" className="w-full">
+                            <LogOut className="mr-2 h-4 w-4" />
+                            Log Out ({userName})
+                          </Button>
+                        </div>
                       ) : (
                         authLinks
                       )}
                   </div>
-                </nav>
               </SheetContent>
             </Sheet>
         </div>

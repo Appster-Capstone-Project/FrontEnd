@@ -20,18 +20,14 @@ function AuthToggle({ isSellerView }: { isSellerView: boolean }) {
 
   return (
     <div className="flex w-full mb-4 rounded-t-lg overflow-hidden border-b">
-        <Button asChild variant="ghost" className={cn(baseClass, !isSellerView ? activeClass : inactiveClass, "rounded-none")}>
-            <Link href="/auth/signup">
-                <User className="h-4 w-4" />
-                Customer
-            </Link>
-        </Button>
-        <Button asChild variant="ghost" className={cn(baseClass, isSellerView ? activeClass : inactiveClass, "rounded-none")}>
-            <Link href="/auth/signup?type=seller">
-                <Briefcase className="h-4 w-4" />
-                Seller
-            </Link>
-        </Button>
+        <Link href="/auth/signup" passHref className={cn(baseClass, !isSellerView ? activeClass : inactiveClass, "rounded-none")}>
+            <User className="h-4 w-4" />
+            Customer
+        </Link>
+        <Link href="/auth/signup?type=seller" passHref className={cn(baseClass, isSellerView ? activeClass : inactiveClass, "rounded-none")}>
+            <Briefcase className="h-4 w-4" />
+            Seller
+        </Link>
     </div>
   )
 }
@@ -149,11 +145,13 @@ function SignUpCard() {
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Button asChild variant="link" className="p-0 h-auto">
-              <Link href={signInLink} className="font-medium text-primary hover:underline">
-                Sign In
-              </Link>
-            </Button>
+            <Link href={signInLink} passHref legacyBehavior>
+              <Button asChild variant="link" className="p-0 h-auto">
+                <a className="font-medium text-primary hover:underline">
+                  Sign In
+                </a>
+              </Button>
+            </Link>
           </p>
         </CardFooter>
       </Card>
@@ -197,7 +195,7 @@ const AuthCardSkeleton = () => (
 
 export default function SignUpPage() {
   return (
-    <div className="container flex min-h-[calc(100vh-var(--header-height)-var(--footer-height))] items-center justify-center py-12">
+    <div className="container flex min-h-[calc(100vh-var(--header-height)-var(--footer-height))] items-center justify-center py-12 px-4">
        <Suspense fallback={<AuthCardSkeleton />}>
         <SignUpCard />
       </Suspense>

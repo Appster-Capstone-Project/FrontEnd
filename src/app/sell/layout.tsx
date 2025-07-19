@@ -218,13 +218,17 @@ export default function SellerLayout({
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>{userName || "My Account"}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-               <DropdownMenuItem onClick={() => router.push("/profile")}>
-                <Settings className="mr-2 h-4 w-4" />
-                Profile Settings
+               <DropdownMenuItem asChild>
+                 <Link href="/profile">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Profile Settings
+                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push("/")}>
+              <DropdownMenuItem asChild>
+                <Link href="/">
                  <ExternalLink className="mr-2 h-4 w-4" />
                 View Site
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem disabled>Support</DropdownMenuItem>
               <DropdownMenuSeparator />

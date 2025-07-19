@@ -36,7 +36,7 @@ export default function PromotionsPage() {
     }
 
   return (
-    <div className="container py-12 md:py-16">
+    <div className="container py-8 md:py-12">
       <SectionTitle
         title="Promotions & Vouchers"
         subtitle="Your available discounts and special offers."

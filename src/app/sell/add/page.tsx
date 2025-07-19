@@ -64,7 +64,7 @@ export default function AddListingPage() {
   };
 
   return (
-    <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+    <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
       <SectionTitle 
         title="Plan a New Meal"
         subtitle="Set up your next meal for the community to pitch in."

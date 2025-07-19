@@ -52,7 +52,7 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="container py-12 md:py-16">
+    <div className="container py-8 md:py-12">
       <SectionTitle
         title="My Orders"
         subtitle="Track your past and current orders here."
@@ -61,7 +61,7 @@ export default function OrdersPage() {
         <div className="max-w-4xl mx-auto space-y-6">
           {orders.map((order) => (
             <Card key={order.id} className="shadow-md">
-              <CardHeader className="flex flex-row justify-between items-start">
+              <CardHeader className="flex flex-col sm:flex-row justify-between items-start gap-2">
                 <div>
                   <CardTitle className="font-headline text-xl">
                     Order from {order.vendorName}
@@ -70,7 +70,7 @@ export default function OrdersPage() {
                     {format(new Date(order.date), 'MMMM d, yyyy')} • Order ID: {order.id.slice(-6)}
                   </CardDescription>
                 </div>
-                <Badge variant={getStatusVariant(order.status)} className="capitalize">
+                <Badge variant={getStatusVariant(order.status)} className="capitalize self-start sm:self-center">
                     {order.status}
                 </Badge>
               </CardHeader>
