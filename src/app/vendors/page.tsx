@@ -15,13 +15,12 @@ import { Search } from "lucide-react";
 import { mockVendors, mockDishes } from "@/lib/data"; 
 
 const categories = [
-  { name: 'All', value: 'all' as const },
   { name: 'Dishes', value: 'dishes' as const },
   { name: 'Home Cooks', value: 'Home Cook' as const },
   { name: 'Tiffin Services', value: 'Tiffin Service' as const },
 ];
 
-type ActiveCategory = Vendor['type'] | 'all' | 'dishes';
+type ActiveCategory = Vendor['type'] | 'dishes';
 
 export default function VendorsPage() {
   const router = useRouter();
@@ -29,7 +28,7 @@ export default function VendorsPage() {
   const [allDishes, setAllDishes] = useState<Dish[]>([]);
   const [filteredItems, setFilteredItems] = useState<(Vendor | Dish)[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState<ActiveCategory>('all');
+  const [activeCategory, setActiveCategory] = useState<ActiveCategory>('dishes');
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -56,10 +55,7 @@ export default function VendorsPage() {
     const filterItems = () => {
       let items: (Vendor | Dish)[] = [];
 
-      if (activeCategory === 'all') {
-        // Show all dishes from home cooks and all tiffin service vendors
-        items = [...allDishes, ...allVendors.filter(v => v.type === 'Tiffin Service')];
-      } else if (activeCategory === 'dishes') {
+      if (activeCategory === 'dishes') {
         // Show only dishes from home cooks
         items = allDishes;
       } else if (activeCategory === 'Home Cook') {
@@ -79,17 +75,6 @@ export default function VendorsPage() {
           }
         });
       }
-
-      // Sort combined list for 'all' tab: dishes first, then tiffin services
-       if (activeCategory === 'all') {
-          items.sort((a, b) => {
-              const aIsDish = 'slotsTotal' in a;
-              const bIsDish = 'slotsTotal' in b;
-              if (aIsDish && !bIsDish) return -1;
-              if (!aIsDish && bIsDish) return 1;
-              return 0;
-          });
-       }
 
       setFilteredItems(items);
     }
@@ -172,3 +157,4 @@ const CardSkeleton = () => (
       </div>
     </Card>
 );
+

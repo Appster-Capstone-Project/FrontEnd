@@ -23,7 +23,7 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({ categories, activeCategory,
   
   return (
     <Tabs value={activeCategory} onValueChange={(value) => onCategoryChange(value as CategoryValue)} className="mb-8">
-      <TabsList className="grid w-full grid-cols-2 sm:w-auto sm:grid-cols-4 bg-background p-1 rounded-lg shadow-inner">
+      <TabsList className="grid w-full grid-cols-3 sm:w-auto sm:grid-cols-3 bg-background p-1 rounded-lg shadow-inner">
         {categories.map((category) => (
           <TabsTrigger 
             key={category.value} 
