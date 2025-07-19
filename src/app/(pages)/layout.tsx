@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import {
-  LayoutDashboard,
+  Search,
   ListOrdered,
   TicketPercent,
   Package,
@@ -12,7 +12,6 @@ import {
   User,
   ExternalLink,
   ShoppingBag,
-  Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -84,6 +83,12 @@ export default function UserAccountLayout({
       icon: TicketPercent,
     },
   ];
+
+  // If the user is on the homepage, render only the children
+  // This prevents the dashboard layout from wrapping the public homepage
+  if (pathname === '/') {
+    return <>{children}</>;
+  }
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
