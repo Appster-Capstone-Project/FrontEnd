@@ -46,12 +46,20 @@ export default function UserAccountLayout({
     const name = localStorage.getItem("userName");
     const role = localStorage.getItem("userRole");
 
-    if (!name || role !== 'user') {
-      router.push('/auth/signin');
+    // Define routes that require authentication
+    const protectedRoutes = ['/dashboard', '/orders', '/promotions'];
+
+    // If the current path is one of the protected routes, check for authentication
+    if (protectedRoutes.includes(pathname)) {
+        if (!name || role !== 'user') {
+            router.push('/auth/signin');
+            return; // Exit early to prevent rendering the protected page
+        }
     }
     
+    // Set user name for display if available
     setUserName(name);
-  }, [router]);
+  }, [router, pathname]);
 
   const handleLogout = () => {
     localStorage.clear();
