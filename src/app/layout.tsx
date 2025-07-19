@@ -61,6 +61,15 @@ export default function RootLayout({
             </Suspense>
         </Providers>
         <Toaster />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js', { scope: '/' });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );
