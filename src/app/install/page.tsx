@@ -6,11 +6,13 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
-import { ArrowRight, Share, PlusSquare } from 'lucide-react';
+import { ArrowRight, Share, PlusSquare, Copy } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 export default function InstallPage() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isStandalone, setIsStandalone] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     // Check if the app is running in standalone mode (installed)
@@ -46,6 +48,33 @@ export default function InstallPage() {
       }
       setDeferredPrompt(null);
     });
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: 'TiffinBox',
+      text: 'Check out TiffinBox to discover homemade meals from local cooks!',
+      url: window.location.origin,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        // Fallback for browsers that don't support the Web Share API
+        await navigator.clipboard.writeText(window.location.origin);
+        toast({
+            title: "Link Copied!",
+            description: "The installation link has been copied to your clipboard.",
+        });
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+      toast({
+        variant: "destructive",
+        title: "Could not share",
+        description: "There was an error trying to share the app.",
+      });
+    }
   };
 
   const handleContinue = () => {
@@ -89,11 +118,16 @@ export default function InstallPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           
-          {deferredPrompt && (
-            <Button onClick={handleInstallClick} className="w-full" size="lg">
-              Install App
+          <div className="flex flex-col sm:flex-row gap-2">
+            {deferredPrompt && (
+              <Button onClick={handleInstallClick} className="w-full" size="lg">
+                Install App
+              </Button>
+            )}
+             <Button onClick={handleShare} variant="outline" className="w-full" size="lg">
+              <Share className="mr-2 h-4 w-4" /> Share
             </Button>
-          )}
+          </div>
 
           <div className="space-y-4 text-sm">
             <div className="p-4 bg-muted/50 rounded-lg">
