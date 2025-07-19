@@ -82,6 +82,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/sell/orders/page.js"
+    ],
+    "/(pages)/promotions/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/promotions/page.js"
+    ],
+    "/sell/earnings/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/sell/earnings/page.js"
     ]
   }
 }
