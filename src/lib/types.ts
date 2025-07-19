@@ -10,7 +10,10 @@ export interface Dish {
   imageUrl?: string;
   dataAiHint?: string;
   category?: string;
-  available: boolean;
+  available: boolean; // Can be used to manually toggle if a listing is active
+  cookingDate: string; // ISO date string for when the meal is prepared
+  slotsTotal: number; // The target number of portions
+  slotsFilled: number; // The number of portions already claimed
 }
 
 export interface Review {

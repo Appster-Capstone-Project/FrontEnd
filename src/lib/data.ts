@@ -3,15 +3,22 @@ import type { Vendor, Dish, Review, CartItem } from './types';
 
 // This file contains mock data to simulate a full backend.
 
+const today = new Date();
+const tomorrow = new Date(today);
+tomorrow.setDate(tomorrow.getDate() + 1);
+const dayAfter = new Date(today);
+dayAfter.setDate(dayAfter.getDate() + 2);
+
+
 export const mockDishes: Dish[] = [
-  { id: 'd1-1', sellerId: 'v1', title: 'Butter Chicken', description: 'Creamy and rich tomato-based curry with tender chicken pieces.', price: 14.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'butter chicken', available: true },
-  { id: 'd1-2', sellerId: 'v1', title: 'Palak Paneer', description: 'Fresh spinach puree with soft cottage cheese cubes.', price: 12.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'palak paneer', available: true },
-  { id: 'd1-3', sellerId: 'v1', title: 'Garlic Naan', description: 'Soft flatbread with garlic and butter.', price: 3.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'garlic naan', available: false },
-  { id: 'd2-1', sellerId: 'v2', title: 'Monthly Tiffin (Veg)', description: 'Daily changing menu of 1 curry, 4 rotis, rice, and salad. 30 meals.', price: 250.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'tiffin service', available: true },
-  { id: 'd2-2', sellerId: 'v2', title: 'Weekly Tiffin (Veg)', description: 'A week of delicious vegetarian meals delivered to your door.', price: 65.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'indian thali', available: true },
-  { id: 'd3-1', sellerId: 'v3', title: 'Margherita Pizza', description: 'Classic pizza with fresh mozzarella, tomatoes, and basil.', price: 15.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'margherita pizza', available: true },
-  { id: 'd3-2', sellerId: 'v3', title: 'Pasta Carbonara', description: 'Creamy pasta with pancetta and parmesan cheese.', price: 18.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'pasta carbonara', available: true },
-  { id: 'd4-1', sellerId: 'v4', title: 'Idli Sambar', description: 'Steamed rice cakes served with a flavorful lentil stew.', price: 8.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'idli sambar', available: true },
+  { id: 'd1-1', sellerId: 'v1', title: 'Butter Chicken Meal', description: 'Creamy tomato curry with tender chicken, served with rice and naan.', price: 14.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'butter chicken', available: true, cookingDate: tomorrow.toISOString(), slotsTotal: 10, slotsFilled: 7 },
+  { id: 'd1-2', sellerId: 'v1', title: 'Palak Paneer Special', description: 'Fresh spinach puree with soft cottage cheese, includes 2 rotis.', price: 12.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'palak paneer', available: true, cookingDate: tomorrow.toISOString(), slotsTotal: 8, slotsFilled: 8 },
+  { id: 'd1-3', sellerId: 'v1', title: 'Weekend Biryani', description: 'Aromatic basmati rice cooked with spices and chicken.', price: 15.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'chicken biryani', available: true, cookingDate: dayAfter.toISOString(), slotsTotal: 15, slotsFilled: 3 },
+  { id: 'd2-1', sellerId: 'v2', title: 'Monthly Tiffin (Veg)', description: 'Daily changing menu of 1 curry, 4 rotis, rice, and salad. 30 meals.', price: 250.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'tiffin service', available: true, cookingDate: today.toISOString(), slotsTotal: 50, slotsFilled: 45 },
+  { id: 'd2-2', sellerId: 'v2', title: 'Weekly Tiffin (Veg)', description: 'A week of delicious vegetarian meals delivered to your door.', price: 65.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'indian thali', available: true, cookingDate: today.toISOString(), slotsTotal: 20, slotsFilled: 11 },
+  { id: 'd3-1', sellerId: 'v3', title: 'Homemade Lasagna Dinner', description: 'Classic beef lasagna with ricotta and mozzarella. Feeds 2.', price: 22.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'lasagna dish', available: true, cookingDate: tomorrow.toISOString(), slotsTotal: 5, slotsFilled: 1 },
+  { id: 'd3-2', sellerId: 'v3', title: 'Pasta Carbonara Kit', description: 'Fresh pasta and ingredients to make your own Carbonara.', price: 18.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'pasta carbonara', available: false, cookingDate: today.toISOString(), slotsTotal: 10, slotsFilled: 10 },
+  { id: 'd4-1', sellerId: 'v4', title: 'Idli Sambar Breakfast', description: '4 steamed rice cakes served with a flavorful lentil stew.', price: 8.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'idli sambar', available: true, cookingDate: tomorrow.toISOString(), slotsTotal: 20, slotsFilled: 18 },
 ];
 
 export const mockReviews: Review[] = [
@@ -27,7 +34,7 @@ export const mockVendors: Vendor[] = [
     id: 'v1',
     name: 'Priya\'s Kitchen',
     type: 'Home Cook',
-    description: 'Authentic North Indian dishes made with love, just like mom used to make. Available for the next few hours!',
+    description: 'Authentic North Indian dishes made with love, just like mom used to make. Pre-order for tomorrow!',
     rating: 4.8,
     address: '123 Spice Lane',
     city: 'Maple Creek',
@@ -65,7 +72,7 @@ export const mockVendors: Vendor[] = [
     id: 'v3',
     name: 'Mama Maria\'s',
     type: 'Home Cook',
-    description: 'Traditional Italian recipes passed down through generations. Freshly made pasta available for tonight\'s dinner.',
+    description: 'Traditional Italian recipes passed down through generations. Pre-order our famous Lasagna for tomorrow.',
     rating: 4.9,
     address: '789 Pasta Place',
     city: 'Maple Creek',
@@ -84,7 +91,7 @@ export const mockVendors: Vendor[] = [
     id: 'v4',
     name: 'Southern Spice',
     type: 'Home Cook',
-    description: 'Bringing the authentic taste of South India to your plate. Serving fresh dosas now!',
+    description: 'Bringing the authentic taste of South India to your plate. Pre-order fresh dosas for tomorrow\'s breakfast!',
     rating: 4.5,
     address: '321 Dosa Drive',
     city: 'Oakwood',

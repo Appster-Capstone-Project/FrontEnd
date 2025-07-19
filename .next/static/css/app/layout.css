@@ -1216,6 +1216,9 @@ video {
 .items-stretch {
   align-items: stretch;
 }
+.justify-start {
+  justify-content: flex-start;
+}
 .justify-end {
   justify-content: flex-end;
 }
@@ -2033,6 +2036,9 @@ video {
 }
 .ease-linear {
   animation-timing-function: linear;
+}
+.paused {
+  animation-play-state: paused;
 }
 
 body {
