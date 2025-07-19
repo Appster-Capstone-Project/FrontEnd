@@ -1,17 +1,5 @@
 {
-  "node": {
-    "40b7fed983b6338c07ff8f2a9a5fba002e54be0182": {
-      "workers": {
-        "app/vendors/[id]/page": {
-          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fuser%2Fstudio%2Fsrc%2Fapp%2Fvendors%2F%5Bid%5D%2Fpage.tsx%22%2C%5B%7B%22id%22%3A%2240b7fed983b6338c07ff8f2a9a5fba002e54be0182%22%2C%22exportedName%22%3A%22%24%24RSC_SERVER_ACTION_0%22%7D%5D%5D%5D&__client_imported__=!",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/vendors/[id]/page": "rsc"
-      }
-    }
-  },
+  "node": {},
   "edge": {},
   "encryptionKey": "ZnK968qttq7NnzT8LZDUj5lsmIlOUk/oE8fIRtNjqjg="
 }

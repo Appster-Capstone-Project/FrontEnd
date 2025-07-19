@@ -1,5 +1,5 @@
 
-import type {Metadata} from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Providers } from '@/context/Providers';
@@ -7,8 +7,6 @@ import { Providers } from '@/context/Providers';
 export const metadata: Metadata = {
   title: 'TiffinBox',
   description: 'TiffinBox: Discover nearby home cooks and tiffin services. Browse menus, read reviews, and enjoy authentic homemade meals.',
-  // manifest: '/manifest.json', // Removed to let next-pwa handle injection
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover',
   
   // Apple PWA Tags
   appleWebAppCapable: 'yes',
@@ -22,11 +20,19 @@ export const metadata: Metadata = {
     icon: "/icons/favicon.ico", // General favicon
     apple: "/icons/apple-touch-icon.png", // Apple touch icon
   },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#F27405' },
     { media: '(prefers-color-scheme: dark)', color: '#2A2A2A' }, 
   ],
-};
+}
 
 export default function RootLayout({
   children,
@@ -43,7 +49,7 @@ export default function RootLayout({
         
         {/* 
           Other meta tags (theme-color, viewport, apple-specific PWA tags) 
-          are now primarily handled by the `metadata` object exported above.
+          are now primarily handled by the metadata objects exported above.
           Next.js injects these automatically.
           The manifest link will be injected by next-pwa.
         */}
