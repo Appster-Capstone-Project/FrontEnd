@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: "/icons/icon.svg", 
-    apple: "/icons/apple-touch-icon.svg", 
+    apple: "/icons/apple-touch-icon.png", 
   },
 };
 
@@ -46,7 +46,11 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="TiffinBox" />
-        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.svg" />
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+        
+        {/* --- iOS Splash Screen --- */}
+        <link rel="apple-touch-startup-image" href="/icons/icon.svg" />
+
       </head>
       <body className="font-body antialiased">
         <Providers>
