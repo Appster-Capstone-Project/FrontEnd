@@ -62,8 +62,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
       <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/3 relative">
-            <Link href={`/vendors/${dish.sellerId}`} asChild>
-              <div className="block cursor-pointer">
+            <Link href={`/vendors/${dish.sellerId}`} className="block cursor-pointer">
                 <Image
                   src={dish.imageUrl || 'https://placehold.co/400x300.png'}
                   alt={dish.title}
@@ -72,7 +71,6 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
                   className="w-full h-48 md:h-full object-cover"
                   data-ai-hint={dish.dataAiHint || 'food dish'}
                 />
-              </div>
             </Link>
           </div>
           <div className="md:w-2/3 flex flex-col">
@@ -128,8 +126,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
   return (
     <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col h-full bg-card">
       <CardHeader className="p-0 relative">
-        <Link href={`/vendors/${dish.sellerId}`} asChild>
-            <div className="block cursor-pointer">
+        <Link href={`/vendors/${dish.sellerId}`} className="block cursor-pointer">
               <Image
                 src={dish.imageUrl || 'https://placehold.co/300x200.png'}
                 alt={dish.title}
@@ -138,7 +135,6 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
                 className="w-full h-40 object-cover"
                 data-ai-hint={dish.dataAiHint || 'food dish'}
               />
-            </div>
         </Link>
          <Badge 
             variant={isSoldOut ? "destructive" : "default"} 
