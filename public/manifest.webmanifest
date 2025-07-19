@@ -1,0 +1,21 @@
+{
+  "name": "TiffinBox",
+  "short_name": "TiffinBox",
+  "description": "Discover nearby home cooks and tiffin services. Browse menus, read reviews, and enjoy authentic homemade meals.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F2E9DD",
+  "theme_color": "#F27405",
+  "icons": [
+    {
+      "src": "/icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
