@@ -1,13 +1,12 @@
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="512" height="512" rx="102.4" fill="#F2E9DD"/>
-<g transform="translate(100, 120) scale(1.5)">
-    <path d="M20.57,4.35,16,2.11V14.22l4.57-2.24Z" fill="#A66321"/>
-    <path d="M11.43,4.35,16,2.11V14.22L11.43,12V4.35Z" fill="#A66321"/>
-    <path d="M29,6,16,12.2,3,6V22H29Z" fill="#F27405"/>
-    <path d="M29,22,16,28.2,3,22Z" fill="#A66321"/>
-    <path d="M16,12.2,20.57,9.95,11.43,9.95,16,12.2Z" fill="#A66321" />
-</g>
-<g transform="translate(190, 80) scale(1.2)">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 22.47l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="#F27405" stroke="#F2E9DD" stroke-width="1"/>
-</g>
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="128" height="128" rx="32" fill="url(#paint0_linear_1_2)"/>
+<path d="M86.6667 48H41.3333C38.3878 48 36 50.3878 36 53.3333V88C36 90.9455 38.3878 93.3333 41.3333 93.3333H86.6667C89.6122 93.3333 92 90.9455 92 88V53.3333C92 50.3878 89.6122 48 86.6667 48Z" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M64 70.6667C69.3484 70.6667 73.721 66.2941 73.721 60.9457C73.721 55.5973 69.3484 51.2246 64 51.2246C58.6516 51.2246 54.279 55.5973 54.279 60.9457C54.279 66.2941 58.6516 70.6667 64 70.6667Z" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M36 66H92" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<defs>
+<linearGradient id="paint0_linear_1_2" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+<stop stop-color="#F27405"/>
+<stop offset="1" stop-color="#F2A007"/>
+</linearGradient>
+</defs>
 </svg>
