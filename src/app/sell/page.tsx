@@ -130,12 +130,14 @@ export default function SellDashboardPage() {
                                         <span className="sr-only">Broadcast to buyers</span>
                                     </Button>
                                 </BroadcastDialog>
-                                <Button variant="outline" size="icon" asChild>
-                                  <Link href={`/sell/edit/${listing.id}`}>
-                                    <Edit className="h-4 w-4" />
-                                    <span className="sr-only">Edit</span>
-                                  </Link>
-                                </Button>
+                                <Link href={`/sell/edit/${listing.id}`} passHref>
+                                  <Button asChild variant="outline" size="icon">
+                                    <a>
+                                      <Edit className="h-4 w-4" />
+                                      <span className="sr-only">Edit</span>
+                                    </a>
+                                  </Button>
+                                </Link>
                                 <AlertDialog>
                                   <AlertDialogTrigger asChild>
                                     <Button variant="destructive" size="icon">
