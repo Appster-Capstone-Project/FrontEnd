@@ -90,8 +90,9 @@ export interface Order {
   vendorName: string;
   buyer: Buyer;
   total: number;
-  status: 'Pending' | 'Confirmed' | 'Delivered' | 'Declined';
+  status: 'Pending' | 'Confirmed' | 'Ready for Pickup' | 'Delivered' | 'Completed' | 'Declined';
   items: CartItem[];
   comments?: string;
   messages?: Message[];
+  pickupDeadline?: string; // ISO date string
 }

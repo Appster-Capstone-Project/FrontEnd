@@ -176,7 +176,7 @@ export const mockOrders: Order[] = [
         vendorName: 'Priya\'s Kitchen',
         buyer: mockUser1,
         total: 14.99,
-        status: 'Pending',
+        status: 'Confirmed',
         comments: "Please make it mild, not too spicy!",
         items: [
             {...mockDishes.find(d => d.id === 'd1-1'), quantity: 1} as CartItem,
@@ -188,13 +188,15 @@ export const mockOrders: Order[] = [
         vendorName: 'Priya\'s Kitchen',
         buyer: mockUser2,
         total: 15.99,
-        status: 'Confirmed',
+        status: 'Ready for Pickup',
+        pickupDeadline: getFutureDate(0, 20, 0).toISOString(), // Today at 8 PM
         items: [
              {...mockDishes.find(d => d.id === 'd1-3'), quantity: 1} as CartItem,
         ].filter(i => i.id),
         messages: [
             { id: 'm1', sender: 'buyer', text: 'Hey! Just confirming my order for the weekend. So excited!', timestamp: getFutureDate(0, 18, 5).toISOString() },
             { id: 'm2', sender: 'seller', text: 'Hi Sam! Confirmed. We\'ll have it ready for you. Thanks for ordering!', timestamp: getFutureDate(0, 18, 7).toISOString() },
+            { id: 'm3', sender: 'seller', text: 'Your order is ready for pickup!', timestamp: getFutureDate(0, 18, 10).toISOString() },
         ]
     },
     {
@@ -203,7 +205,7 @@ export const mockOrders: Order[] = [
         vendorName: 'Priya\'s Kitchen',
         buyer: mockUser1,
         total: 12.99,
-        status: 'Delivered',
+        status: 'Completed',
         items: [
              {...mockDishes.find(d => d.id === 'd1-2'), quantity: 1} as CartItem,
         ].filter(i => i.id)

@@ -7,33 +7,46 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check, X, Clock, Package, ListOrdered, MessageSquare } from 'lucide-react';
+import { Check, X, Clock, Package, ListOrdered, MessageSquare, Bell, CheckCheck, HandCoins } from 'lucide-react';
 import { mockOrders } from '@/lib/data';
 import type { Order } from '@/lib/types';
-import { format } from 'date-fns';
+import { format, addHours } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ChatDialog } from '@/components/shared/ChatDialog';
 
-const OrderCard: React.FC<{ order: Order; onStatusChange: (id: string, status: Order['status']) => void }> = ({ order, onStatusChange }) => {
+const OrderCard: React.FC<{ order: Order; onStatusChange: (id: string, status: Order['status'], deadline?: string) => void }> = ({ order, onStatusChange }) => {
   const { toast } = useToast();
 
   const handleStatusChange = (status: Order['status']) => {
-    onStatusChange(order.id, status);
+    let deadline;
+    if (status === 'Ready for Pickup') {
+        // Set pickup deadline 2 hours from now
+        deadline = addHours(new Date(), 2).toISOString();
+    }
+    onStatusChange(order.id, status, deadline);
+    
+    let toastMessage = `Order #${order.id.slice(-6)} has been marked as ${status.toLowerCase()}.`;
+    if(status === 'Ready for Pickup') {
+        toastMessage = `A notification has been sent to ${order.buyer.name} that their order is ready for pickup.`
+    }
+
     toast({
       title: `Order ${status}`,
-      description: `Order #${order.id.slice(-6)} has been marked as ${status.toLowerCase()}.`,
+      description: toastMessage,
     });
   };
   
   const statusConfig = {
     Pending: { variant: 'secondary', icon: <Clock className="h-4 w-4 mr-2" />, text: 'Pending Confirmation' },
     Confirmed: { variant: 'default', icon: <Check className="h-4 w-4 mr-2" />, text: 'Confirmed' },
-    Delivered: { variant: 'outline', icon: <Package className="h-4 w-4 mr-2" />, text: 'Delivered' },
+    'Ready for Pickup': { variant: 'outline', icon: <Bell className="h-4 w-4 mr-2 text-primary animate-pulse" />, text: 'Ready for Pickup' },
+    Completed: { variant: 'default', icon: <HandCoins className="h-4 w-4 mr-2" />, text: 'Completed & Paid' },
+    Delivered: { variant: 'outline', icon: <Package className="h-4 w-4 mr-2" />, text: 'Delivered' }, // Kept for tiffin services
     Declined: { variant: 'destructive', icon: <X className="h-4 w-4 mr-2" />, text: 'Declined' },
   };
   
-  const currentStatus = statusConfig[order.status];
+  const currentStatus = statusConfig[order.status] || statusConfig.Pending;
 
   return (
     <Card className="shadow-md hover:shadow-lg transition-shadow">
@@ -74,24 +87,33 @@ const OrderCard: React.FC<{ order: Order; onStatusChange: (id: string, status: O
           </div>
         )}
       </CardContent>
-      <CardFooter className="flex justify-end gap-2">
-        {order.status === 'Pending' && (
-            <>
-                <Button variant="destructive" size="sm" onClick={() => handleStatusChange('Declined')}>
-                    <X className="mr-2 h-4 w-4" /> Decline
+      <CardFooter className="flex justify-between items-center gap-2">
+         <ChatDialog order={order}>
+            <Button variant="ghost" size="sm" className="text-muted-foreground">
+                <MessageSquare className="mr-2 h-4 w-4" /> Message Buyer
+            </Button>
+        </ChatDialog>
+
+        <div className="flex gap-2">
+            {order.status === 'Pending' && (
+                <>
+                    <Button variant="destructive" size="sm" onClick={() => handleStatusChange('Declined')}>
+                        <X className="mr-2 h-4 w-4" /> Decline
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => handleStatusChange('Confirmed')}>
+                        <Check className="mr-2 h-4 w-4" /> Confirm
+                    </Button>
+                </>
+            )}
+            {order.status === 'Confirmed' && (
+                <Button size="sm" onClick={() => handleStatusChange('Ready for Pickup')}>
+                    <Bell className="mr-2 h-4 w-4" /> Mark as Ready
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => handleStatusChange('Confirmed')}>
-                    <Check className="mr-2 h-4 w-4" /> Confirm
-                </Button>
-            </>
-        )}
-        {order.status === 'Confirmed' && (
-            <ChatDialog order={order}>
-              <Button variant="outline" size="sm">
-                  <MessageSquare className="mr-2 h-4 w-4" /> Message Buyer
-              </Button>
-            </ChatDialog>
-        )}
+            )}
+             {order.status === 'Ready for Pickup' && (
+                <p className="text-sm text-primary font-medium">Awaiting buyer confirmation...</p>
+            )}
+        </div>
       </CardFooter>
     </Card>
   )
@@ -131,15 +153,16 @@ export default function SellerOrdersPage() {
             setIsLoading(true);
             setTimeout(() => {
                 const sellerOrders = mockOrders.filter(o => o.items.some(item => item.sellerId === sellerId));
+                sellerOrders.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime());
                 setOrders(sellerOrders);
                 setIsLoading(false);
             }, 500);
         }
     }, []);
 
-    const handleStatusChange = (orderId: string, status: Order['status']) => {
+    const handleStatusChange = (orderId: string, status: Order['status'], deadline?: string) => {
         setOrders(prevOrders => 
-            prevOrders.map(o => o.id === orderId ? { ...o, status } : o)
+            prevOrders.map(o => o.id === orderId ? { ...o, status, pickupDeadline: deadline } : o)
         );
     };
 

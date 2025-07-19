@@ -4,5 +4,6 @@
   "/page": "app/page.js",
   "/sell/add/page": "app/sell/add/page.js",
   "/sell/page": "app/sell/page.js",
-  "/(pages)/dashboard/page": "app/(pages)/dashboard/page.js"
+  "/(pages)/dashboard/page": "app/(pages)/dashboard/page.js",
+  "/(pages)/orders/page": "app/(pages)/orders/page.js"
 }
