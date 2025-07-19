@@ -8,11 +8,6 @@ export const metadata: Metadata = {
   title: 'TiffinBox',
   description: 'TiffinBox: Discover nearby home cooks and tiffin services. Browse menus, read reviews, and enjoy authentic homemade meals.',
   manifest: '/manifest.webmanifest',
-  // Apple PWA Tags
-  appleWebAppCapable: 'yes',
-  appleWebAppStatusBarStyle: 'default',
-  appleWebAppTitle: 'TiffinBox',
-  
   formatDetection: {
     telephone: false,
   },
@@ -46,6 +41,11 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
+        
+        {/* --- Apple PWA-specific meta tags --- */}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="TiffinBox" />
       </head>
       <body className="font-body antialiased">
         <Providers>

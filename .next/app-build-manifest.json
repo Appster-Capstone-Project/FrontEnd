@@ -16,20 +16,30 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(pages)/page.js"
     ],
-    "/vendors/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/vendors/page.js"
-    ],
     "/(pages)/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(pages)/dashboard/page.js"
     ],
-    "/auth/signin/page": [
+    "/vendors/[id]/error": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/auth/signin/page.js"
+      "static/chunks/app/vendors/[id]/error.js"
+    ],
+    "/vendors/[id]/loading": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/vendors/[id]/loading.js"
+    ],
+    "/vendors/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/vendors/[id]/page.js"
+    ],
+    "/(pages)/orders/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/orders/page.js"
     ]
   }
 }

@@ -6,7 +6,6 @@ const withPwa = withPWA({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: false, // Force PWA to be enabled in dev
 });
 
 const nextConfig: NextConfig = {
@@ -32,14 +31,6 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       }
     ],
-  },
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'http://172.191.27.147/:path*', // your backend IP with port
-      },
-    ];
   },
   env: {
     NEXT_PUBLIC_API_BASE_URL: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : '',
