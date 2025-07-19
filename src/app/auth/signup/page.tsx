@@ -13,22 +13,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Heart, Package, User, Briefcase } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Helper to extract a more detailed error message from an API response
-async function getApiErrorMessage(response: Response): Promise<string> {
-    try {
-        const errorData = await response.json();
-        // Backend could return error in 'error' or 'message' field
-        return errorData.error || errorData.message || `API error: ${JSON.stringify(errorData)}`;
-    } catch (e) {
-        // If the response is not JSON, return the raw text
-        const textError = await response.text();
-        if (textError) {
-            return textError;
-        }
-        return `Request failed with status ${response.status}`;
-    }
-}
-
 function AuthToggle({ isSellerView }: { isSellerView: boolean }) {
   const baseClass = "flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors";
   const activeClass = "bg-primary/20 text-primary border-b-2 border-primary font-semibold";
@@ -97,49 +81,19 @@ function SignUpCard() {
       return;
     }
     
-    try {
-      let endpoint = '';
-      let payload = {};
-      let successMessage = '';
-      let redirectPath = '';
-
-      if (isSeller) {
-        endpoint = '/api/sellers/register';
-        payload = { name, email, phone, password };
-        successMessage = "Seller Registration Successful!";
-        redirectPath = '/auth/signin?type=seller';
-      } else {
-        endpoint = '/api/users/register';
-        payload = { name, email, password };
-        successMessage = "Registration Successful!";
-        redirectPath = '/auth/signin';
-      }
-
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
+    // Simulate API Call
+    setTimeout(() => {
+        let successMessage = isSeller ? "Seller Registration Successful!" : "Registration Successful!";
+        let redirectPath = isSeller ? '/auth/signin?type=seller' : '/auth/signin';
+        
         toast({
           title: successMessage,
           description: "You can now sign in with your credentials.",
         });
+        
         router.push(redirectPath);
-      } else {
-        const errorMessage = await getApiErrorMessage(response);
-        throw new Error(errorMessage);
-      }
-    } catch (error) {
-        toast({
-            variant: "destructive",
-            title: "Registration Failed",
-            description: (error as Error).message,
-        });
-    } finally {
         setIsLoading(false);
-    }
+    }, 1000);
   };
 
   const title = isSeller ? 'Create a Seller Account' : 'Create an Account';

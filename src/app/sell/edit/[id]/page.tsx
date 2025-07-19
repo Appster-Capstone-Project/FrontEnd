@@ -14,6 +14,7 @@ import { useRouter, useParams } from "next/navigation";
 import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Dish } from "@/lib/types";
+import { getDishById } from "@/lib/data";
 
 export default function EditListingPage() {
   const { toast } = useToast();
@@ -34,25 +35,18 @@ export default function EditListingPage() {
     }
 
     if (id) {
-        const fetchListing = async () => {
-            setIsLoading(true);
-            try {
-                const response = await fetch(`/api/listings/${id}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (!response.ok) {
-                    throw new Error("Failed to fetch dish details.");
-                }
-                const data = await response.json();
-                setListing(data);
-            } catch (error) {
-                toast({ variant: "destructive", title: "Error", description: (error as Error).message });
-                router.push('/sell');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchListing();
+      setIsLoading(true);
+      // Simulate API call
+      setTimeout(() => {
+        const dish = getDishById(id);
+        if (dish) {
+          setListing(dish);
+        } else {
+          toast({ variant: "destructive", title: "Error", description: "Dish not found." });
+          router.push('/sell');
+        }
+        setIsLoading(false);
+      }, 500);
     }
   }, [id, router, toast]);
 
@@ -67,41 +61,20 @@ export default function EditListingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
+    setIsSubmitting(true);
 
     if (!listing.title || !listing.price || !listing.description) {
       toast({ variant: "destructive", title: "Missing Information", description: "All fields are required." });
+      setIsSubmitting(false);
       return;
     }
     
-    setIsSubmitting(true);
-    const updatedData = {
-      ...listing,
-      price: parseFloat(String(listing.price)),
-    };
-
-    try {
-      const response = await fetch(`/api/listings/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(updatedData),
-      });
-
-      if (response.ok) {
-        toast({ title: "Dish Updated!", description: `'${listing.title}' has been updated.` });
-        router.push('/sell');
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "An unknown error occurred.");
-      }
-    } catch (error) {
-      toast({ variant: "destructive", title: "Update Failed", description: (error as Error).message });
-    } finally {
+    // Simulate API Call
+    setTimeout(() => {
+      toast({ title: "Dish Updated!", description: `'${listing.title}' has been updated.` });
       setIsSubmitting(false);
-    }
+      router.push('/sell');
+    }, 1000);
   };
   
   if (isLoading) {

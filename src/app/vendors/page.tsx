@@ -11,25 +11,8 @@ import CategoryTabs from "@/components/shared/CategoryTabs";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import { mockVendors } from "@/lib/data";
 
-
-// Helper to augment seller data from the API with placeholder data for the UI
-const augmentSellerData = (seller): Vendor => ({
-  id: seller.id,
-  name: seller.name,
-  phone: seller.phone,
-  // Add placeholder data for fields not in the API response
-  type: 'Home Cook', // Default type, can be enhanced if API provides it
-  description: `Authentic meals from ${seller.name}. Explore a variety of delicious home-cooked food.`,
-  rating: 4.5, // Placeholder rating
-  address: 'Location not available',
-  city: 'Online',
-  imageUrl: 'https://placehold.co/400x250.png',
-  dataAiHint: 'food vendor',
-  menu: [],
-  reviews: [],
-  specialty: 'Home-style Cooking',
-});
 
 const categories = [
   { name: 'All', value: 'all' as const },
@@ -52,43 +35,25 @@ export default function VendorsPage() {
     const role = localStorage.getItem('userRole');
     setUserRole(role);
 
-    // If the current user is a seller, they should not be on this page.
-    // Redirect them to their own dashboard immediately.
     if (role === 'seller') {
       router.replace('/sell');
-      return; // Stop further execution in this component
+      return; 
     }
 
-    // If not a seller, proceed to render the page and fetch data
     setIsReady(true);
 
-    const fetchVendors = async () => {
+    const fetchVendors = () => {
       setIsLoading(true);
-      try {
-        const response = await fetch('/api/sellers');
-        if (!response.ok) {
-          throw new Error('Failed to fetch vendors from API.');
-        }
-        const sellers = await response.json();
-        
-        const augmentedData = Array.isArray(sellers) ? sellers.map(augmentSellerData) : [];
-        
-        setAllVendors(augmentedData);
-        setFilteredVendors(augmentedData);
-      } catch (error) {
-        console.error("Failed to fetch vendors:", error);
-        toast({
-            variant: "destructive",
-            title: "Error fetching vendors",
-            description: (error as Error).message,
-        });
-      } finally {
+      // Simulate API call
+      setTimeout(() => {
+        setAllVendors(mockVendors);
+        setFilteredVendors(mockVendors);
         setIsLoading(false);
-      }
+      }, 500);
     };
 
     fetchVendors();
-  }, [router, toast]);
+  }, [router]);
 
   const filterVendors = () => {
     let vendors = allVendors;
@@ -113,7 +78,6 @@ export default function VendorsPage() {
     setActiveCategory(category);
   };
   
-  // Render a loading state until the role check is complete to prevent content flashing.
   if (!isReady) {
     return (
       <div className="container py-12 md:py-16">

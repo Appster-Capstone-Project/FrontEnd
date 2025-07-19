@@ -21,7 +21,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
+import { mockDishes } from "@/lib/data";
 
 export default function SellDashboardPage() {
   const { toast } = useToast();
@@ -33,43 +34,18 @@ export default function SellDashboardPage() {
 
   const fetchListings = React.useCallback(async () => {
     setIsListingsLoading(true);
-    const token = localStorage.getItem('token');
     const sellerId = localStorage.getItem('sellerId');
 
-    if (!token || !sellerId) {
-      toast({
-        variant: "destructive",
-        title: "Authentication Error",
-        description: "Please sign in as a seller to view this page.",
-      });
-      router.push('/auth/signin?type=seller');
-      return;
-    }
+    // Simulate API call
+    setTimeout(() => {
+        // In a real app, you would filter by sellerId from an API call
+        // Here, we'll just show all dishes from a specific mock seller for demo
+        const sellerDishes = mockDishes.filter(d => d.sellerId === sellerId);
+        setListings(sellerDishes);
+        setIsListingsLoading(false);
+    }, 500);
 
-    try {
-      const response = await fetch(`/api/listings?sellerId=${sellerId}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setListings(Array.isArray(data) ? data : []);
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Could not load your current dishes.");
-      }
-    } catch (error) {
-      console.error("Failed to fetch listings", error);
-      toast({
-        variant: "destructive",
-        title: "Failed to Fetch Listings",
-        description: (error as Error).message,
-      });
-      setListings([]);
-    } finally {
-      setIsListingsLoading(false);
-    }
-  }, [toast, router]);
+  }, []);
 
   React.useEffect(() => {
     const token = localStorage.getItem('token');
@@ -85,28 +61,12 @@ export default function SellDashboardPage() {
   }, [router, fetchListings]);
 
   const handleDelete = async (listingId: string) => {
-    const token = localStorage.getItem('token');
-    try {
-        const response = await fetch(`/api/listings/${listingId}`, {
-            method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${token}` },
-        });
-
-        if (response.ok) {
-            toast({ title: "Dish Deleted", description: "The dish has been removed from your menu." });
-            // Refresh the list after deletion
-            fetchListings(); 
-        } else {
-            const errorData = await response.json();
-            throw new Error(errorData.error || "Failed to delete the dish.");
-        }
-    } catch (error) {
-        toast({
-            variant: "destructive",
-            title: "Deletion Failed",
-            description: (error as Error).message,
-        });
-    }
+    // Simulate API call
+    setTimeout(() => {
+        toast({ title: "Dish Deleted", description: "The dish has been removed from your menu." });
+        // Refresh the list after deletion by filtering out the deleted dish
+        setListings(prevListings => prevListings.filter(l => l.id !== listingId));
+    }, 500);
   };
 
   return (

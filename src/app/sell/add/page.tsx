@@ -33,8 +33,7 @@ export default function AddListingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const sellerId = localStorage.getItem("sellerId");
-    const token = localStorage.getItem('token');
+    setIsSubmitting(true);
 
     if (!title || !price || !description) {
       toast({
@@ -42,57 +41,20 @@ export default function AddListingPage() {
         title: "Missing Information",
         description: "Dish Title, Price, and Description are required.",
       });
+      setIsSubmitting(false);
       return;
     }
     
-    if (!sellerId || !token) {
+    // Simulate API Call
+    setTimeout(() => {
       toast({
-        variant: "destructive",
-        title: "Authentication Error",
-        description: "Could not identify seller. Please log in again.",
+        title: "Dish Added Successfully!",
+        description: `'${title}' has been added to your menu.`,
       });
-      return;
-    }
-
-    setIsSubmitting(true);
-    const listingData = {
-      title,
-      price: parseFloat(price),
-      description,
-      available,
-      sellerId,
-    };
-
-    try {
-      const response = await fetch('/api/listings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(listingData),
-      });
-
-      if (response.status === 201) {
-        toast({
-          title: "Dish Added Successfully!",
-          description: `'${title}' has been added to your menu.`,
-        });
-        // Redirect to the main seller dashboard to see the new list
-        router.push('/sell');
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "An unknown error occurred on the server.");
-      }
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Failed to Add Dish",
-        description: (error as Error).message,
-      });
-    } finally {
       setIsSubmitting(false);
-    }
+      // Redirect to the main seller dashboard to see the new list
+      router.push('/sell');
+    }, 1000);
   };
 
   return (

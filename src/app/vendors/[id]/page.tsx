@@ -3,7 +3,7 @@ import type { Vendor, Dish, Review } from '@/lib/types';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import StarRating from '@/components/shared/StarRating';
@@ -12,7 +12,7 @@ import ReviewCard from '@/components/shared/ReviewCard';
 import SectionTitle from '@/components/shared/SectionTitle';
 import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-
+import { getVendorById } from '@/lib/data'; // Import mock data function
 
 async function submitReview(formData: FormData) {
   "use server";
@@ -24,67 +24,16 @@ async function submitReview(formData: FormData) {
   
   console.log("Review Submitted (Server Action Demo):", rawFormData);
   // This is where you would POST to a /reviews endpoint
-  // Since there is no review endpoint, this is for demonstration.
+  // For now, this is for demonstration.
 }
 
 async function getVendorDetails(id: string): Promise<Vendor | null> {
-  try {
-    // Use relative paths to leverage Next.js rewrites configured in next.config.ts
-    const [sellerRes, listingsRes] = await Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sellers/${id}`),
-      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/listings?sellerId=${id}`)
-    ]);
-
-    if (!sellerRes.ok) {
-      if (sellerRes.status === 404) {
-        console.log(`Vendor with ID ${id} not found.`);
-        return null;
-      }
-      throw new Error(`Failed to fetch seller: ${sellerRes.statusText}`);
-    }
-
-    const seller = await sellerRes.json();
-    const listings = listingsRes.ok ? await listingsRes.json() : [];
-
-    const augmentedListings: Dish[] = Array.isArray(listings) ? listings.map(listing => ({
-      ...listing,
-      imageUrl: 'https://placehold.co/300x200.png',
-      dataAiHint: 'food dish',
-    })) : [];
-
-    // Placeholder reviews as there is no API endpoint for it
-    const mockReviews: Review[] = [
-      { id: 'r1-1', userName: 'Raj K.', rating: 5, comment: 'Best food I\'ve had in ages!', date: '2024-07-15T10:00:00Z', userImageUrl: 'https://placehold.co/40x40.png', dataAiHintUser: 'man smiling' },
-      { id: 'r1-2', userName: 'Anita S.', rating: 4, comment: 'Delicious, a bit spicy for me though.', date: '2024-07-14T18:30:00Z', userImageUrl: 'https://placehold.co/40x40.png', dataAiHintUser: 'woman portrait' },
-    ];
-    
-    // Augment the seller data with placeholder values for UI completeness
-    return {
-      id: seller.id,
-      name: seller.name,
-      phone: seller.phone,
-      type: 'Home Cook', // Default type
-      description: `Authentic meals from ${seller.name}. Browse the menu below.`,
-      rating: 4.7, // Placeholder rating
-      address: 'Location not specified',
-      city: 'City',
-      verified: seller.verified,
-      imageUrl: 'https://placehold.co/600x400.png',
-      dataAiHint: 'food vendor',
-      specialty: 'Delicious Home Food',
-      operatingHours: '10 AM - 10 PM',
-      deliveryOptions: ['Pickup', 'Delivery'],
-      menu: augmentedListings,
-      reviews: mockReviews, // Using mock reviews
-    };
-  } catch (error) {
-    console.error("Failed to fetch vendor details:", error);
-    // Re-throwing the error is important for the error boundary to catch it
-    if (error instanceof Error) {
-        throw new Error(`Network request failed: ${error.message}`);
-    }
-    throw new Error('An unknown network error occurred.');
+  // Use mock data instead of fetching from an API
+  const vendor = getVendorById(id);
+  if (vendor) {
+    return Promise.resolve(vendor);
   }
+  return Promise.resolve(null);
 }
 
 export default async function VendorDetailPage({ params }: { params: { id: string } }) {

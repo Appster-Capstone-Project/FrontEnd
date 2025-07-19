@@ -53,87 +53,32 @@ function SignInCard() {
   
   const handleSignIn = async () => {
     setIsLoading(true);
-    // Always clear previous session data on a new login attempt
     localStorage.clear();
 
-    const endpoint = isSellerView ? '/api/sellers/login' : '/api/users/login';
-    const body = JSON.stringify({ email, password });
-
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: body,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Invalid credentials");
-      }
-
-      const { token } = await response.json();
-      if (!token) {
-        throw new Error("Login failed: No token received.");
-      }
-      
-      localStorage.setItem("token", token);
-      
-      // Store a flag to show splash screen
+    // Simulate API call
+    setTimeout(() => {
+      // Mock successful login
+      localStorage.setItem("token", "mock-jwt-token-string");
       localStorage.setItem('showSplash', 'true');
 
       if (isSellerView) {
-        // For sellers, we fetch their details from the /sellers list
-        const sellersResponse = await fetch('/api/sellers', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (!sellersResponse.ok) {
-            throw new Error("Failed to fetch seller profile.");
-        }
-        
-        const sellers = await sellersResponse.json();
-        const sellerProfile = Array.isArray(sellers) ? sellers.find(s => s.email === email) : null;
-
-        if (!sellerProfile) {
-            throw new Error("Could not find seller profile for the given email.");
-        }
-
-        localStorage.setItem("userName", sellerProfile.name);
-        localStorage.setItem("sellerId", sellerProfile.id);
+        localStorage.setItem("userName", "Priya's Kitchen");
+        localStorage.setItem("sellerId", "v1");
         localStorage.setItem("userRole", "seller");
-        
-        router.push('/loading');
       } else {
-        // For users, we fetch their details from the /users/profile endpoint
-        const profileResponse = await fetch('/api/users/profile', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (!profileResponse.ok) {
-            throw new Error("Failed to fetch user profile.");
-        }
-        
-        const user = await profileResponse.json();
-
-        localStorage.setItem("userName", user.name);
-        localStorage.setItem("userId", user.id);
+        localStorage.setItem("userName", "Alex Doe");
+        localStorage.setItem("userId", "u1");
         localStorage.setItem("userRole", "user");
-
-        router.push("/loading");
       }
 
-    } catch (error) {
-      // Clear any partial login data on failure
-      localStorage.clear();
-      
       toast({
-        variant: "destructive",
-        title: "Login Failed",
-        description: (error as Error).message,
+        title: "Login Successful!",
+        description: isSellerView ? "Redirecting to your seller dashboard." : "Welcome back!",
       });
-    } finally {
+      
+      router.push('/loading');
       setIsLoading(false);
-    }
+    }, 1000);
   };
   
   const title = isSellerView ? 'Seller Sign In' : 'Welcome Back!';
