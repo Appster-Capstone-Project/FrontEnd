@@ -6,6 +6,16 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
+    "/install/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/install/page.js"
+    ],
     "/(pages)/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -16,65 +26,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(pages)/dashboard/page.js"
     ],
-    "/vendors/[id]/error": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/vendors/[id]/error.js"
-    ],
-    "/vendors/[id]/loading": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/vendors/[id]/loading.js"
-    ],
-    "/vendors/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/vendors/[id]/page.js"
-    ],
-    "/(pages)/orders/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(pages)/orders/page.js"
-    ],
-    "/auth/signin/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/auth/signin/page.js"
-    ],
-    "/sell/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/sell/layout.js"
-    ],
-    "/sell/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/sell/page.js"
-    ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
-    ],
     "/(pages)/welcome/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(pages)/welcome/page.js"
     ],
-    "/(pages)/promotions/page": [
+    "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(pages)/promotions/page.js"
-    ],
-    "/(pages)/profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(pages)/profile/page.js"
-    ],
-    "/install/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/install/page.js"
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }
