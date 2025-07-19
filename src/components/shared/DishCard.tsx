@@ -13,6 +13,9 @@ import { Progress } from '@/components/ui/progress';
 import { format } from 'date-fns';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect } from 'react';
 
 interface DishCardProps {
   dish: Dish;
@@ -22,8 +25,28 @@ interface DishCardProps {
 
 const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }) => {
   const { addToCart } = useCart();
+  const router = useRouter();
+  const { toast } = useToast();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('userRole');
+    if (token && role === 'user') {
+      setIsLoggedIn(true);
+    }
+  }, []);
   
   const handleAddToCart = () => {
+    if (!isLoggedIn) {
+      toast({
+        title: "Please Log In",
+        description: "You need to be logged in as a user to pitch in.",
+        variant: "destructive"
+      });
+      router.push('/auth/signin');
+      return;
+    }
     addToCart(dish);
   };
 

@@ -8,18 +8,43 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { CalendarDays, Check, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect } from 'react';
 
 interface TiffinPlanCardProps {
   plan: TiffinPlan;
 }
 
 const TiffinPlanCard: React.FC<TiffinPlanCardProps> = ({ plan }) => {
-  // const { addToCart } = useCart();
+  const router = useRouter();
+  const { toast } = useToast();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('userRole');
+    if (token && role === 'user') {
+      setIsLoggedIn(true);
+    }
+  }, []);
   
   const handleSubscribe = () => {
+     if (!isLoggedIn) {
+      toast({
+        title: "Please Log In",
+        description: "You need to be logged in as a user to subscribe.",
+        variant: "destructive"
+      });
+      router.push('/auth/signin');
+      return;
+    }
     // Note: The cart currently only supports `Dish` items.
     // This would need to be extended to support TiffinPlan subscriptions.
-    alert(`Subscribing to ${plan.title}`);
+    toast({
+        title: "Subscribed!",
+        description: `You have subscribed to the ${plan.title}.`,
+    });
   };
 
   return (
