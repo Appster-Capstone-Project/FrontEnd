@@ -46,13 +46,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
-        
-        {/* 
-          Other meta tags (theme-color, viewport, apple-specific PWA tags) 
-          are now primarily handled by the metadata objects exported above.
-          Next.js injects these automatically.
-          The manifest link will be injected by next-pwa.
-        */}
       </head>
       <body className="font-body antialiased">
         <Providers>
