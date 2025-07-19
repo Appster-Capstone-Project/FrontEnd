@@ -1,5 +1,5 @@
 
-import type { Vendor, Dish, Review, CartItem, TiffinPlan } from './types';
+import type { Vendor, Dish, Review, CartItem, TiffinPlan, Order } from './types';
 
 // This file contains mock data to simulate a full backend.
 
@@ -157,25 +157,55 @@ export const getDishById = (id: string): Dish | undefined => {
   return mockDishes.find(d => d.id === id);
 }
 
-export const mockOrders = [
+const mockUser1 = { id: 'u1', name: 'Alex Doe', imageUrl: 'https://i.pravatar.cc/40?u=alex' };
+const mockUser2 = { id: 'u2', name: 'Sam Jones', imageUrl: 'https://i.pravatar.cc/40?u=sam' };
+
+
+export const mockOrders: Order[] = [
     {
-        id: 'ord-1',
-        date: '2024-07-18T14:30:00Z',
+        id: 'ord-v1-1',
+        date: getFutureDate(0, 14, 30).toISOString(), // Today
         vendorName: 'Priya\'s Kitchen',
-        total: 18.98,
-        status: 'Delivered',
+        buyer: mockUser1,
+        total: 14.99,
+        status: 'Pending',
+        comments: "Please make it mild, not too spicy!",
         items: [
             {...mockDishes.find(d => d.id === 'd1-1'), quantity: 1} as CartItem,
         ].filter(i => i.id)
     },
     {
-        id: 'ord-2',
-        date: '2024-07-20T18:00:00Z',
-        vendorName: 'Daily Tiffins',
-        total: 65.00,
-        status: 'Preparing',
+        id: 'ord-v1-2',
+        date: getFutureDate(0, 18, 0).toISOString(), // Today
+        vendorName: 'Priya\'s Kitchen',
+        buyer: mockUser2,
+        total: 15.99,
+        status: 'Confirmed',
         items: [
-             {...(mockTiffinPlans.find(d => d.id === 'plan-d2-1')), quantity: 1} as any, // This needs to be 'any' for now
+             {...mockDishes.find(d => d.id === 'd1-3'), quantity: 1} as CartItem,
+        ].filter(i => i.id)
+    },
+    {
+        id: 'ord-v1-3',
+        date: getFutureDate(-1, 19, 0).toISOString(), // Yesterday
+        vendorName: 'Priya\'s Kitchen',
+        buyer: mockUser1,
+        total: 12.99,
+        status: 'Delivered',
+        items: [
+             {...mockDishes.find(d => d.id === 'd1-2'), quantity: 1} as CartItem,
+        ].filter(i => i.id)
+    },
+    {
+        id: 'ord-v3-1',
+        date: getFutureDate(0, 10, 0).toISOString(), // Today
+        vendorName: 'Mama Maria\'s',
+        buyer: mockUser2,
+        total: 22.00,
+        status: 'Pending',
+        comments: "Can I pick it up around 7 PM?",
+        items: [
+             {...mockDishes.find(d => d.id === 'd3-1'), quantity: 1} as CartItem,
         ].filter(i => i.id)
     }
 ].filter(o => o.items.every(item => item && item.id)); // Filter out orders with missing items

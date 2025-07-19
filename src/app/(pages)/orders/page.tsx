@@ -1,12 +1,15 @@
 
+"use client";
+
 import SectionTitle from '@/components/shared/SectionTitle';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { PackageSearch, FileText } from 'lucide-react';
+import { PackageSearch } from 'lucide-react';
 import { mockOrders } from '@/lib/data';
-import type { CartItem } from '@/lib/types';
+import type { Order, CartItem } from '@/lib/types';
 import { format } from 'date-fns';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+import React from 'react';
 
 interface OrderItemProps {
   item: CartItem;
@@ -20,7 +23,31 @@ const OrderItem: React.FC<OrderItemProps> = ({ item }) => (
 )
 
 export default function OrdersPage() {
-  const orders = mockOrders;
+  const [orders, setOrders] = React.useState<Order[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    // Simulate fetching user's orders
+    const userId = localStorage.getItem('userId');
+    setIsLoading(true);
+    setTimeout(() => {
+        // In a real app, this would be an API call `GET /api/users/${userId}/orders`
+        const userOrders = mockOrders.filter(o => o.buyer.id === userId);
+        setOrders(userOrders);
+        setIsLoading(false);
+    }, 500);
+
+  }, []);
+
+  const getStatusVariant = (status: Order['status']) => {
+    switch (status) {
+        case 'Delivered': return 'default';
+        case 'Confirmed': return 'secondary';
+        case 'Pending': return 'outline';
+        case 'Declined': return 'destructive';
+        default: return 'secondary';
+    }
+  }
 
   return (
     <div className="container py-12 md:py-16">
@@ -38,10 +65,10 @@ export default function OrdersPage() {
                     Order from {order.vendorName}
                   </CardTitle>
                   <CardDescription>
-                    {format(new Date(order.date), 'MMMM d, yyyy')} • Order ID: {order.id}
+                    {format(new Date(order.date), 'MMMM d, yyyy')} • Order ID: {order.id.slice(-6)}
                   </CardDescription>
                 </div>
-                <Badge variant={order.status === 'Delivered' ? 'default' : 'secondary'} className="capitalize">
+                <Badge variant={getStatusVariant(order.status)} className="capitalize">
                     {order.status}
                 </Badge>
               </CardHeader>

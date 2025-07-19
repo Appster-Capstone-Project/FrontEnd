@@ -1,7 +1,11 @@
 {
-  "/vendors/page": "app/vendors/page.js",
   "/vendors/[id]/page": "app/vendors/[id]/page.js",
+  "/auth/signin/page": "app/auth/signin/page.js",
+  "/loading/page": "app/loading/page.js",
   "/(pages)/dashboard/page": "app/(pages)/dashboard/page.js",
+  "/sell/page": "app/sell/page.js",
+  "/sell/add/page": "app/sell/add/page.js",
+  "/sell/orders/page": "app/sell/orders/page.js",
   "/(pages)/profile/page": "app/(pages)/profile/page.js",
   "/(pages)/page": "app/(pages)/page.js"
 }

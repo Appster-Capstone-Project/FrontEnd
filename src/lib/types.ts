@@ -66,3 +66,20 @@ export interface Vendor {
 export interface CartItem extends Dish {
   quantity: number;
 }
+
+export interface Buyer {
+  id: string;
+  name: string;
+  imageUrl?: string;
+}
+
+export interface Order {
+  id: string;
+  date: string; // ISO date string
+  vendorName: string;
+  buyer: Buyer;
+  total: number;
+  status: 'Pending' | 'Confirmed' | 'Delivered' | 'Declined';
+  items: CartItem[];
+  comments?: string;
+}
