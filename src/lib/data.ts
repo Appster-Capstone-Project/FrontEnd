@@ -1,5 +1,5 @@
 
-import type { Vendor, Dish, Review, CartItem, TiffinPlan, Order } from './types';
+import type { Vendor, Dish, Review, CartItem, TiffinPlan, Order, Message } from './types';
 
 // This file contains mock data to simulate a full backend.
 
@@ -183,7 +183,11 @@ export const mockOrders: Order[] = [
         status: 'Confirmed',
         items: [
              {...mockDishes.find(d => d.id === 'd1-3'), quantity: 1} as CartItem,
-        ].filter(i => i.id)
+        ].filter(i => i.id),
+        messages: [
+            { id: 'm1', sender: 'buyer', text: 'Hey! Just confirming my order for the weekend. So excited!', timestamp: getFutureDate(0, 18, 5).toISOString() },
+            { id: 'm2', sender: 'seller', text: 'Hi Sam! Confirmed. We\'ll have it ready for you. Thanks for ordering!', timestamp: getFutureDate(0, 18, 7).toISOString() },
+        ]
     },
     {
         id: 'ord-v1-3',

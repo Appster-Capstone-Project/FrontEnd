@@ -19,9 +19,10 @@ import { Send } from 'lucide-react';
 interface BroadcastDialogProps {
   children: React.ReactNode;
   onBroadcast: (message: string) => void;
+  dishTitle?: string;
 }
 
-export const BroadcastDialog: React.FC<BroadcastDialogProps> = ({ children, onBroadcast }) => {
+export const BroadcastDialog: React.FC<BroadcastDialogProps> = ({ children, onBroadcast, dishTitle }) => {
   const [message, setMessage] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
@@ -38,9 +39,12 @@ export const BroadcastDialog: React.FC<BroadcastDialogProps> = ({ children, onBr
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Broadcast Message</DialogTitle>
+          <DialogTitle>Broadcast to Buyers</DialogTitle>
           <DialogDescription>
-            Send a message to all buyers with a pending or confirmed order. This is for general announcements.
+            {dishTitle 
+                ? `Send an announcement to all buyers of "${dishTitle}".`
+                : "Send a message to all buyers with a pending or confirmed order."
+            }
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

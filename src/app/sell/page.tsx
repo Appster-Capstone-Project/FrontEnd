@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { List, PlusCircle, CheckCircle, XCircle, Edit, Trash2 } from "lucide-react";
+import { List, PlusCircle, CheckCircle, XCircle, Edit, Trash2, Send } from "lucide-react";
 import SectionTitle from "@/components/shared/SectionTitle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,6 +23,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { mockDishes } from "@/lib/data";
+import { BroadcastDialog } from "@/components/shared/BroadcastDialog";
 
 export default function SellDashboardPage() {
   const { toast } = useToast();
@@ -68,6 +69,13 @@ export default function SellDashboardPage() {
         setListings(prevListings => prevListings.filter(l => l.id !== listingId));
     }, 500);
   };
+  
+  const handleBroadcast = (message: string, dishTitle: string) => {
+    toast({
+        title: "Broadcast Sent!",
+        description: `Your message about "${dishTitle}" has been sent.`,
+    });
+  }
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -113,6 +121,15 @@ export default function SellDashboardPage() {
                               </div>
                               <div className="flex items-center gap-2">
                                 <span className="font-mono text-foreground mr-4">${listing.price.toFixed(2)}</span>
+                                <BroadcastDialog 
+                                    onBroadcast={(message) => handleBroadcast(message, listing.title)}
+                                    dishTitle={listing.title}
+                                >
+                                    <Button variant="outline" size="icon">
+                                        <Send className="h-4 w-4" />
+                                        <span className="sr-only">Broadcast to buyers</span>
+                                    </Button>
+                                </BroadcastDialog>
                                 <Button variant="outline" size="icon" asChild>
                                   <Link href={`/sell/edit/${listing.id}`}>
                                     <Edit className="h-4 w-4" />
