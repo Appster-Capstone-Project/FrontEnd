@@ -14,7 +14,6 @@ import {
   ChefHat, 
   LogOut, 
   LayoutDashboard, 
-  TicketPercent,
   ListOrdered,
   Menu
 } from 'lucide-react';
@@ -35,6 +34,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { cn } from '@/lib/utils';
 
 const Header = () => {
   const { getItemCount } = useCart();
@@ -81,8 +81,7 @@ const Header = () => {
   };
   
   const navLinks = [
-    { href: "/dashboard", label: "Browse Food", icon: Search, roles: ['guest'] },
-    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ['user'] },
+    { href: "/dashboard", label: "Browse Food", icon: Search, roles: ['guest', 'user'] },
     { href: "/orders", label: "My Orders", icon: ListOrdered, roles: ['user'] },
     { href: "/profile", label: "My Profile", icon: UserCircle, roles: ['user'] },
     { href: "/sell", label: "Seller Dashboard", icon: ChefHat, roles: ['seller'] },
@@ -93,20 +92,16 @@ const Header = () => {
 
   const authLinks = (
     <div className="flex flex-col space-y-3 pt-4 border-t">
-       <Link href="/auth/signin?type=seller" passHref legacyBehavior>
-        <Button asChild variant="ghost">
-          <a>
+       <Link href="/auth/signin?type=seller" asChild>
+        <Button variant="ghost">
             <ChefHat className="mr-2 h-4 w-4" />
             <span>Become/Sign In as Seller</span>
-          </a>
         </Button>
        </Link>
-       <Link href="/auth/signin" passHref legacyBehavior>
-        <Button asChild variant="outline">
-          <a>
+       <Link href="/auth/signin" asChild>
+        <Button variant="outline">
             <UserCircle className="mr-2 h-4 w-4" />
             <span>Login / Sign Up</span>
-          </a>
         </Button>
        </Link>
     </div>
@@ -174,12 +169,10 @@ const Header = () => {
         
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center space-x-2 md:space-x-4">
-          <Link href="/dashboard" passHref legacyBehavior>
-            <Button asChild variant="ghost">
-              <a>
-                <Search className="h-4 w-4 md:mr-2" />
-                <span className="hidden md:inline">Browse Food</span>
-              </a>
+          <Link href="/dashboard" asChild>
+            <Button variant="ghost">
+              <Search className="h-4 w-4 md:mr-2" />
+              <span className="hidden md:inline">Browse Food</span>
             </Button>
           </Link>
 
@@ -187,20 +180,16 @@ const Header = () => {
               <Skeleton className="h-9 w-24 rounded-md" />
           ) : isLoggedIn ? <UserMenu /> : (
              <>
-              <Link href="/auth/signin?type=seller" passHref legacyBehavior>
-                <Button asChild variant="ghost">
-                  <a>
-                    <ChefHat className="h-4 w-4 md:mr-2" />
-                    <span className="hidden md:inline">Become a Seller</span>
-                  </a>
+              <Link href="/auth/signin?type=seller" asChild>
+                <Button variant="ghost">
+                  <ChefHat className="h-4 w-4 md:mr-2" />
+                  <span className="hidden md:inline">Become a Seller</span>
                 </Button>
               </Link>
-              <Link href="/auth/signin" passHref legacyBehavior>
-                <Button asChild variant="outline" size="sm">
-                  <a>
-                    <UserCircle className="h-4 w-4 mr-2" />
-                    <span>Login / Sign Up</span>
-                  </a>
+              <Link href="/auth/signin" asChild>
+                <Button variant="outline" size="sm">
+                  <UserCircle className="h-4 w-4 mr-2" />
+                  <span>Login / Sign Up</span>
                 </Button>
               </Link>
             </>
@@ -237,10 +226,10 @@ const Header = () => {
                     <span className="sr-only">Open menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-full max-w-xs flex flex-col">
+              <SheetContent side="right" className="w-full max-w-xs flex flex-col p-4">
                 <nav className="flex-grow flex flex-col space-y-4 pt-8">
                   {visibleNavLinks.map(({ href, label, icon: Icon }) => (
-                     <Link key={href} href={href} className="flex items-center text-lg font-medium text-foreground hover:text-primary">
+                     <Link key={href} href={href} className={cn("flex items-center text-lg font-medium text-foreground hover:text-primary p-2 rounded-md", pathname === href && "bg-muted")}>
                        <Icon className="mr-3 h-5 w-5" /> {label}
                     </Link>
                   ))}
