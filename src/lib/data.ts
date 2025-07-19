@@ -5,8 +5,17 @@ import type { Vendor, Dish, Review, CartItem, TiffinPlan } from './types';
 
 const now = new Date();
 const today = new Date(now.setHours(0, 0, 0, 0));
-const tomorrow = new Date(new Date().setDate(today.getDate() + 1));
-const dayAfter = new Date(new Date().setDate(today.getDate() + 2));
+
+const getFutureDate = (days: number, hour: number, minute: number) => {
+    const future = new Date();
+    future.setDate(future.getDate() + days);
+    future.setHours(hour, minute, 0, 0);
+    return future;
+};
+
+const tomorrow = getFutureDate(1, 17, 0); // Tomorrow at 5:00 PM
+const dayAfter = getFutureDate(2, 18, 30); // Day after tomorrow at 6:30 PM
+const breakfastTomorrow = getFutureDate(1, 8, 0); // Tomorrow at 8:00 AM
 
 export const mockTiffinPlans: TiffinPlan[] = [
   { 
@@ -46,7 +55,7 @@ export const mockDishes: Dish[] = [
   { id: 'd1-3', sellerId: 'v1', title: 'Weekend Biryani', description: 'Aromatic basmati rice cooked with spices and chicken.', price: 15.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'chicken biryani', available: true, cookingDate: dayAfter.toISOString(), slotsTotal: 15, slotsFilled: 3, postedAt: new Date(now.getTime() - 30 * 60 * 1000).toISOString() },
   { id: 'd3-1', sellerId: 'v3', title: 'Homemade Lasagna Dinner', description: 'Classic beef lasagna with ricotta and mozzarella. Feeds 2.', price: 22.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'lasagna dish', available: true, cookingDate: tomorrow.toISOString(), slotsTotal: 5, slotsFilled: 1, postedAt: new Date(now.getTime() - 60 * 60 * 1000).toISOString() },
   { id: 'd3-2', sellerId: 'v3', title: 'Pasta Carbonara Kit', description: 'Fresh pasta and ingredients to make your own Carbonara.', price: 18.00, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'pasta carbonara', available: false, cookingDate: today.toISOString(), slotsTotal: 10, slotsFilled: 10, postedAt: new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString() },
-  { id: 'd4-1', sellerId: 'v4', title: 'Idli Sambar Breakfast', description: '4 steamed rice cakes served with a flavorful lentil stew.', price: 8.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'idli sambar', available: true, cookingDate: tomorrow.toISOString(), slotsTotal: 20, slotsFilled: 18, postedAt: new Date(now.getTime() - 25 * 60 * 1000).toISOString() },
+  { id: 'd4-1', sellerId: 'v4', title: 'Idli Sambar Breakfast', description: '4 steamed rice cakes served with a flavorful lentil stew.', price: 8.99, imageUrl: 'https://placehold.co/300x200.png', dataAiHint: 'idli sambar', available: true, cookingDate: breakfastTomorrow.toISOString(), slotsTotal: 20, slotsFilled: 18, postedAt: new Date(now.getTime() - 25 * 60 * 1000).toISOString() },
 ];
 
 export const mockCombinedMenu = [...mockDishes, ...mockTiffinPlans];

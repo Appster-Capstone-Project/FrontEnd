@@ -7,12 +7,11 @@ import type { Dish, Vendor } from '@/lib/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart, Users, Calendar, ChefHat } from 'lucide-react';
+import { ShoppingCart, Users, Calendar, Clock } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Progress } from '@/components/ui/progress';
-import { format, formatDistanceToNow } from 'date-fns';
+import { format } from 'date-fns';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import StarRating from './StarRating';
 
 interface DishCardProps {
   dish: Dish;
@@ -29,7 +28,9 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor }) => {
   const isSoldOut = dish.slotsFilled >= dish.slotsTotal;
   const progress = (dish.slotsFilled / dish.slotsTotal) * 100;
   
-  const timeAgo = dish.postedAt ? formatDistanceToNow(new Date(dish.postedAt), { addSuffix: true }) : format(new Date(dish.cookingDate), 'MMM d');
+  const cookingDate = new Date(dish.cookingDate);
+  const readyByTime = format(cookingDate, 'p'); // e.g., 5:00 PM
+  const cookingDay = format(cookingDate, 'MMM d'); // e.g., Jul 23
 
   return (
     <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col h-full bg-card">
@@ -50,10 +51,16 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor }) => {
         >
             {isSoldOut ? 'Sold Out' : 'Available'}
         </Badge>
-        <Badge variant="secondary" className="absolute top-2 left-2 text-xs flex items-center">
-            <Calendar className="h-3 w-3 mr-1" />
-            Cooking: {format(new Date(dish.cookingDate), 'MMM d')}
-        </Badge>
+         <div className="absolute top-2 left-2 flex flex-col gap-1">
+            <Badge variant="secondary" className="text-xs flex items-center">
+                <Calendar className="h-3 w-3 mr-1" />
+                Cooking: {cookingDay}
+            </Badge>
+             <Badge variant="secondary" className="text-xs flex items-center">
+                <Clock className="h-3 w-3 mr-1" />
+                Ready by {readyByTime}
+            </Badge>
+        </div>
       </CardHeader>
       
       <CardContent className="p-4 flex-grow">
