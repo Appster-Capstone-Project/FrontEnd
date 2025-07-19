@@ -12,8 +12,8 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: "/icons/icon.svg", // General favicon
-    apple: "/icons/apple-touch-icon.svg", // Apple touch icon
+    icon: "/icons/icon.svg", 
+    apple: "/icons/apple-touch-icon.svg", 
   },
 };
 
@@ -37,12 +37,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Font links remain here as they are direct resource links */}
+        {/* Font links */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
         
-        {/* --- Apple PWA-specific meta tags --- */}
+        {/* --- PWA-specific meta tags --- */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="TiffinBox" />
