@@ -42,7 +42,7 @@ export default function InstallPage() {
       if (choiceResult.outcome === 'accepted') {
         console.log('User accepted the install prompt');
         // Mark as installed so we don't show this page again
-        localStorage.setItem('tiffinbox_installed', 'true');
+        localStorage.setItem('homepalate_installed', 'true');
       } else {
         console.log('User dismissed the install prompt');
       }
@@ -52,8 +52,8 @@ export default function InstallPage() {
 
   const handleShare = async () => {
     const shareData = {
-      title: 'TiffinBox',
-      text: 'Check out TiffinBox to discover homemade meals from local cooks!',
+      title: 'HomePalate',
+      text: 'Check out HomePalate to discover homemade meals from local cooks!',
       url: window.location.origin,
     };
     try {
@@ -79,7 +79,7 @@ export default function InstallPage() {
 
   const handleContinue = () => {
     // Mark as installed/visited so we don't show this page again
-    localStorage.setItem('tiffinbox_installed', 'true');
+    localStorage.setItem('homepalate_installed', 'true');
   }
 
   // If already installed, just provide a link to the dashboard
@@ -89,9 +89,9 @@ export default function InstallPage() {
              <Card className="max-w-md w-full text-center">
                 <CardHeader>
                     <div className="mx-auto mb-4">
-                        <Image src="/icons/icon.svg" width={80} height={80} alt="TiffinBox Logo" />
+                        <Image src="/icons/icon.svg" width={80} height={80} alt="HomePalate Logo" />
                     </div>
-                    <CardTitle className="font-headline text-2xl">Welcome to TiffinBox!</CardTitle>
+                    <CardTitle className="font-headline text-2xl">Welcome to HomePalate!</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground mb-6">You have the app installed. Let's find some food!</p>
@@ -111,9 +111,9 @@ export default function InstallPage() {
       <Card className="max-w-md w-full">
         <CardHeader className="text-center">
            <div className="mx-auto mb-4">
-             <Image src="/icons/icon.svg" width={80} height={80} alt="TiffinBox Logo" />
+             <Image src="/icons/icon.svg" width={80} height={80} alt="HomePalate Logo" />
            </div>
-          <CardTitle className="font-headline text-2xl">Install TiffinBox</CardTitle>
+          <CardTitle className="font-headline text-2xl">Install HomePalate</CardTitle>
           <p className="text-muted-foreground">For the best experience, add our app to your home screen.</p>
         </CardHeader>
         <CardContent className="space-y-6">

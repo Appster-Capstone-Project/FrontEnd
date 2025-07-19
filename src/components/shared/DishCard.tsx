@@ -7,7 +7,7 @@ import type { Dish, Vendor } from '@/lib/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart, Users, Calendar, MapPin } from 'lucide-react';
+import { ShoppingCart, Users, Calendar, MapPin, ShieldCheck } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Progress } from '@/components/ui/progress';
 import { format } from 'date-fns';
@@ -80,7 +80,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
                 <Link href={`/vendors/${dish.sellerId}`}>{dish.title}</Link>
               </CardTitle>
               {vendor && (
-                <div className="flex items-center gap-4 mb-3 text-sm">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-3 text-sm">
                     <Link href={`/vendors/${vendor.id}`} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                       <Avatar className="h-6 w-6">
                         <AvatarImage src={vendor.profileImageUrl} alt={vendor.name} />
@@ -88,6 +88,12 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
                       </Avatar>
                       <span>By {vendor.name}</span>
                     </Link>
+                    {vendor.verified && (
+                      <Badge variant="default" className="bg-green-600 hover:bg-green-700 text-xs">
+                          <ShieldCheck className="mr-1 h-3 w-3" />
+                          Verified Seller
+                      </Badge>
+                    )}
                     <div className="flex items-center text-muted-foreground">
                         <MapPin className="h-4 w-4 mr-1 text-accent" />
                         <span>{vendor.city}</span>
@@ -154,14 +160,20 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
           <Link href={`/vendors/${dish.sellerId}`}>{dish.title}</Link>
         </CardTitle>
         {vendor && (
-          <div className="flex items-center gap-2 mb-3">
-              <Avatar className="h-6 w-6">
-                <AvatarImage src={vendor.profileImageUrl} alt={vendor.name} />
-                <AvatarFallback>{vendor.name.substring(0, 1)}</AvatarFallback>
-              </Avatar>
-              <Link href={`/vendors/${vendor.id}`} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+              <Link href={`/vendors/${vendor.id}`} className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+                <Avatar className="h-6 w-6">
+                  <AvatarImage src={vendor.profileImageUrl} alt={vendor.name} />
+                  <AvatarFallback>{vendor.name.substring(0, 1)}</AvatarFallback>
+                </Avatar>
                 By {vendor.name}
               </Link>
+              {vendor.verified && (
+                  <Badge variant="default" className="bg-green-600 hover:bg-green-700 text-xs py-0.5">
+                      <ShieldCheck className="mr-1 h-3 w-3" />
+                      Verified
+                  </Badge>
+              )}
           </div>
         )}
         <div className="space-y-2 text-sm text-muted-foreground mb-4">

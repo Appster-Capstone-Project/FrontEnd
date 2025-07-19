@@ -101,22 +101,16 @@ export default function UserAccountLayout({
     },
   ];
 
-  // If the user is on the welcome page, render only the children
-  // This prevents the dashboard layout from wrapping the public homepage
-  if (pathname === '/') {
-    return <>{children}</>;
-  }
-
   const DesktopNav = () => (
      <div className="hidden border-r bg-muted/40 md:block">
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-            <Link href="/" className="flex items-center gap-2 font-semibold">
+            <Link href="/welcome" className="flex items-center gap-2 font-semibold">
               <div className="relative flex items-center justify-center">
                 <Package className="h-7 w-7 text-primary" />
                 <Heart className="absolute top-0 right-0 h-3.5 w-3.5 text-accent fill-accent transform translate-x-1/4 -translate-y-1/4" />
               </div>
-              <span className="font-headline text-xl">TiffinBox</span>
+              <span className="font-headline text-xl">HomePalate</span>
             </Link>
           </div>
           <div className="flex-1">
@@ -156,14 +150,14 @@ export default function UserAccountLayout({
       <SheetContent side="left" className="flex flex-col">
         <nav className="grid gap-2 text-lg font-medium">
           <Link
-            href="/"
+            href="/welcome"
             className="flex items-center gap-2 text-lg font-semibold mb-4"
           >
             <div className="relative flex items-center justify-center">
               <Package className="h-7 w-7 text-primary" />
               <Heart className="absolute top-0 right-0 h-3.5 w-3.5 text-accent fill-accent transform translate-x-1/4 -translate-y-1/4" />
             </div>
-            <span className="font-headline text-xl">TiffinBox</span>
+            <span className="font-headline text-xl">HomePalate</span>
           </Link>
           {navItems.map((item) => {
             const isActive = item.exact
@@ -222,7 +216,7 @@ export default function UserAccountLayout({
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                 <Link href="/">
+                 <Link href="/welcome">
                    <ExternalLink className="mr-2 h-4 w-4" />
                    View Site
                  </Link>

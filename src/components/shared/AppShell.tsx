@@ -11,10 +11,9 @@ export default function AppShell({ children }: { children: ReactNode }) {
 
   // Define paths that should NOT have the main header and footer
   // as they have their own dedicated layouts.
-  const noShellRoutes = ['/auth', '/sell', '/dashboard', '/orders', '/promotions', '/profile', '/vendors'];
+  const noShellRoutes = ['/auth', '/sell', '/dashboard', '/orders', '/promotions', '/profile', '/vendors', '/install'];
 
-  // Show shell only for the new `/welcome` page. The root `/` is the new loading screen.
-  const showShell = pathname === '/welcome';
+  const showShell = !noShellRoutes.some(path => pathname.startsWith(path));
 
   if (showShell) {
     return (

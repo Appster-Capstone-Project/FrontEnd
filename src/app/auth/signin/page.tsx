@@ -82,7 +82,7 @@ function SignInCard() {
   };
   
   const title = isSellerView ? 'Seller Sign In' : 'Welcome Back!';
-  const description = isSellerView ? 'Access your dashboard to manage listings and orders.' : 'Sign in to continue to TiffinBox.';
+  const description = isSellerView ? 'Access your dashboard to manage listings and orders.' : 'Sign in to continue to HomePalate.';
   const signupLink = isSellerView ? '/auth/signup?type=seller' : '/auth/signup';
   const signupHint = isSellerView ? "Don't have a seller account? " : "Don't have an account? ";
   const signupActionText = "Sign Up";
@@ -132,10 +132,10 @@ function SignInCard() {
           </Button>
           <div className="w-full text-center text-sm text-muted-foreground">
               {signupHint}
-              <Link href={signupLink} passHref legacyBehavior>
-                <a className="font-medium text-primary hover:underline">
+              <Link href={signupLink} passHref>
+                <span className="font-medium text-primary hover:underline">
                   {signupActionText}
-                </a>
+                </span>
               </Link>
           </div>
         </CardFooter>
@@ -168,7 +168,7 @@ const AuthCardSkeleton = () => (
 
 export default function SignInPage() {
   return (
-    <div className="container flex min-h-[calc(100vh-var(--header-height)-var(--footer-height))] items-center justify-center py-12 px-4">
+    <div className="container flex min-h-[calc(100vh)] items-center justify-center py-12 px-4">
       <Suspense fallback={<AuthCardSkeleton />}>
         <SignInCard />
       </Suspense>

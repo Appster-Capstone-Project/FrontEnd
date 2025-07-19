@@ -1,9 +1,8 @@
 {
-  "/page": "app/page.js",
-  "/install/page": "app/install/page.js",
+  "/vendors/[id]/page": "app/vendors/[id]/page.js",
   "/auth/signin/page": "app/auth/signin/page.js",
-  "/(pages)/welcome/page": "app/(pages)/welcome/page.js",
-  "/sell/page": "app/sell/page.js",
+  "/page": "app/page.js",
   "/sell/add/page": "app/sell/add/page.js",
+  "/sell/page": "app/sell/page.js",
   "/(pages)/dashboard/page": "app/(pages)/dashboard/page.js"
 }

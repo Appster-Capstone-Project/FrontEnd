@@ -3,10 +3,12 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Providers } from '@/context/Providers';
+import Loading from './loading'; // Import the loading component
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
-  title: 'TiffinBox',
-  description: 'TiffinBox: Discover nearby home cooks and tiffin services. Browse menus, read reviews, and enjoy authentic homemade meals.',
+  title: 'HomePalate',
+  description: 'HomePalate: Discover nearby home cooks and tiffin services. Browse menus, read reviews, and enjoy authentic homemade meals.',
   manifest: '/manifest.webmanifest',
   formatDetection: {
     telephone: false,
@@ -45,7 +47,7 @@ export default function RootLayout({
         {/* --- PWA-specific meta tags --- */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="TiffinBox" />
+        <meta name="apple-mobile-web-app-title" content="HomePalate" />
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
         
         {/* --- iOS Splash Screen --- */}
@@ -54,7 +56,9 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <Providers>
-          {children}
+            <Suspense fallback={<Loading />}>
+              {children}
+            </Suspense>
         </Providers>
         <Toaster />
       </body>

@@ -63,7 +63,7 @@ export default function HomePage() {
                 className="pl-10 h-12 text-base border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
               />
             </div>
-            <Link href="/dashboard" asChild>
+            <Link href="/dashboard" passHref>
               <Button size="lg" className="w-full sm:w-auto h-12 bg-primary hover:bg-primary/90 text-primary-foreground">
                 Find Food
               </Button>
@@ -76,7 +76,7 @@ export default function HomePage() {
       <section id="how-it-works" className="bg-background py-16 md:py-24">
         <div className="container">
           <SectionTitle
-            title="How TiffinBox Works"
+            title="How HomePalate Works"
             subtitle="Get your favorite homemade food in 3 simple steps."
             className="text-center"
           />
@@ -136,7 +136,7 @@ export default function HomePage() {
                 Join our community of passionate cooks, share your delicious creations, and earn from your kitchen.
               </p>
               <div className="mt-8">
-                <Link href="/auth/signup?type=seller" asChild>
+                <Link href="/auth/signup?type=seller" passHref>
                     <Button size="lg">
                         Become a Seller
                         <ChefHat className="ml-2 h-5 w-5" />

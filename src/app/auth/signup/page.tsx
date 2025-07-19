@@ -97,7 +97,7 @@ function SignUpCard() {
   };
 
   const title = isSeller ? 'Create a Seller Account' : 'Create an Account';
-  const description = isSeller ? 'Start selling your homemade food today.' : 'Join TiffinBox to discover amazing food.';
+  const description = isSeller ? 'Start selling your homemade food today.' : 'Join HomePalate to discover amazing food.';
   const signInLink = isSeller ? '/auth/signin?type=seller' : '/auth/signin';
 
   return (
@@ -145,10 +145,10 @@ function SignUpCard() {
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Link href={signInLink} passHref legacyBehavior>
-              <a className="font-medium text-primary hover:underline">
+            <Link href={signInLink} passHref>
+              <span className="font-medium text-primary hover:underline">
                 Sign In
-              </a>
+              </span>
             </Link>
           </p>
         </CardFooter>
@@ -193,7 +193,7 @@ const AuthCardSkeleton = () => (
 
 export default function SignUpPage() {
   return (
-    <div className="container flex min-h-[calc(100vh-var(--header-height)-var(--footer-height))] items-center justify-center py-12 px-4">
+    <div className="container flex min-h-[calc(100vh)] items-center justify-center py-12 px-4">
        <Suspense fallback={<AuthCardSkeleton />}>
         <SignUpCard />
       </Suspense>
