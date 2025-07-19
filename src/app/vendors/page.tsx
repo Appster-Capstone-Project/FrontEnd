@@ -7,8 +7,7 @@ import SectionTitle from "@/components/shared/SectionTitle";
 import VendorCard from "@/components/shared/VendorCard";
 import DishCard from "@/components/shared/DishCard";
 import type { Vendor, Dish } from "@/lib/types";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardHeader, Skeleton } from "@/components/ui/card";
 import CategoryTabs from "@/components/shared/CategoryTabs";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
@@ -116,13 +115,13 @@ export default function VendorsPage() {
             {[...Array(5)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
       ) : filteredItems.length > 0 ? (
-        <div className={activeCategory === 'dishes' ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" : "space-y-6"}>
+        <div className="space-y-6 max-w-4xl mx-auto">
           {filteredItems.map((item) => {
              if ('type' in item) { // It's a Vendor
                 return <VendorCard key={`vendor-${item.id}`} vendor={item} />
              } else { // It's a Dish
                 const vendor = allVendors.find(v => v.id === item.sellerId);
-                return <DishCard key={`dish-${item.id}`} dish={item} vendor={vendor} />
+                return <DishCard key={`dish-${item.id}`} dish={item} vendor={vendor} layout="horizontal" />
              }
           })}
         </div>
@@ -157,4 +156,3 @@ const CardSkeleton = () => (
       </div>
     </Card>
 );
-

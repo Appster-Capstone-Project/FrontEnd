@@ -147,7 +147,7 @@ export default function DashboardPage() {
                 return <VendorCard key={`vendor-${item.id}`} vendor={item} />
              } else { // It's a Dish
                 const vendor = allVendors.find(v => v.id === item.sellerId);
-                return <DishCard key={`dish-${item.id}`} dish={item} vendor={vendor} />
+                return <DishCard key={`dish-${item.id}`} dish={item} vendor={vendor} layout="horizontal" />
              }
           })}
         </div>
