@@ -35,6 +35,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { cn } from '@/lib/utils';
 
 const Header = () => {
   const { getItemCount } = useCart();
@@ -85,32 +86,32 @@ const Header = () => {
   };
   
   const navLinks = [
-    { href: "/vendors", label: "Browse Food", icon: Search },
-    ...(isLoggedIn && userRole === 'user' ? [
-        { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-        { href: "/orders", label: "My Orders", icon: ListOrdered },
-        { href: "/promotions", label: "Promotions", icon: TicketPercent },
-    ] : []),
-    ...(isLoggedIn && userRole === 'seller' ? [
-        { href: "/sell", label: "Seller Dashboard", icon: ChefHat },
-    ] : []),
+    { href: "/dashboard", label: "Browse Food", icon: Search, roles: ['user', 'guest'] },
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ['user'] },
+    { href: "/orders", label: "My Orders", icon: ListOrdered, roles: ['user'] },
+    { href: "/promotions", label: "Promotions", icon: TicketPercent, roles: ['user'] },
+    { href: "/sell", label: "Seller Dashboard", icon: ChefHat, roles: ['seller'] },
   ];
+  
+  const currentRole = isLoggedIn ? userRole : 'guest';
+  const visibleNavLinks = navLinks.filter(link => link.roles.includes(currentRole as string));
+
 
   const authLinks = (
-    <>
+    <div className="flex flex-col space-y-3">
        <Button variant="ghost" asChild>
-          <Link href="/auth/signin?type=seller" className="flex items-center space-x-1">
-            <ChefHat className="h-4 w-4 md:mr-1" />
+          <Link href="/auth/signin?type=seller">
+            <ChefHat className="mr-2 h-4 w-4" />
             <span>Become/Sign In as Seller</span>
           </Link>
         </Button>
-        <Button variant="outline" size="sm" asChild>
-          <Link href="/auth/signin" className="flex items-center space-x-2">
-            <UserCircle className="h-4 w-4" />
+        <Button variant="outline" asChild>
+          <Link href="/auth/signin">
+            <UserCircle className="mr-2 h-4 w-4" />
             <span>Login / Sign Up</span>
           </Link>
         </Button>
-    </>
+    </div>
   );
 
   return (
@@ -127,8 +128,8 @@ const Header = () => {
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center space-x-2 md:space-x-4">
           <Button variant="ghost" asChild>
-            <Link href="/vendors" className="flex items-center space-x-1">
-              <Search className="h-4 w-4 md:mr-1" />
+            <Link href="/dashboard">
+              <Search className="h-4 w-4 md:mr-2" />
               <span className="hidden md:inline">Browse Food</span>
             </Link>
           </Button>
@@ -167,12 +168,12 @@ const Header = () => {
                       <span>My Orders</span>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/promotions">
-                      <TicketPercent className="mr-2 h-4 w-4" />
-                      <span>Promotions</span>
-                    </Link>
-                  </DropdownMenuItem>
+                   <DropdownMenuItem asChild>
+                     <Link href="/profile">
+                       <UserCircle className="mr-2 h-4 w-4" />
+                       <span>My Profile</span>
+                     </Link>
+                   </DropdownMenuItem>
                   </>
                 )}
                 <DropdownMenuSeparator />
@@ -185,16 +186,15 @@ const Header = () => {
           ) : (
              <>
               <Button variant="ghost" asChild>
-                <Link href="/auth/signin?type=seller" className="flex items-center space-x-1">
-                  <ChefHat className="h-4 w-4 md:mr-1" />
-                  <span className="hidden md:inline">Become / Sign In as Seller</span>
+                <Link href="/auth/signin?type=seller">
+                  <ChefHat className="h-4 w-4 md:mr-2" />
+                  <span className="hidden md:inline">Become/Sign In as Seller</span>
                 </Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
-                <Link href="/auth/signin" className="flex items-center space-x-2">
+                <Link href="/auth/signin">
                   <UserCircle className="h-4 w-4" />
-                  <span className="hidden sm:inline">Login</span>
-                  <span className="hidden md:inline"> / Sign Up</span>
+                  <span className="hidden sm:inline">Login / Sign Up</span>
                 </Link>
               </Button>
             </>
@@ -233,7 +233,7 @@ const Header = () => {
               </SheetTrigger>
               <SheetContent side="right" className="w-full max-w-xs">
                 <nav className="flex flex-col space-y-4 pt-8">
-                  {navLinks.map(({ href, label, icon: Icon }) => (
+                  {visibleNavLinks.map(({ href, label, icon: Icon }) => (
                     <Link key={href} href={href} className="flex items-center text-lg font-medium text-foreground hover:text-primary">
                        <Icon className="mr-3 h-5 w-5" /> {label}
                     </Link>
@@ -246,7 +246,7 @@ const Header = () => {
                           Log Out ({userName})
                         </Button>
                       ) : (
-                        <div className="flex flex-col space-y-3">{authLinks}</div>
+                        authLinks
                       )}
                   </div>
                 </nav>

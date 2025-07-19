@@ -2918,6 +2918,10 @@ body {
     margin-right: 0.25rem;
   }
 
+  .md\:mr-2 {
+    margin-right: 0.5rem;
+  }
+
   .md\:block {
     display: block;
   }

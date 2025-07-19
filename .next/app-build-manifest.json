@@ -41,10 +41,26 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(pages)/orders/page.js"
     ],
-    "/_not-found/page": [
+    "/auth/signin/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/auth/signin/page.js"
+    ],
+    "/loading/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/loading/page.css",
+      "static/chunks/app/loading/page.js"
+    ],
+    "/sell/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/sell/layout.js"
+    ],
+    "/sell/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/sell/page.js"
     ]
   }
 }
