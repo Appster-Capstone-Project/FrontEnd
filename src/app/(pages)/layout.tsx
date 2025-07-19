@@ -58,7 +58,7 @@ export default function UserAccountLayout({
     const role = localStorage.getItem("userRole");
 
     // Define routes that require authentication
-    const protectedRoutes = ['/dashboard', '/orders', '/promotions', '/vendors', '/profile'];
+    const protectedRoutes = ['/orders', '/promotions', '/profile'];
 
     // If the current path is one of the protected routes, check for authentication
     if (protectedRoutes.some(path => pathname.startsWith(path))) {
@@ -103,7 +103,7 @@ export default function UserAccountLayout({
 
   // If the user is on the welcome page, render only the children
   // This prevents the dashboard layout from wrapping the public homepage
-  if (pathname === '/welcome') {
+  if (pathname === '/') {
     return <>{children}</>;
   }
 
@@ -222,7 +222,7 @@ export default function UserAccountLayout({
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                 <Link href="/welcome">
+                 <Link href="/">
                    <ExternalLink className="mr-2 h-4 w-4" />
                    View Site
                  </Link>

@@ -30,6 +30,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    // This check runs on the client and won't cause hydration errors.
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('userRole');
     if (token && role === 'user') {

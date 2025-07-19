@@ -11,7 +11,7 @@ import DishCard from '@/components/shared/DishCard';
 import TiffinPlanCard from '@/components/shared/TiffinPlanCard';
 import ReviewCard from '@/components/shared/ReviewCard';
 import SectionTitle from '@/components/shared/SectionTitle';
-import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat } from 'lucide-react';
+import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat, ShieldCheck } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { getVendorById, mockVendors } from '@/lib/data';
 
@@ -63,11 +63,17 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
             />
           </div>
           <div className="md:w-2/3 p-6 md:p-8">
-            <div className="flex items-center mb-2">
+            <div className="flex flex-wrap items-center mb-2 gap-2">
               <Badge variant={vendor.type === 'Home Cook' ? 'secondary' : 'outline'} className="capitalize mr-2">
                 <VendorIcon className="mr-1 h-4 w-4" />
                 {vendor.type}
               </Badge>
+              {vendor.verified && (
+                  <Badge variant="default" className="bg-green-600 hover:bg-green-700">
+                      <ShieldCheck className="mr-1 h-4 w-4" />
+                      Verified Seller
+                  </Badge>
+              )}
               <StarRating rating={vendor.rating || 0} size={20} showText />
             </div>
             <h1 className="font-headline text-3xl md:text-4xl font-bold text-primary mb-2">{vendor.name}</h1>

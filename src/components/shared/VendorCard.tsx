@@ -8,7 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import StarRating from './StarRating';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Utensils, ChefHat, ArrowRight, Clock } from 'lucide-react';
+import { MapPin, Utensils, ChefHat, ArrowRight, Clock, ShieldCheck } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useEffect, useState } from 'react';
 
@@ -23,7 +23,12 @@ const TimeAgo: React.FC<TimeAgoProps> = ({ date }) => {
     // This runs only on the client, after hydration, preventing a mismatch
     if (date) {
       try {
-        setTimeAgo(formatDistanceToNow(new Date(date), { addSuffix: true }));
+        const d = new Date(date);
+        if(!isNaN(d.getTime())) {
+          setTimeAgo(formatDistanceToNow(d, { addSuffix: true }));
+        } else {
+           setTimeAgo('just now');
+        }
       } catch (e) {
         console.error("Invalid date for TimeAgo", date);
         setTimeAgo('just now');
@@ -70,11 +75,17 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
         <div className="md:w-2/3 flex flex-col">
           <CardContent className="p-6 flex-grow">
             <div className="flex items-center justify-between mb-2">
-               <div className="flex items-center gap-2">
+               <div className="flex items-center gap-2 flex-wrap">
                 <Badge variant={vendor.type === 'Home Cook' ? 'secondary' : 'outline'} className="capitalize">
                   <VendorIcon className="mr-1 h-4 w-4" />
                   {vendor.type}
                 </Badge>
+                {vendor.verified && (
+                  <Badge variant="default" className="bg-green-600 hover:bg-green-700">
+                    <ShieldCheck className="mr-1 h-4 w-4" />
+                    Verified
+                  </Badge>
+                )}
                 {vendor.postedAt && <TimeAgo date={vendor.postedAt} />}
                </div>
               <StarRating rating={vendor.rating} size={18} showText />
@@ -100,7 +111,7 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             </div>
           </CardContent>
           <div className="p-6 pt-0">
-            <Link href={`/vendors/${vendor.id}`} asChild>
+            <Link href={`/vendors/${vendor.id}`} passHref>
                <Button className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground">
                     View Menu & Reviews <ArrowRight className="ml-2 h-4 w-4" />
               </Button>

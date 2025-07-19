@@ -4,5 +4,6 @@
   "/auth/signin/page": "app/auth/signin/page.js",
   "/(pages)/welcome/page": "app/(pages)/welcome/page.js",
   "/sell/page": "app/sell/page.js",
-  "/sell/add/page": "app/sell/add/page.js"
+  "/sell/add/page": "app/sell/add/page.js",
+  "/(pages)/dashboard/page": "app/(pages)/dashboard/page.js"
 }
