@@ -101,9 +101,9 @@ export default function UserAccountLayout({
     },
   ];
 
-  // If the user is on the homepage, render only the children
+  // If the user is on the welcome page, render only the children
   // This prevents the dashboard layout from wrapping the public homepage
-  if (pathname === '/') {
+  if (pathname === '/welcome') {
     return <>{children}</>;
   }
 
@@ -222,7 +222,7 @@ export default function UserAccountLayout({
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                 <Link href="/">
+                 <Link href="/welcome">
                    <ExternalLink className="mr-2 h-4 w-4" />
                    View Site
                  </Link>

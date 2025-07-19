@@ -59,16 +59,17 @@ function SignInCard() {
     setTimeout(() => {
       // Mock successful login
       localStorage.setItem("token", "mock-jwt-token-string");
-      localStorage.setItem('showSplash', 'true');
-
+      
       if (isSellerView) {
         localStorage.setItem("userName", "Priya's Kitchen");
         localStorage.setItem("sellerId", "v1");
         localStorage.setItem("userRole", "seller");
+        router.replace('/sell');
       } else {
         localStorage.setItem("userName", "Alex Doe");
         localStorage.setItem("userId", "u1");
         localStorage.setItem("userRole", "user");
+        router.replace('/dashboard');
       }
 
       toast({
@@ -76,7 +77,6 @@ function SignInCard() {
         description: isSellerView ? "Redirecting to your seller dashboard." : "Welcome back!",
       });
       
-      router.push('/loading');
       setIsLoading(false);
     }, 1000);
   };
@@ -132,7 +132,7 @@ function SignInCard() {
           </Button>
           <div className="w-full text-center text-sm text-muted-foreground">
               {signupHint}
-              <Link href={signupLink} passHref legacyBehavior>
+              <Link href={signupLink} passHref>
                 <a className="font-medium text-primary hover:underline">
                   {signupActionText}
                 </a>

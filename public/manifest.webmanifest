@@ -1,10 +1,10 @@
+
 {
   "name": "TiffinBox",
   "short_name": "TiffinBox",
-  "description": "Discover homemade meals from local cooks and tiffin services.",
+  "description": "Discover nearby home cooks and tiffin services. Browse menus, read reviews, and enjoy authentic homemade meals.",
   "start_url": "/",
   "display": "standalone",
-  "scope": "/",
   "background_color": "#F2E9DD",
   "theme_color": "#F27405",
   "icons": [
@@ -19,9 +19,9 @@
       "type": "image/png"
     },
     {
-      "src": "/icons/apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png"
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
     }
   ]
 }
