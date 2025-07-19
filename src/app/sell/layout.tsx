@@ -13,6 +13,7 @@ import {
   User,
   ExternalLink,
   Menu,
+  Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -95,6 +96,11 @@ export default function SellerLayout({
       href: "/sell/earnings",
       label: "Earnings",
       icon: DollarSign,
+    },
+     {
+      href: "/profile",
+      label: "My Profile",
+      icon: User,
     },
   ];
 
@@ -212,6 +218,10 @@ export default function SellerLayout({
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>{userName || "My Account"}</DropdownMenuLabel>
               <DropdownMenuSeparator />
+               <DropdownMenuItem onClick={() => router.push("/profile")}>
+                <Settings className="mr-2 h-4 w-4" />
+                Profile Settings
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => router.push("/")}>
                  <ExternalLink className="mr-2 h-4 w-4" />
                 View Site

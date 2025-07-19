@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { List, PlusCircle, CheckCircle, XCircle } from "lucide-react";
+import { List, PlusCircle, CheckCircle, XCircle, Edit, Trash2 } from "lucide-react";
 import SectionTitle from "@/components/shared/SectionTitle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +11,17 @@ import type { Dish } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 export default function SellDashboardPage() {
   const { toast } = useToast();
@@ -73,6 +84,31 @@ export default function SellDashboardPage() {
     }
   }, [router, fetchListings]);
 
+  const handleDelete = async (listingId: string) => {
+    const token = localStorage.getItem('token');
+    try {
+        const response = await fetch(`/api/listings/${listingId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` },
+        });
+
+        if (response.ok) {
+            toast({ title: "Dish Deleted", description: "The dish has been removed from your menu." });
+            // Refresh the list after deletion
+            fetchListings(); 
+        } else {
+            const errorData = await response.json();
+            throw new Error(errorData.error || "Failed to delete the dish.");
+        }
+    } catch (error) {
+        toast({
+            variant: "destructive",
+            title: "Deletion Failed",
+            description: (error as Error).message,
+        });
+    }
+  };
+
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
        <SectionTitle 
@@ -97,14 +133,14 @@ export default function SellDashboardPage() {
             </CardHeader>
             <CardContent>
               {isListingsLoading ? (
-                  <div className="space-y-3">
-                      {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-8 w-full" />)}
+                  <div className="space-y-4">
+                      {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}
                   </div>
               ) : listings.length > 0 ? (
-                  <ul className="space-y-3 text-sm">
+                  <ul className="divide-y divide-border">
                       {listings.map((listing) => (
-                          <li key={listing.id} className="flex justify-between items-center border-b pb-2 last:border-b-0">
-                              <div>
+                          <li key={listing.id} className="flex justify-between items-center py-3">
+                              <div className="flex-1">
                                 <span className="font-medium text-foreground">{listing.title}</span>
                                 <div className="flex items-center text-xs text-muted-foreground">
                                     {listing.available ? (
@@ -115,7 +151,38 @@ export default function SellDashboardPage() {
                                     {listing.available ? 'Available' : 'Unavailable'}
                                 </div>
                               </div>
-                              <span className="font-mono text-foreground">${listing.price.toFixed(2)}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono text-foreground mr-4">${listing.price.toFixed(2)}</span>
+                                <Button variant="outline" size="icon" asChild>
+                                  <Link href={`/sell/edit/${listing.id}`}>
+                                    <Edit className="h-4 w-4" />
+                                    <span className="sr-only">Edit</span>
+                                  </Link>
+                                </Button>
+                                <AlertDialog>
+                                  <AlertDialogTrigger asChild>
+                                    <Button variant="destructive" size="icon">
+                                      <Trash2 className="h-4 w-4" />
+                                      <span className="sr-only">Delete</span>
+                                    </Button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete the dish
+                                        "{listing.title}" from your menu.
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                      <AlertDialogAction onClick={() => handleDelete(listing.id)}>
+                                        Delete
+                                      </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
+                              </div>
                           </li>
                       ))}
                   </ul>

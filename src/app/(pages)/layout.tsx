@@ -12,7 +12,8 @@ import {
   User,
   ExternalLink,
   ShoppingBag,
-  Menu
+  Menu,
+  Settings
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -57,7 +58,7 @@ export default function UserAccountLayout({
     const role = localStorage.getItem("userRole");
 
     // Define routes that require authentication
-    const protectedRoutes = ['/dashboard', '/orders', '/promotions', '/vendors'];
+    const protectedRoutes = ['/dashboard', '/orders', '/promotions', '/vendors', '/profile'];
 
     // If the current path is one of the protected routes, check for authentication
     if (protectedRoutes.some(path => pathname.startsWith(path))) {
@@ -92,6 +93,11 @@ export default function UserAccountLayout({
       href: "/promotions",
       label: "Promotions",
       icon: TicketPercent,
+    },
+     {
+      href: "/profile",
+      label: "My Profile",
+      icon: User,
     },
   ];
 
@@ -209,6 +215,10 @@ export default function UserAccountLayout({
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>{userName || "My Account"}</DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => router.push("/profile")}>
+                <Settings className="mr-2 h-4 w-4" />
+                Profile Settings
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => router.push("/")}>
                  <ExternalLink className="mr-2 h-4 w-4" />
                 View Site
