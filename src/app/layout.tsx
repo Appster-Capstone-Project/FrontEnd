@@ -49,7 +49,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
         
         {/* --- iOS Splash Screen --- */}
-        <link rel="apple-touch-startup-image" href="/icons/icon.svg" />
+        <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" />
 
       </head>
       <body className="font-body antialiased">
