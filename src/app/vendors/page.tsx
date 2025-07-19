@@ -58,10 +58,10 @@ export default function VendorsPage() {
         // Show all dishes from home cooks and all tiffin service vendors
         items = [...allDishes, ...allVendors.filter(v => v.type === 'Tiffin Service')];
       } else if (activeCategory === 'Home Cook') {
-        // Show only dishes from home cooks
-        items = allDishes;
+        // Show all vendors who are Home Cooks
+        items = allVendors.filter(vendor => vendor.type === 'Home Cook');
       } else if (activeCategory === 'Tiffin Service') {
-        // Show only tiffin service vendors
+        // Show all vendors who are Tiffin Services
         items = allVendors.filter(vendor => vendor.type === 'Tiffin Service');
       }
       
@@ -75,14 +75,16 @@ export default function VendorsPage() {
         });
       }
 
-      // Sort combined list: dishes first, then tiffin services
-      items.sort((a, b) => {
-          const aIsDish = 'slotsTotal' in a;
-          const bIsDish = 'slotsTotal' in b;
-          if (aIsDish && !bIsDish) return -1;
-          if (!aIsDish && bIsDish) return 1;
-          return 0;
-      });
+      // Sort combined list for 'all' tab: dishes first, then tiffin services
+       if (activeCategory === 'all') {
+          items.sort((a, b) => {
+              const aIsDish = 'slotsTotal' in a;
+              const bIsDish = 'slotsTotal' in b;
+              if (aIsDish && !bIsDish) return -1;
+              if (!aIsDish && bIsDish) return 1;
+              return 0;
+          });
+       }
 
       setFilteredItems(items);
     }
@@ -94,14 +96,13 @@ export default function VendorsPage() {
   };
   
   return (
-    <div className="container py-12 md:py-16">
+    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
       <SectionTitle 
         title="Find Your Next Meal"
         subtitle="Browse our collection of talented home cooks and reliable tiffin services."
-        className="text-center"
       />
       
-      <div className="max-w-4xl mx-auto w-full space-y-4 mb-12">
+      <div className="max-w-4xl mx-auto w-full space-y-4">
         <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input 
@@ -125,13 +126,13 @@ export default function VendorsPage() {
             {[...Array(5)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
       ) : filteredItems.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="space-y-6">
           {filteredItems.map((item) => {
              if ('type' in item) { // It's a Vendor
                 return <VendorCard key={`vendor-${item.id}`} vendor={item} />
              } else { // It's a Dish
                 const vendor = allVendors.find(v => v.id === item.sellerId);
-                return <DishCard key={`dish-${item.id}`} dish={item} vendor={vendor} />
+                return <VendorCard key={`dish-${item.id}`} vendor={{...vendor!, menu: [item]}} />
              }
           })}
         </div>
@@ -147,15 +148,22 @@ export default function VendorsPage() {
 }
 
 const CardSkeleton = () => (
-    <Card>
-      <CardHeader className="p-0 relative">
-        <Skeleton className="w-full h-40" />
-      </CardHeader>
-      <CardContent className="p-4">
-        <Skeleton className="h-6 w-3/4 mb-1" />
-        <Skeleton className="h-4 w-full mb-2" />
-        <Skeleton className="h-4 w-1/2 mb-2" />
-        <Skeleton className="h-9 w-full mt-2" />
-      </CardContent>
+   <Card className="overflow-hidden">
+      <div className="flex flex-col md:flex-row">
+        <Skeleton className="h-48 w-full md:w-1/3" />
+        <div className="w-full md:w-2/3 p-6 flex flex-col">
+          <CardHeader className="p-0">
+            <Skeleton className="h-4 w-1/4 mb-2" />
+            <Skeleton className="h-8 w-3/4 mb-2" />
+          </CardHeader>
+          <CardContent className="p-0 flex-grow">
+            <Skeleton className="h-4 w-full mb-1" />
+            <Skeleton className="h-4 w-5/6 mb-4" />
+          </CardContent>
+          <div className="p-0 pt-4">
+            <Skeleton className="h-10 w-40" />
+          </div>
+        </div>
+      </div>
     </Card>
 );
