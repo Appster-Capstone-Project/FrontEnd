@@ -16,9 +16,12 @@ import { mockVendors, mockDishes } from "@/lib/data";
 
 const categories = [
   { name: 'All', value: 'all' as const },
+  { name: 'Dishes', value: 'dishes' as const },
   { name: 'Home Cooks', value: 'Home Cook' as const },
   { name: 'Tiffin Services', value: 'Tiffin Service' as const },
 ];
+
+type ActiveCategory = Vendor['type'] | 'all' | 'dishes';
 
 export default function VendorsPage() {
   const router = useRouter();
@@ -26,7 +29,7 @@ export default function VendorsPage() {
   const [allDishes, setAllDishes] = useState<Dish[]>([]);
   const [filteredItems, setFilteredItems] = useState<(Vendor | Dish)[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState<Vendor['type'] | 'all'>('all');
+  const [activeCategory, setActiveCategory] = useState<ActiveCategory>('all');
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -38,7 +41,6 @@ export default function VendorsPage() {
 
     const fetchData = () => {
       setIsLoading(true);
-      // Simulate API call
       setTimeout(() => {
         const sortedDishes = mockDishes.sort((a, b) => new Date(b.cookingDate).getTime() - new Date(a.cookingDate).getTime());
         setAllVendors(mockVendors);
@@ -57,6 +59,9 @@ export default function VendorsPage() {
       if (activeCategory === 'all') {
         // Show all dishes from home cooks and all tiffin service vendors
         items = [...allDishes, ...allVendors.filter(v => v.type === 'Tiffin Service')];
+      } else if (activeCategory === 'dishes') {
+        // Show only dishes from home cooks
+        items = allDishes;
       } else if (activeCategory === 'Home Cook') {
         // Show all vendors who are Home Cooks
         items = allVendors.filter(vendor => vendor.type === 'Home Cook');
@@ -91,7 +96,7 @@ export default function VendorsPage() {
     filterItems();
   }, [searchTerm, activeCategory, allVendors, allDishes]);
 
-  const handleCategoryChange = (category: Vendor['type'] | 'all') => {
+  const handleCategoryChange = (category: ActiveCategory) => {
     setActiveCategory(category);
   };
   
@@ -116,7 +121,7 @@ export default function VendorsPage() {
          <CategoryTabs 
             categories={categories}
             activeCategory={activeCategory}
-            onCategoryChange={handleCategoryChange}
+            onCategoryChange={handleCategoryChange as (c: any) => void}
         />
       </div>
       </div>
@@ -126,13 +131,13 @@ export default function VendorsPage() {
             {[...Array(5)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
       ) : filteredItems.length > 0 ? (
-        <div className="space-y-6">
+        <div className={activeCategory === 'dishes' ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" : "space-y-6"}>
           {filteredItems.map((item) => {
              if ('type' in item) { // It's a Vendor
                 return <VendorCard key={`vendor-${item.id}`} vendor={item} />
              } else { // It's a Dish
                 const vendor = allVendors.find(v => v.id === item.sellerId);
-                return <VendorCard key={`dish-${item.id}`} vendor={{...vendor!, menu: [item]}} />
+                return <DishCard key={`dish-${item.id}`} dish={item} vendor={vendor} />
              }
           })}
         </div>
