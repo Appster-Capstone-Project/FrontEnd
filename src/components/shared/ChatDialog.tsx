@@ -19,68 +19,130 @@ import { ScrollArea } from '../ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { getVendorById } from '@/lib/data';
+import WebSocket from 'isomorphic-ws';
 
 interface ChatDialogProps {
   children: React.ReactNode;
   order: Order;
 }
 
+// Mock WebSocket server for demonstration
+const createMockWebSocket = (initialMessages: Message[], onMessage: (msg: Message) => void) => {
+    let mockSocket: { onmessage: (event: any) => void; send: (data: string) => void; close: () => void; };
+    
+    // Simulate the other person replying
+    const simulateReply = (sentMessage: Message) => {
+        if (sentMessage.sender === 'buyer') {
+            setTimeout(() => {
+                const reply: Message = {
+                    id: `msg-${Date.now() + 1}`,
+                    sender: 'seller',
+                    text: `Thanks for your message about order #${order.id.slice(-6)}. We're looking into it.`,
+                    timestamp: new Date().toISOString(),
+                };
+                if (mockSocket && mockSocket.onmessage) {
+                    mockSocket.onmessage({ data: JSON.stringify(reply) });
+                }
+            }, 1500);
+        }
+    };
+    
+    mockSocket = {
+        onmessage: (event: any) => {},
+        send: (data: string) => {
+            const message: Message = JSON.parse(data);
+            // "Send" the message back to the client immediately for display
+             if (mockSocket.onmessage) {
+                mockSocket.onmessage({ data: JSON.stringify(message) });
+             }
+            // Then simulate a reply from the other party
+            simulateReply(message);
+        },
+        close: () => { console.log("Mock WebSocket closed."); }
+    };
+
+    return mockSocket as WebSocket;
+};
+
 export const ChatDialog: React.FC<ChatDialogProps> = ({ children, order }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>(order.messages || []);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [currentUserRole, setCurrentUserRole] = useState<'buyer' | 'seller' | null>(null);
-
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
   
-  const scrollToBottom = () => {
-    setTimeout(() => {
-        const scrollViewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
-        if (scrollViewport) {
-            scrollViewport.scrollTop = scrollViewport.scrollHeight;
-        }
-    }, 0);
-  };
+  const ws = useRef<WebSocket | null>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Determine the current user's role to style the chat bubbles correctly
+    // Determine the current user's role
     const role = localStorage.getItem('userRole');
-    if (role === 'seller') {
-      setCurrentUserRole('seller');
-    } else {
-      setCurrentUserRole('buyer');
-    }
+    setCurrentUserRole(role === 'seller' ? 'seller' : 'buyer');
 
     if (isOpen) {
-      scrollToBottom();
+        // --- REAL-WORLD SCENARIO ---
+        // 1. Fetch initial chat history via REST API
+        // For demo, we just use the mock data from the order prop
+        setMessages(order.messages || []);
+
+        // --- MOCK WEBSOCKET ---
+        // 2. Establish WebSocket connection
+        const mockSocket = createMockWebSocket(order.messages || [], (newMessage) => {
+             setMessages(prev => [...prev, newMessage]);
+        });
+        
+        // This is where you'd connect to your real WebSocket server
+        // ws.current = new WebSocket('ws://your-backend-api.com/chat');
+        ws.current = mockSocket;
+
+        ws.current.onopen = () => {
+            console.log("WebSocket connected");
+            // 3. Authenticate and join room
+            const token = localStorage.getItem('token');
+            ws.current?.send(JSON.stringify({ type: 'auth', token }));
+            ws.current?.send(JSON.stringify({ type: 'join', orderId: order.id }));
+        };
+
+        ws.current.onmessage = (event) => {
+            const message = JSON.parse(event.data as string);
+            setMessages(prev => [...prev, message]);
+        };
+
+        ws.current.onclose = () => {
+            console.log("WebSocket disconnected");
+        };
+
+        return () => {
+            ws.current?.close();
+        };
+
+    } else {
+        setMessages([]);
     }
-  }, [messages, isOpen]);
+  }, [isOpen, order.id, order.messages]);
+  
+  useEffect(() => {
+      // Scroll to bottom whenever messages change
+      const scrollViewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollViewport) {
+          scrollViewport.scrollTop = scrollViewport.scrollHeight;
+      }
+  }, [messages]);
+
 
   const seller = getVendorById(order.items[0]?.sellerId || '');
 
   const handleSendMessage = () => {
-    if (newMessage.trim() && currentUserRole) {
+    if (newMessage.trim() && currentUserRole && ws.current) {
       const msg: Message = {
         id: `msg-${Date.now()}`,
         sender: currentUserRole,
         text: newMessage,
         timestamp: new Date().toISOString(),
       };
-      setMessages(prev => [...prev, msg]);
+      
+      // Send message through WebSocket
+      ws.current.send(JSON.stringify(msg));
       setNewMessage('');
-
-      // Simulate a reply if the buyer sends a message
-      if (currentUserRole === 'buyer') {
-          setTimeout(() => {
-            const reply: Message = {
-                id: `msg-${Date.now() + 1}`,
-                sender: 'seller',
-                text: "Thanks for your message! We'll get back to you shortly.",
-                timestamp: new Date().toISOString(),
-            };
-            setMessages(prev => [...prev, reply]);
-          }, 1500);
-      }
     }
   };
 
