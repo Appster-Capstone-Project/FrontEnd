@@ -62,8 +62,8 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
       <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/3 relative">
-            <Link href={`/vendors/${dish.sellerId}`} passHref legacyBehavior>
-              <a className="block">
+            <Link href={`/vendors/${dish.sellerId}`} asChild>
+              <div className="block cursor-pointer">
                 <Image
                   src={dish.imageUrl || 'https://placehold.co/400x300.png'}
                   alt={dish.title}
@@ -72,13 +72,13 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
                   className="w-full h-48 md:h-full object-cover"
                   data-ai-hint={dish.dataAiHint || 'food dish'}
                 />
-              </a>
+              </div>
             </Link>
           </div>
           <div className="md:w-2/3 flex flex-col">
             <CardContent className="p-6 flex-grow">
               <CardTitle className="font-headline text-2xl mb-2 line-clamp-2 leading-tight hover:text-primary transition-colors">
-                <Link href={`/vendors/${dish.sellerId}`} passHref legacyBehavior><a>{dish.title}</a></Link>
+                <Link href={`/vendors/${dish.sellerId}`}>{dish.title}</Link>
               </CardTitle>
               {vendor && (
                 <div className="flex items-center gap-2 mb-3">
@@ -86,8 +86,8 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
                       <AvatarImage src={vendor.profileImageUrl} alt={vendor.name} />
                       <AvatarFallback>{vendor.name.substring(0, 1)}</AvatarFallback>
                     </Avatar>
-                    <Link href={`/vendors/${vendor.id}`} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors" passHref legacyBehavior>
-                      <a>By {vendor.name}</a>
+                    <Link href={`/vendors/${vendor.id}`} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+                      By {vendor.name}
                     </Link>
                 </div>
               )}
@@ -128,8 +128,8 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
   return (
     <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col h-full bg-card">
       <CardHeader className="p-0 relative">
-        <Link href={`/vendors/${dish.sellerId}`} className="block" passHref legacyBehavior>
-            <a>
+        <Link href={`/vendors/${dish.sellerId}`} asChild>
+            <div className="block cursor-pointer">
               <Image
                 src={dish.imageUrl || 'https://placehold.co/300x200.png'}
                 alt={dish.title}
@@ -138,7 +138,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
                 className="w-full h-40 object-cover"
                 data-ai-hint={dish.dataAiHint || 'food dish'}
               />
-            </a>
+            </div>
         </Link>
          <Badge 
             variant={isSoldOut ? "destructive" : "default"} 
@@ -150,7 +150,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
       
       <CardContent className="p-4 flex-grow">
         <CardTitle className="font-headline text-2xl mb-2 line-clamp-2 leading-tight hover:text-primary transition-colors">
-          <Link href={`/vendors/${dish.sellerId}`} passHref legacyBehavior><a>{dish.title}</a></Link>
+          <Link href={`/vendors/${dish.sellerId}`}>{dish.title}</Link>
         </CardTitle>
         {vendor && (
           <div className="flex items-center gap-2 mb-3">
@@ -158,8 +158,8 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
                 <AvatarImage src={vendor.profileImageUrl} alt={vendor.name} />
                 <AvatarFallback>{vendor.name.substring(0, 1)}</AvatarFallback>
               </Avatar>
-              <Link href={`/vendors/${vendor.id}`} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors" passHref legacyBehavior>
-                <a>By {vendor.name}</a>
+              <Link href={`/vendors/${vendor.id}`} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+                By {vendor.name}
               </Link>
           </div>
         )}
