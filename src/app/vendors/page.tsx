@@ -7,7 +7,8 @@ import SectionTitle from "@/components/shared/SectionTitle";
 import VendorCard from "@/components/shared/VendorCard";
 import DishCard from "@/components/shared/DishCard";
 import type { Vendor, Dish } from "@/lib/types";
-import { Card, CardContent, CardHeader, Skeleton } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import CategoryTabs from "@/components/shared/CategoryTabs";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
@@ -111,7 +112,7 @@ export default function VendorsPage() {
       </div>
       
       {isLoading ? (
-        <div className="space-y-6">
+        <div className="space-y-6 max-w-4xl mx-auto">
             {[...Array(5)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
       ) : filteredItems.length > 0 ? (
