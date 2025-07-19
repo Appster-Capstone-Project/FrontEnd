@@ -730,6 +730,10 @@ video {
   margin-left: -0.25rem;
   margin-right: -0.25rem;
 }
+.mx-1 {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
 .mx-2 {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
@@ -753,10 +757,6 @@ video {
 .my-4 {
   margin-top: 1rem;
   margin-bottom: 1rem;
-}
-.mx-1 {
-  margin-left: 0.25rem;
-  margin-right: 0.25rem;
 }
 .mb-1 {
   margin-bottom: 0.25rem;
@@ -935,9 +935,6 @@ video {
 }
 .h-svh {
   height: 100svh;
-}
-.h-auto {
-  height: auto;
 }
 .max-h-96 {
   max-height: 24rem;
@@ -1355,14 +1352,14 @@ video {
 .rounded-md {
   border-radius: calc(var(--radius) - 2px);
 }
+.rounded-none {
+  border-radius: 0px;
+}
 .rounded-sm {
   border-radius: calc(var(--radius) - 4px);
 }
 .rounded-xl {
   border-radius: 0.75rem;
-}
-.rounded-none {
-  border-radius: 0px;
 }
 .rounded-t-lg {
   border-top-left-radius: var(--radius);
@@ -2947,10 +2944,6 @@ body {
 
 @media (min-width: 768px) {
 
-  .md\:mr-1 {
-    margin-right: 0.25rem;
-  }
-
   .md\:mr-2 {
     margin-right: 0.5rem;
   }
@@ -3053,12 +3046,17 @@ body {
     padding: 1rem;
   }
 
+  .md\:p-6 {
+    padding: 1.5rem;
+  }
+
   .md\:p-8 {
     padding: 2rem;
   }
 
-  .md\:p-6 {
-    padding: 1.5rem;
+  .md\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 
   .md\:py-0 {
@@ -3071,11 +3069,6 @@ body {
     padding-bottom: 3rem;
   }
 
-  .md\:py-16 {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-  }
-
   .md\:py-24 {
     padding-top: 6rem;
     padding-bottom: 6rem;
@@ -3084,11 +3077,6 @@ body {
   .md\:py-48 {
     padding-top: 12rem;
     padding-bottom: 12rem;
-  }
-
-  .md\:px-6 {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
   }
 
   .md\:pt-0 {

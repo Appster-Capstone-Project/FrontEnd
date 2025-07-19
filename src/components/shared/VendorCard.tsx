@@ -22,7 +22,12 @@ const TimeAgo: React.FC<TimeAgoProps> = ({ date }) => {
   useEffect(() => {
     // This runs only on the client, after hydration, preventing a mismatch
     if (date) {
-      setTimeAgo(formatDistanceToNow(new Date(date), { addSuffix: true }));
+      try {
+        setTimeAgo(formatDistanceToNow(new Date(date), { addSuffix: true }));
+      } catch (e) {
+        console.error("Invalid date for TimeAgo", date);
+        setTimeAgo('just now');
+      }
     }
   }, [date]);
 
@@ -81,17 +86,17 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             </h3>
             <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{vendor.description}</p>
             
-            <div className="space-y-1 text-sm text-muted-foreground">
+            <div className="space-y-1 text-sm">
+               <p className="flex items-center text-muted-foreground">
+                <MapPin className="h-4 w-4 mr-2 text-accent" />
+                <span>{vendor.city}</span>
+              </p>
               {vendor.specialty && 
-                <p className="text-accent font-medium flex items-center">
-                  <Utensils className="h-4 w-4 mr-2" />
+                <p className="flex items-center text-muted-foreground">
+                  <Utensils className="h-4 w-4 mr-2 text-accent" />
                   <span>Specialty: {vendor.specialty}</span>
                 </p>
               }
-              <p className="flex items-center">
-                <MapPin className="h-4 w-4 mr-2" />
-                <span>{vendor.city}</span>
-              </p>
             </div>
           </CardContent>
           <div className="p-6 pt-0">

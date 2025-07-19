@@ -7,7 +7,7 @@ import type { Dish, Vendor } from '@/lib/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart, Users, Calendar, Clock } from 'lucide-react';
+import { ShoppingCart, Users, Calendar, MapPin } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Progress } from '@/components/ui/progress';
 import { format } from 'date-fns';
@@ -79,14 +79,18 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
                 <Link href={`/vendors/${dish.sellerId}`}>{dish.title}</Link>
               </CardTitle>
               {vendor && (
-                <div className="flex items-center gap-2 mb-3">
-                    <Avatar className="h-6 w-6">
-                      <AvatarImage src={vendor.profileImageUrl} alt={vendor.name} />
-                      <AvatarFallback>{vendor.name.substring(0, 1)}</AvatarFallback>
-                    </Avatar>
-                    <Link href={`/vendors/${vendor.id}`} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-                      By {vendor.name}
+                <div className="flex items-center gap-4 mb-3 text-sm">
+                    <Link href={`/vendors/${vendor.id}`} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                      <Avatar className="h-6 w-6">
+                        <AvatarImage src={vendor.profileImageUrl} alt={vendor.name} />
+                        <AvatarFallback>{vendor.name.substring(0, 1)}</AvatarFallback>
+                      </Avatar>
+                      <span>By {vendor.name}</span>
                     </Link>
+                    <div className="flex items-center text-muted-foreground">
+                        <MapPin className="h-4 w-4 mr-1 text-accent" />
+                        <span>{vendor.city}</span>
+                    </div>
                 </div>
               )}
               <div className="flex items-center text-sm text-muted-foreground mb-4">
@@ -145,7 +149,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
       </CardHeader>
       
       <CardContent className="p-4 flex-grow">
-        <CardTitle className="font-headline text-2xl mb-2 line-clamp-2 leading-tight hover:text-primary transition-colors">
+        <CardTitle className="font-headline text-lg mb-2 line-clamp-2 leading-tight hover:text-primary transition-colors">
           <Link href={`/vendors/${dish.sellerId}`}>{dish.title}</Link>
         </CardTitle>
         {vendor && (
@@ -159,9 +163,17 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor, layout = 'vertical' }
               </Link>
           </div>
         )}
-        <div className="flex items-center text-sm text-muted-foreground mb-4">
-            <Calendar className="h-4 w-4 mr-2 text-accent" />
-            <span>Ready {cookingDay} by {readyByTime}</span>
+        <div className="space-y-2 text-sm text-muted-foreground mb-4">
+            <div className="flex items-center">
+                <Calendar className="h-4 w-4 mr-2 text-accent" />
+                <span>Ready {cookingDay} by {readyByTime}</span>
+            </div>
+            {vendor && (
+                 <div className="flex items-center">
+                    <MapPin className="h-4 w-4 mr-2 text-accent" />
+                    <span>{vendor.city}</span>
+                </div>
+            )}
         </div>
         
         <div>
