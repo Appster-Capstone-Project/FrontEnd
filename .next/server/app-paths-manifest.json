@@ -1,8 +1,8 @@
 {
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/page": "app/page.js",
   "/install/page": "app/install/page.js",
-  "/(pages)/welcome/page": "app/(pages)/welcome/page.js",
-  "/(pages)/dashboard/page": "app/(pages)/dashboard/page.js"
+  "/auth/signin/page": "app/auth/signin/page.js",
+  "/page": "app/page.js",
+  "/sell/page": "app/sell/page.js",
+  "/sell/add/page": "app/sell/add/page.js",
+  "/(pages)/welcome/page": "app/(pages)/welcome/page.js"
 }
