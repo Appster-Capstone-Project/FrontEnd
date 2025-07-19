@@ -73,6 +73,13 @@ export interface Buyer {
   imageUrl?: string;
 }
 
+export interface Message {
+  id: string;
+  sender: 'buyer' | 'seller';
+  text: string;
+  timestamp: string; // ISO Date String
+}
+
 export interface Order {
   id: string;
   date: string; // ISO date string
@@ -82,4 +89,5 @@ export interface Order {
   status: 'Pending' | 'Confirmed' | 'Delivered' | 'Declined';
   items: CartItem[];
   comments?: string;
+  messages?: Message[];
 }

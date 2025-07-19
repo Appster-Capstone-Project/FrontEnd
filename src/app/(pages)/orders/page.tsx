@@ -2,14 +2,16 @@
 "use client";
 
 import SectionTitle from '@/components/shared/SectionTitle';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { PackageSearch } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { MessageSquare, PackageSearch } from 'lucide-react';
 import { mockOrders } from '@/lib/data';
 import type { Order, CartItem } from '@/lib/types';
 import { format } from 'date-fns';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import React from 'react';
+import { Button } from '@/components/ui/button';
+import { ChatDialog } from '@/components/shared/ChatDialog';
 
 interface OrderItemProps {
   item: CartItem;
@@ -84,6 +86,16 @@ export default function OrdersPage() {
                     <p>${order.total.toFixed(2)}</p>
                 </div>
               </CardContent>
+              {(order.status === 'Confirmed' || order.status === 'Delivered') && (
+                  <CardFooter className="justify-end">
+                      <ChatDialog order={order}>
+                         <Button variant="outline">
+                            <MessageSquare className="mr-2 h-4 w-4" />
+                            Contact Seller
+                         </Button>
+                      </ChatDialog>
+                  </CardFooter>
+              )}
             </Card>
           ))}
         </div>

@@ -7,12 +7,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check, X, Clock, Package, ListOrdered } from 'lucide-react';
+import { Check, X, Clock, Package, ListOrdered, MessageSquare, Send } from 'lucide-react';
 import { mockOrders } from '@/lib/data';
 import type { Order } from '@/lib/types';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
+import { BroadcastDialog } from '@/components/shared/BroadcastDialog';
 
 const OrderCard: React.FC<{ order: Order; onStatusChange: (id: string, status: Order['status']) => void }> = ({ order, onStatusChange }) => {
   const { toast } = useToast();
@@ -73,16 +74,23 @@ const OrderCard: React.FC<{ order: Order; onStatusChange: (id: string, status: O
           </div>
         )}
       </CardContent>
-      {order.status === 'Pending' && (
-         <CardFooter className="flex justify-end gap-2">
-            <Button variant="destructive" size="sm" onClick={() => handleStatusChange('Declined')}>
-                <X className="mr-2 h-4 w-4" /> Decline
+      <CardFooter className="flex justify-end gap-2">
+        {order.status === 'Pending' && (
+            <>
+                <Button variant="destructive" size="sm" onClick={() => handleStatusChange('Declined')}>
+                    <X className="mr-2 h-4 w-4" /> Decline
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => handleStatusChange('Confirmed')}>
+                    <Check className="mr-2 h-4 w-4" /> Confirm
+                </Button>
+            </>
+        )}
+        {order.status === 'Confirmed' && (
+             <Button variant="ghost" size="sm" className="text-muted-foreground" disabled>
+                <MessageSquare className="mr-2 h-4 w-4" /> Message Buyer (Soon)
             </Button>
-            <Button variant="outline" size="sm" onClick={() => handleStatusChange('Confirmed')}>
-                <Check className="mr-2 h-4 w-4" /> Confirm
-            </Button>
-        </CardFooter>
-      )}
+        )}
+      </CardFooter>
     </Card>
   )
 }
@@ -113,6 +121,7 @@ const OrderSkeleton = () => (
 export default function SellerOrdersPage() {
     const [orders, setOrders] = React.useState<Order[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
+    const { toast } = useToast();
 
     React.useEffect(() => {
         // Simulate fetching orders for the logged-in seller
@@ -133,12 +142,27 @@ export default function SellerOrdersPage() {
         );
     };
 
+    const handleBroadcast = (message: string) => {
+        toast({
+            title: "Broadcast Sent!",
+            description: `Your message has been sent to all relevant buyers.`,
+        });
+    }
+
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-      <SectionTitle
-        title="Incoming Orders"
-        subtitle="Review and manage your new meal requests."
-      />
+      <div className="flex items-center justify-between">
+        <SectionTitle
+            title="Incoming Orders"
+            subtitle="Review and manage your new meal requests."
+        />
+        <BroadcastDialog onBroadcast={handleBroadcast}>
+            <Button>
+                <Send className="mr-2 h-4 w-4" /> Broadcast to Buyers
+            </Button>
+        </BroadcastDialog>
+      </div>
+
       {isLoading ? (
         <div className="max-w-4xl mx-auto w-full space-y-4">
             <OrderSkeleton />
@@ -162,3 +186,4 @@ export default function SellerOrdersPage() {
     </div>
   );
 }
+
