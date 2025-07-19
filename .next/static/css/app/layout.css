@@ -3070,6 +3070,11 @@ body {
     padding-bottom: 12rem;
   }
 
+  .md\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
   .md\:pt-0 {
     padding-top: 0px;
   }

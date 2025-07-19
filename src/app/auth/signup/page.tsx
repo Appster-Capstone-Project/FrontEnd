@@ -146,11 +146,9 @@ function SignUpCard() {
           <p className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link href={signInLink} passHref legacyBehavior>
-              <Button asChild variant="link" className="p-0 h-auto">
-                <a className="font-medium text-primary hover:underline">
-                  Sign In
-                </a>
-              </Button>
+              <a className="font-medium text-primary hover:underline">
+                Sign In
+              </a>
             </Link>
           </p>
         </CardFooter>

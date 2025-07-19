@@ -65,7 +65,7 @@ export default function ProfilePage() {
     }
 
     return (
-        <div className="container py-8 md:py-12">
+        <div className="container py-8 md:py-12 px-4 md:px-6">
             <SectionTitle
                 title="My Profile"
                 subtitle="View and manage your account details."
@@ -116,7 +116,7 @@ export default function ProfilePage() {
 }
 
 const ProfileSkeleton = () => (
-    <div className="container py-8 md:py-12">
+    <div className="container py-8 md:py-12 px-4 md:px-6">
         <div className="mb-8">
             <Skeleton className="h-10 w-48" />
             <Skeleton className="h-6 w-64 mt-2" />

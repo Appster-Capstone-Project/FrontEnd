@@ -93,11 +93,13 @@ export default function SellDashboardPage() {
                     A list of all the dishes you are currently offering.
                 </CardDescription>
               </div>
-              <Button asChild>
-                <Link href="/sell/add">
-                  <PlusCircle className="mr-2 h-4 w-4" /> Add New Dish
-                </Link>
-              </Button>
+              <Link href="/sell/add" passHref legacyBehavior>
+                <Button asChild>
+                  <a>
+                    <PlusCircle className="mr-2 h-4 w-4" /> Add New Dish
+                  </a>
+                </Button>
+              </Link>
             </CardHeader>
             <CardContent>
               {isListingsLoading ? (
@@ -130,7 +132,7 @@ export default function SellDashboardPage() {
                                         <span className="sr-only">Broadcast to buyers</span>
                                     </Button>
                                 </BroadcastDialog>
-                                <Link href={`/sell/edit/${listing.id}`} passHref>
+                                <Link href={`/sell/edit/${listing.id}`} passHref legacyBehavior>
                                   <Button asChild variant="outline" size="icon">
                                     <a>
                                       <Edit className="h-4 w-4" />
@@ -169,11 +171,13 @@ export default function SellDashboardPage() {
                 <div className="text-center py-12">
                   <h3 className="text-xl font-semibold">Your menu is empty</h3>
                   <p className="text-muted-foreground mt-2 mb-4">You haven't added any dishes yet. Let's add the first one!</p>
-                  <Button asChild>
-                    <Link href="/sell/add">
-                      <PlusCircle className="mr-2 h-4 w-4" /> Add Your First Dish
-                    </Link>
-                  </Button>
+                  <Link href="/sell/add" passHref legacyBehavior>
+                    <Button asChild>
+                      <a>
+                        <PlusCircle className="mr-2 h-4 w-4" /> Add Your First Dish
+                      </a>
+                    </Button>
+                  </Link>
                 </div>
               )}
             </CardContent>

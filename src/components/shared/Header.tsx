@@ -92,16 +92,20 @@ const Header = () => {
 
   const authLinks = (
     <div className="flex flex-col space-y-3 pt-4 border-t">
-       <Link href="/auth/signin?type=seller" asChild>
-        <Button variant="ghost">
+       <Link href="/auth/signin?type=seller" passHref legacyBehavior>
+        <Button asChild variant="ghost">
+          <a>
             <ChefHat className="mr-2 h-4 w-4" />
             <span>Become/Sign In as Seller</span>
+          </a>
         </Button>
        </Link>
-       <Link href="/auth/signin" asChild>
-        <Button variant="outline">
+       <Link href="/auth/signin" passHref legacyBehavior>
+        <Button asChild variant="outline">
+          <a>
             <UserCircle className="mr-2 h-4 w-4" />
             <span>Login / Sign Up</span>
+          </a>
         </Button>
        </Link>
     </div>
@@ -120,29 +124,37 @@ const Header = () => {
         <DropdownMenuSeparator />
         {userRole === 'seller' ? (
            <DropdownMenuItem asChild>
-             <Link href="/sell">
-               <ChefHat className="mr-2 h-4 w-4" />
-               <span>Seller Dashboard</span>
+             <Link href="/sell" passHref legacyBehavior>
+                <a>
+                  <ChefHat className="mr-2 h-4 w-4" />
+                  <span>Seller Dashboard</span>
+                </a>
              </Link>
            </DropdownMenuItem>
         ) : (
           <>
           <DropdownMenuItem asChild>
-             <Link href="/dashboard">
-               <LayoutDashboard className="mr-2 h-4 w-4" />
-               <span>Dashboard</span>
+             <Link href="/dashboard" passHref legacyBehavior>
+                <a>
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  <span>Dashboard</span>
+                </a>
              </Link>
           </DropdownMenuItem>
            <DropdownMenuItem asChild>
-            <Link href="/orders">
-              <ListOrdered className="mr-2 h-4 w-4" />
-              <span>My Orders</span>
+            <Link href="/orders" passHref legacyBehavior>
+              <a>
+                <ListOrdered className="mr-2 h-4 w-4" />
+                <span>My Orders</span>
+              </a>
             </Link>
           </DropdownMenuItem>
            <DropdownMenuItem asChild>
-             <Link href="/profile">
-               <UserCircle className="mr-2 h-4 w-4" />
-               <span>My Profile</span>
+             <Link href="/profile" passHref legacyBehavior>
+                <a>
+                  <UserCircle className="mr-2 h-4 w-4" />
+                  <span>My Profile</span>
+                </a>
              </Link>
            </DropdownMenuItem>
           </>
@@ -159,20 +171,24 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
-        <Link href="/" className="flex items-center space-x-2">
-          <div className="relative flex items-center justify-center">
-            <Package className="h-7 w-7 text-primary" />
-            <Heart className="absolute top-0 right-0 h-3.5 w-3.5 text-accent fill-accent transform translate-x-1/4 -translate-y-1/4" />
-          </div>
-          <span className="font-headline text-2xl font-bold text-foreground">TiffinBox</span>
+        <Link href="/" className="flex items-center space-x-2" passHref legacyBehavior>
+          <a>
+            <div className="relative flex items-center justify-center">
+              <Package className="h-7 w-7 text-primary" />
+              <Heart className="absolute top-0 right-0 h-3.5 w-3.5 text-accent fill-accent transform translate-x-1/4 -translate-y-1/4" />
+            </div>
+            <span className="font-headline text-2xl font-bold text-foreground">TiffinBox</span>
+          </a>
         </Link>
         
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center space-x-2 md:space-x-4">
-          <Link href="/dashboard" asChild>
-            <Button variant="ghost">
-              <Search className="h-4 w-4 md:mr-2" />
-              <span className="hidden md:inline">Browse Food</span>
+          <Link href="/dashboard" passHref legacyBehavior>
+            <Button asChild variant="ghost">
+              <a>
+                <Search className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:inline">Browse Food</span>
+              </a>
             </Button>
           </Link>
 
@@ -180,16 +196,20 @@ const Header = () => {
               <Skeleton className="h-9 w-24 rounded-md" />
           ) : isLoggedIn ? <UserMenu /> : (
              <>
-              <Link href="/auth/signin?type=seller" asChild>
-                <Button variant="ghost">
-                  <ChefHat className="h-4 w-4 md:mr-2" />
-                  <span className="hidden md:inline">Become a Seller</span>
+              <Link href="/auth/signin?type=seller" passHref legacyBehavior>
+                <Button asChild variant="ghost">
+                  <a>
+                    <ChefHat className="h-4 w-4 md:mr-2" />
+                    <span className="hidden md:inline">Become a Seller</span>
+                  </a>
                 </Button>
               </Link>
-              <Link href="/auth/signin" asChild>
-                <Button variant="outline" size="sm">
-                  <UserCircle className="h-4 w-4 mr-2" />
-                  <span>Login / Sign Up</span>
+              <Link href="/auth/signin" passHref legacyBehavior>
+                <Button asChild variant="outline" size="sm">
+                  <a>
+                    <UserCircle className="h-4 w-4 mr-2" />
+                    <span>Login / Sign Up</span>
+                  </a>
                 </Button>
               </Link>
             </>
@@ -229,8 +249,10 @@ const Header = () => {
               <SheetContent side="right" className="w-full max-w-xs flex flex-col p-4">
                 <nav className="flex-grow flex flex-col space-y-4 pt-8">
                   {visibleNavLinks.map(({ href, label, icon: Icon }) => (
-                     <Link key={href} href={href} className={cn("flex items-center text-lg font-medium text-foreground hover:text-primary p-2 rounded-md", pathname === href && "bg-muted")}>
-                       <Icon className="mr-3 h-5 w-5" /> {label}
+                     <Link key={href} href={href} className={cn("flex items-center text-lg font-medium text-foreground hover:text-primary p-2 rounded-md", pathname === href && "bg-muted")} passHref legacyBehavior>
+                       <a>
+                         <Icon className="mr-3 h-5 w-5" /> {label}
+                       </a>
                     </Link>
                   ))}
                 </nav>

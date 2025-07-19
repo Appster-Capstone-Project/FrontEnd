@@ -30,14 +30,18 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
     <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
       <div className="flex flex-col md:flex-row">
         <div className="md:w-1/3 relative">
-           <Image
-            src={vendor.imageUrl || 'https://placehold.co/400x300.png'}
-            alt={vendor.name}
-            width={400}
-            height={300}
-            className="w-full h-48 md:h-full object-cover"
-            data-ai-hint={vendor.dataAiHint || 'food vendor'}
-          />
+          <Link href={`/vendors/${vendor.id}`} passHref legacyBehavior>
+            <a>
+               <Image
+                src={vendor.imageUrl || 'https://placehold.co/400x300.png'}
+                alt={vendor.name}
+                width={400}
+                height={300}
+                className="w-full h-48 md:h-full object-cover"
+                data-ai-hint={vendor.dataAiHint || 'food vendor'}
+              />
+            </a>
+          </Link>
         </div>
         <div className="md:w-2/3 flex flex-col">
           <CardContent className="p-6 flex-grow">
@@ -57,8 +61,8 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
               <StarRating rating={vendor.rating} size={18} showText />
             </div>
             <h3 className="font-headline text-2xl font-bold mb-2 group">
-              <Link href={`/vendors/${vendor.id}`} className="hover:text-primary transition-colors">
-                {vendor.name}
+              <Link href={`/vendors/${vendor.id}`} className="hover:text-primary transition-colors" passHref legacyBehavior>
+                <a>{vendor.name}</a>
               </Link>
             </h3>
             <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{vendor.description}</p>
@@ -77,11 +81,13 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             </div>
           </CardContent>
           <div className="p-6 pt-0">
-             <Button asChild className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground">
-              <Link href={`/vendors/${vendor.id}`}>
-                View Menu & Reviews <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+            <Link href={`/vendors/${vendor.id}`} passHref legacyBehavior>
+               <Button asChild className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground">
+                <a>
+                  View Menu & Reviews <ArrowRight className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
