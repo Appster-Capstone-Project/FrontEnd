@@ -125,7 +125,7 @@ export default function VendorsPage() {
             {[...Array(5)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
       ) : filteredItems.length > 0 ? (
-        <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredItems.map((item) => {
              if ('type' in item) { // It's a Vendor
                 return <VendorCard key={`vendor-${item.id}`} vendor={item} />
@@ -147,22 +147,15 @@ export default function VendorsPage() {
 }
 
 const CardSkeleton = () => (
-    <Card className="overflow-hidden">
-      <div className="flex flex-col md:flex-row">
-        <Skeleton className="h-48 w-full md:w-1/3" />
-        <div className="w-full md:w-2/3 p-6 flex flex-col">
-          <CardHeader className="p-0">
-            <Skeleton className="h-4 w-1/4 mb-2" />
-            <Skeleton className="h-8 w-3/4 mb-2" />
-          </CardHeader>
-          <CardContent className="p-0 flex-grow">
-            <Skeleton className="h-4 w-full mb-1" />
-            <Skeleton className="h-4 w-5/6 mb-4" />
-          </CardContent>
-          <div className="p-0 pt-4">
-            <Skeleton className="h-10 w-40" />
-          </div>
-        </div>
-      </div>
+    <Card>
+      <CardHeader className="p-0 relative">
+        <Skeleton className="w-full h-40" />
+      </CardHeader>
+      <CardContent className="p-4">
+        <Skeleton className="h-6 w-3/4 mb-1" />
+        <Skeleton className="h-4 w-full mb-2" />
+        <Skeleton className="h-4 w-1/2 mb-2" />
+        <Skeleton className="h-9 w-full mt-2" />
+      </CardContent>
     </Card>
 );
