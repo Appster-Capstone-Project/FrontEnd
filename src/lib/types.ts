@@ -11,6 +11,7 @@ interface BaseMenuItem {
   imageUrl?: string;
   dataAiHint?: string;
   available: boolean;
+  postedAt?: string; // ISO date string for when the item was listed
 }
 
 // Specific type for a single, pre-orderable dish from a Home Cook

@@ -13,7 +13,7 @@ import ReviewCard from '@/components/shared/ReviewCard';
 import SectionTitle from '@/components/shared/SectionTitle';
 import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { getVendorById } from '@/lib/data'; 
+import { getVendorById, mockVendors } from '@/lib/data';
 
 async function submitReview(formData: FormData) {
   "use server";
@@ -134,7 +134,7 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {(vendor.menu as Dish[]).map((dish: Dish) => (
-                  <DishCard key={dish.id} dish={dish} />
+                  <DishCard key={dish.id} dish={dish} vendor={vendor} />
                 ))}
               </div>
             )
