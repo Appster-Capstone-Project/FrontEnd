@@ -95,11 +95,9 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             </div>
           </CardContent>
           <div className="p-6 pt-0">
-            <Link href={`/vendors/${vendor.id}`} passHref legacyBehavior>
-               <Button asChild className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground">
-                  <a>
+            <Link href={`/vendors/${vendor.id}`} asChild>
+               <Button className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground">
                     View Menu & Reviews <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
               </Button>
             </Link>
           </div>
@@ -110,6 +108,3 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
 };
 
 export default VendorCard;
-
-
-    
