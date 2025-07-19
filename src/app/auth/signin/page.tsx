@@ -131,7 +131,6 @@ function SignInCard() {
             {isLoading ? "Signing In..." : "Sign In"}
           </Button>
           <div className="w-full text-center text-sm text-muted-foreground">
-            <p>
               {signupHint}
               <Link
                 href={signupLink}
@@ -139,7 +138,6 @@ function SignInCard() {
               >
                 {signupActionText}
               </Link>
-            </p>
           </div>
         </CardFooter>
       </Card>

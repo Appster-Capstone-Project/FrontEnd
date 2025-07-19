@@ -188,7 +188,7 @@ const Header = () => {
               <Button variant="ghost" asChild>
                 <Link href="/auth/signin?type=seller">
                   <ChefHat className="h-4 w-4 md:mr-2" />
-                  <span className="hidden md:inline">Become/Sign In as Seller</span>
+                  <span className="hidden md:inline">Become a Seller</span>
                 </Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
