@@ -20,11 +20,11 @@ function AuthToggle({ isSellerView }: { isSellerView: boolean }) {
 
   return (
     <div className="flex w-full mb-4 rounded-t-lg overflow-hidden border-b">
-        <Link href="/auth/signup" passHref className={cn(baseClass, !isSellerView ? activeClass : inactiveClass, "rounded-none")}>
+        <Link href="/auth/signup" className={cn(baseClass, !isSellerView ? activeClass : inactiveClass, "rounded-none")}>
             <User className="h-4 w-4" />
             Customer
         </Link>
-        <Link href="/auth/signup?type=seller" passHref className={cn(baseClass, isSellerView ? activeClass : inactiveClass, "rounded-none")}>
+        <Link href="/auth/signup?type=seller" className={cn(baseClass, isSellerView ? activeClass : inactiveClass, "rounded-none")}>
             <Briefcase className="h-4 w-4" />
             Seller
         </Link>

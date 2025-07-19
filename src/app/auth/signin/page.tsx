@@ -28,11 +28,11 @@ function AuthToggle({ isSellerView }: { isSellerView: boolean }) {
 
   return (
     <div className="flex w-full mb-4 rounded-t-lg overflow-hidden border-b">
-      <Link href="/auth/signin" passHref className={cn(baseClass, !isSellerView ? activeClass : inactiveClass, "rounded-none")}>
+      <Link href="/auth/signin" className={cn(baseClass, !isSellerView ? activeClass : inactiveClass, "rounded-none")}>
         <User className="h-4 w-4" />
         Customer
       </Link>
-      <Link href="/auth/signin?type=seller" passHref className={cn(baseClass, isSellerView ? activeClass : inactiveClass, "rounded-none")}>
+      <Link href="/auth/signin?type=seller" className={cn(baseClass, isSellerView ? activeClass : inactiveClass, "rounded-none")}>
         <Briefcase className="h-4 w-4" />
         Seller
       </Link>
@@ -132,7 +132,7 @@ function SignInCard() {
           </Button>
           <div className="w-full text-center text-sm text-muted-foreground">
               {signupHint}
-              <Link href={signupLink} passHref>
+              <Link href={signupLink} passHref legacyBehavior>
                 <a className="font-medium text-primary hover:underline">
                   {signupActionText}
                 </a>
