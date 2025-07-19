@@ -81,8 +81,8 @@ export default function VendorsPage() {
   if (!isReady) {
     return (
       <div className="container py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
+        <div className="flex flex-col gap-8 max-w-4xl mx-auto">
+            {[...Array(3)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
       </div>
     );
@@ -96,7 +96,7 @@ export default function VendorsPage() {
         className="text-center"
       />
       
-      <div className="max-w-2xl mx-auto w-full space-y-4">
+      <div className="max-w-2xl mx-auto w-full space-y-4 mb-12">
         <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input 
@@ -116,11 +116,11 @@ export default function VendorsPage() {
       </div>
       
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
+        <div className="flex flex-col gap-8 max-w-4xl mx-auto">
+            {[...Array(3)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
       ) : filteredVendors.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="flex flex-col gap-8 max-w-4xl mx-auto">
           {filteredVendors.map((vendor) => (
             <VendorCard key={vendor.id} vendor={vendor} />
           ))}
@@ -137,11 +137,13 @@ export default function VendorsPage() {
 }
 
 const CardSkeleton = () => (
-  <div className="flex flex-col space-y-3">
-    <Skeleton className="h-[225px] w-full rounded-xl" />
-    <div className="space-y-2">
+  <div className="flex flex-col md:flex-row space-x-0 md:space-x-6 space-y-4 md:space-y-0">
+    <Skeleton className="h-[200px] w-full md:w-[250px] rounded-xl" />
+    <div className="space-y-3 flex-1">
+      <Skeleton className="h-6 w-2/5" />
       <Skeleton className="h-4 w-4/5" />
       <Skeleton className="h-4 w-3/5" />
+       <Skeleton className="h-10 w-1/3 mt-4" />
     </div>
   </div>
 );

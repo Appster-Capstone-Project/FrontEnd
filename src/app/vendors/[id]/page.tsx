@@ -3,7 +3,7 @@ import type { Vendor, Dish, Review } from '@/lib/types';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import StarRating from '@/components/shared/StarRating';
