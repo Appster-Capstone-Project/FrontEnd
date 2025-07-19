@@ -57,7 +57,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor }) => {
       </CardHeader>
       
       <CardContent className="p-4 flex-grow">
-        <CardTitle className="font-headline text-xl mb-2 line-clamp-2 leading-tight hover:text-primary transition-colors">
+        <CardTitle className="font-headline text-2xl mb-2 line-clamp-2 leading-tight hover:text-primary transition-colors">
           <Link href={`/vendors/${dish.sellerId}`}>{dish.title}</Link>
         </CardTitle>
         {vendor && (
@@ -66,7 +66,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, vendor }) => {
                 <AvatarImage src={vendor.profileImageUrl} alt={vendor.name} />
                 <AvatarFallback>{vendor.name.substring(0, 1)}</AvatarFallback>
               </Avatar>
-              <Link href={`/vendors/${vendor.id}`} className="text-xs font-medium text-muted-foreground hover:text-primary transition-colors">By {vendor.name}</Link>
+              <Link href={`/vendors/${vendor.id}`} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">By {vendor.name}</Link>
           </div>
         )}
         
