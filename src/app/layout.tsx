@@ -12,8 +12,8 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: "/icons/icon-192x192.png", // General favicon
-    apple: "/icons/apple-touch-icon.png", // Apple touch icon
+    icon: "/icons/icon.svg", // General favicon
+    apple: "/icons/apple-touch-icon.svg", // Apple touch icon
   },
 };
 
@@ -46,6 +46,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="TiffinBox" />
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.svg" />
       </head>
       <body className="font-body antialiased">
         <Providers>
