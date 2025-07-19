@@ -20,14 +20,18 @@ function AuthToggle({ isSellerView }: { isSellerView: boolean }) {
 
   return (
     <div className="flex w-full mb-4 rounded-t-lg overflow-hidden border-b">
-        <Link href="/auth/signup" className={cn(baseClass, !isSellerView ? activeClass : inactiveClass)}>
-            <User className="h-4 w-4" />
-            Customer
-        </Link>
-        <Link href="/auth/signup?type=seller" className={cn(baseClass, isSellerView ? activeClass : inactiveClass)}>
-            <Briefcase className="h-4 w-4" />
-            Seller
-        </Link>
+        <Button asChild variant="ghost" className={cn(baseClass, !isSellerView ? activeClass : inactiveClass, "rounded-none")}>
+            <Link href="/auth/signup">
+                <User className="h-4 w-4" />
+                Customer
+            </Link>
+        </Button>
+        <Button asChild variant="ghost" className={cn(baseClass, isSellerView ? activeClass : inactiveClass, "rounded-none")}>
+            <Link href="/auth/signup?type=seller">
+                <Briefcase className="h-4 w-4" />
+                Seller
+            </Link>
+        </Button>
     </div>
   )
 }
@@ -145,9 +149,11 @@ function SignUpCard() {
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Link href={signInLink} className="font-medium text-primary hover:underline">
-              Sign In
-            </Link>
+            <Button asChild variant="link" className="p-0 h-auto">
+              <Link href={signInLink} className="font-medium text-primary hover:underline">
+                Sign In
+              </Link>
+            </Button>
           </p>
         </CardFooter>
       </Card>
