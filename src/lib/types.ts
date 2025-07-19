@@ -43,6 +43,7 @@ export interface Vendor {
   operatingHours?: string;
   deliveryOptions?: string[];
   Icon?: LucideIcon;
+  postedAt?: string; // ISO date string
 }
 
 export interface CartItem extends Dish {

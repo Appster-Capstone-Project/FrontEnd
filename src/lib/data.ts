@@ -20,12 +20,14 @@ export const mockReviews: Review[] = [
   { id: 'r2-1', userName: 'Priya M.', rating: 5, comment: 'The tiffin service is a lifesaver! Always on time and the food is healthy and tasty.', date: '2024-07-16T12:00:00Z', userImageUrl: 'https://placehold.co/40x40.png', dataAiHintUser: 'woman happy' },
 ];
 
+const now = new Date();
+
 export const mockVendors: Vendor[] = [
   {
     id: 'v1',
     name: 'Priya\'s Kitchen',
     type: 'Home Cook',
-    description: 'Authentic North Indian dishes made with love, just like mom used to make.',
+    description: 'Authentic North Indian dishes made with love, just like mom used to make. Available for the next few hours!',
     rating: 4.8,
     address: '123 Spice Lane',
     city: 'Maple Creek',
@@ -38,12 +40,13 @@ export const mockVendors: Vendor[] = [
     specialty: 'North Indian Curries',
     operatingHours: '5 PM - 10 PM',
     deliveryOptions: ['Pickup', 'Delivery'],
+    postedAt: new Date(now.getTime() - 5 * 60 * 1000).toISOString(), // 5 minutes ago
   },
   {
     id: 'v2',
     name: 'Daily Tiffins',
     type: 'Tiffin Service',
-    description: 'Healthy and wholesome vegetarian meals delivered daily to your doorstep.',
+    description: 'Healthy and wholesome vegetarian meals delivered daily to your doorstep. Subscriptions available.',
     rating: 4.6,
     address: '456 Health Ave',
     city: 'Oakwood',
@@ -56,12 +59,13 @@ export const mockVendors: Vendor[] = [
     specialty: 'Vegetarian Thalis',
     operatingHours: '11 AM - 8 PM',
     deliveryOptions: ['Delivery'],
+    postedAt: new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
   },
   {
     id: 'v3',
     name: 'Mama Maria\'s',
     type: 'Home Cook',
-    description: 'Traditional Italian recipes passed down through generations. Taste the heart of Italy.',
+    description: 'Traditional Italian recipes passed down through generations. Freshly made pasta available for tonight\'s dinner.',
     rating: 4.9,
     address: '789 Pasta Place',
     city: 'Maple Creek',
@@ -74,12 +78,13 @@ export const mockVendors: Vendor[] = [
     specialty: 'Handmade Pasta & Pizza',
     operatingHours: '6 PM - 11 PM',
     deliveryOptions: ['Pickup'],
+    postedAt: new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
   },
    {
     id: 'v4',
     name: 'Southern Spice',
     type: 'Home Cook',
-    description: 'Bringing the authentic taste of South India to your plate.',
+    description: 'Bringing the authentic taste of South India to your plate. Serving fresh dosas now!',
     rating: 4.5,
     address: '321 Dosa Drive',
     city: 'Oakwood',
@@ -92,6 +97,7 @@ export const mockVendors: Vendor[] = [
     specialty: 'Dosas and Idlis',
     operatingHours: '8 AM - 2 PM',
     deliveryOptions: ['Pickup', 'Delivery'],
+    postedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days ago
   },
 ];
 
@@ -111,9 +117,9 @@ export const mockOrders = [
         total: 18.98,
         status: 'Delivered',
         items: [
-            {...mockDishes.find(d => d.id === 'd1-1'), quantity: 1},
-            {...mockDishes.find(d => d.id === 'd1-3'), quantity: 1}
-        ]
+            {...mockDishes.find(d => d.id === 'd1-1'), quantity: 1} as CartItem,
+            {...mockDishes.find(d => d.id === 'd1-3'), quantity: 1} as CartItem
+        ].filter(i => i.id)
     },
     {
         id: 'ord-2',
@@ -122,7 +128,7 @@ export const mockOrders = [
         total: 65.00,
         status: 'Preparing',
         items: [
-             {...mockDishes.find(d => d.id === 'd2-2'), quantity: 1}
-        ]
+             {...mockDishes.find(d => d.id === 'd2-2'), quantity: 1} as CartItem
+        ].filter(i => i.id)
     }
 ].filter(o => o.items.every(item => item && item.id)); // Filter out orders with missing items
