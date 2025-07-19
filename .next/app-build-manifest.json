@@ -61,6 +61,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(pages)/welcome/page.js"
+    ],
+    "/(pages)/promotions/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/promotions/page.js"
+    ],
+    "/(pages)/profile/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/profile/page.js"
     ]
   }
 }

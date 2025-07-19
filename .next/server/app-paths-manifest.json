@@ -3,5 +3,8 @@
   "/page": "app/page.js",
   "/(pages)/dashboard/page": "app/(pages)/dashboard/page.js",
   "/sell/page": "app/sell/page.js",
-  "/(pages)/welcome/page": "app/(pages)/welcome/page.js"
+  "/(pages)/welcome/page": "app/(pages)/welcome/page.js",
+  "/(pages)/orders/page": "app/(pages)/orders/page.js",
+  "/(pages)/promotions/page": "app/(pages)/promotions/page.js",
+  "/(pages)/profile/page": "app/(pages)/profile/page.js"
 }

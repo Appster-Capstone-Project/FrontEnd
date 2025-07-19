@@ -16,16 +16,30 @@ interface VendorCardProps {
   vendor: Vendor;
 }
 
-const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
-  const VendorIcon = vendor.type === 'Home Cook' ? ChefHat : Utensils;
+const TimeAgo: React.FC<{ date: string }> = ({ date }) => {
   const [timeAgo, setTimeAgo] = useState('');
 
   useEffect(() => {
-    if (vendor.postedAt) {
-      setTimeAgo(formatDistanceToNow(new Date(vendor.postedAt), { addSuffix: true }));
+    if (date) {
+      setTimeAgo(formatDistanceToNow(new Date(date), { addSuffix: true }));
     }
-  }, [vendor.postedAt]);
+  }, [date]);
 
+  if (!timeAgo) {
+    return null;
+  }
+
+  return (
+    <div className="flex items-center text-xs text-muted-foreground">
+      <Clock className="h-3 w-3 mr-1" />
+      <span>{timeAgo}</span>
+    </div>
+  );
+};
+
+const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
+  const VendorIcon = vendor.type === 'Home Cook' ? ChefHat : Utensils;
+  
   return (
     <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
       <div className="flex flex-col md:flex-row">
@@ -49,12 +63,7 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
                   <VendorIcon className="mr-1 h-4 w-4" />
                   {vendor.type}
                 </Badge>
-                {timeAgo && (
-                  <div className="flex items-center text-xs text-muted-foreground">
-                    <Clock className="h-3 w-3 mr-1" />
-                    <span>{timeAgo}</span>
-                  </div>
-                )}
+                {vendor.postedAt && <TimeAgo date={vendor.postedAt} />}
                </div>
               <StarRating rating={vendor.rating} size={18} showText />
             </div>
