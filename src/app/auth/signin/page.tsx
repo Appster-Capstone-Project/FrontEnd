@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useCallback } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from "next/link";
 import { Package, Heart, User, Briefcase } from 'lucide-react';
@@ -40,18 +40,108 @@ function AuthToggle({ isSellerView }: { isSellerView: boolean }) {
   )
 }
 
-function SignInCard() {
+function SignInCard({ isSellerView, onSignIn, isLoading }: { isSellerView: boolean, onSignIn: (email: string, pass: string) => void, isLoading: boolean }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const title = isSellerView ? 'Seller Sign In' : 'Welcome Back!';
+  const description = isSellerView ? 'Access your dashboard to manage listings and orders.' : 'Sign in to continue to TiffinBox.';
+  const signupLink = isSellerView ? '/auth/signup?type=seller' : '/auth/signup';
+  const signupHint = isSellerView ? "Don't have a seller account? " : "Don't have an account? ";
+  const signupActionText = "Sign Up";
+
+  return (
+      <Card className="w-full max-w-md shadow-xl border-4 border-primary/20 overflow-hidden">
+        <AuthToggle isSellerView={isSellerView} />
+        <CardHeader className="text-center pt-2">
+            <div className="relative mx-auto flex items-center justify-center mb-4">
+              <Package className="h-14 w-14 text-primary" />
+              <Heart className="absolute top-0 right-0 h-7 w-7 text-accent fill-accent transform translate-x-1/4 -translate-y-1/4" />
+            </div>
+          <CardTitle className="font-headline text-2xl">{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder={isSellerView ? "seller@example.com" : "user@example.com"}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={isLoading}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={isLoading}
+            />
+          </div>
+        </CardContent>
+        <CardFooter className="flex flex-col gap-4">
+          <Button
+            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+            onClick={() => onSignIn(email, password)}
+            disabled={isLoading}
+          >
+            {isLoading ? "Signing In..." : "Sign In"}
+          </Button>
+          <div className="w-full text-center text-sm text-muted-foreground">
+            <p>
+              {signupHint}
+              <Link
+                href={signupLink}
+                className="font-medium text-primary hover:underline"
+              >
+                {signupActionText}
+              </Link>
+            </p>
+          </div>
+        </CardFooter>
+      </Card>
+  );
+}
+
+const AuthCardSkeleton = () => (
+    <Card className="w-full max-w-md">
+        <CardHeader className="text-center space-y-2">
+            <Skeleton className="h-7 w-48 mx-auto" />
+            <Skeleton className="h-5 w-64 mx-auto" />
+        </CardHeader>
+        <CardContent className="space-y-4">
+            <div className="space-y-2">
+                <Skeleton className="h-4 w-12" />
+                <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="space-y-2">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-10 w-full" />
+            </div>
+        </CardContent>
+        <CardFooter className="flex flex-col gap-4">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-5 w-48" />
+        </CardFooter>
+    </Card>
+)
+
+function SignInPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const userType = searchParams.get('type');
   const isSellerView = userType === 'seller';
   
-  const handleSignIn = async () => {
+  const handleSignIn = useCallback(async (email, password) => {
     setIsLoading(true);
     // Always clear previous session data on a new login attempt
     localStorage.clear();
@@ -134,101 +224,22 @@ function SignInCard() {
     } finally {
       setIsLoading(false);
     }
-  };
-  
-  const title = isSellerView ? 'Seller Sign In' : 'Welcome Back!';
-  const description = isSellerView ? 'Access your dashboard to manage listings and orders.' : 'Sign in to continue to TiffinBox.';
-  const signupLink = isSellerView ? '/auth/signup?type=seller' : '/auth/signup';
-  const signupHint = isSellerView ? "Don't have a seller account? " : "Don't have an account? ";
-  const signupActionText = "Sign Up";
+  }, [isSellerView, router, toast]);
 
   return (
-      <Card className="w-full max-w-md shadow-xl border-4 border-primary/20 overflow-hidden">
-        <AuthToggle isSellerView={isSellerView} />
-        <CardHeader className="text-center pt-2">
-            <div className="relative mx-auto flex items-center justify-center mb-4">
-              <Package className="h-14 w-14 text-primary" />
-              <Heart className="absolute top-0 right-0 h-7 w-7 text-accent fill-accent transform translate-x-1/4 -translate-y-1/4" />
-            </div>
-          <CardTitle className="font-headline text-2xl">{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder={isSellerView ? "seller@example.com" : "user@example.com"}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={isLoading}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={isLoading}
-            />
-          </div>
-        </CardContent>
-        <CardFooter className="flex flex-col gap-4">
-          <Button
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-            onClick={handleSignIn}
-            disabled={isLoading}
-          >
-            {isLoading ? "Signing In..." : "Sign In"}
-          </Button>
-          <div className="w-full text-center text-sm text-muted-foreground">
-            <p>
-              {signupHint}
-              <Link
-                href={signupLink}
-                className="font-medium text-primary hover:underline"
-              >
-                {signupActionText}
-              </Link>
-            </p>
-          </div>
-        </CardFooter>
-      </Card>
+    <SignInCard 
+      isSellerView={isSellerView}
+      onSignIn={handleSignIn}
+      isLoading={isLoading}
+    />
   );
 }
-
-const AuthCardSkeleton = () => (
-    <Card className="w-full max-w-md">
-        <CardHeader className="text-center space-y-2">
-            <Skeleton className="h-7 w-48 mx-auto" />
-            <Skeleton className="h-5 w-64 mx-auto" />
-        </CardHeader>
-        <CardContent className="space-y-4">
-            <div className="space-y-2">
-                <Skeleton className="h-4 w-12" />
-                <Skeleton className="h-10 w-full" />
-            </div>
-            <div className="space-y-2">
-                <Skeleton className="h-4 w-16" />
-                <Skeleton className="h-10 w-full" />
-            </div>
-        </CardContent>
-        <CardFooter className="flex flex-col gap-4">
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-5 w-48" />
-        </CardFooter>
-    </Card>
-)
 
 export default function SignInPage() {
   return (
     <div className="container flex min-h-[calc(100vh-var(--header-height)-var(--footer-height))] items-center justify-center py-12">
       <Suspense fallback={<AuthCardSkeleton />}>
-        <SignInCard />
+        <SignInPageContent />
       </Suspense>
     </div>
   );
