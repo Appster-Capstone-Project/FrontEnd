@@ -2417,9 +2417,6 @@ function AppShell({ children }) {
     const noShellRoutes = [
         '/auth',
         '/sell',
-        '/dashboard',
-        '/orders',
-        '/promotions',
         '/loading'
     ];
     const showShell = !noShellRoutes.some((path)=>pathname.startsWith(path));
