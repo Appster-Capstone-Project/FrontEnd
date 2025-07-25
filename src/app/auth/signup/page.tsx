@@ -18,15 +18,28 @@ async function getApiErrorMessage(response: Response): Promise<string> {
     try {
         const errorData = await response.json();
         // Backend could return error in 'error' or 'message' field
-        return errorData.error || errorData.message || `API error: ${JSON.stringify(errorData)}`;
-    } catch (e) {
-        // If the response is not JSON, return the raw text
-        const textError = await response.text();
-        if (textError) {
-            return textError;
+        if (typeof errorData === 'object' && errorData !== null) {
+            if ('error' in errorData && typeof errorData.error === 'string') {
+                return errorData.error;
+            }
+            if ('message' in errorData && typeof errorData.message === 'string') {
+                return errorData.message;
+            }
+            return `An unknown API error occurred: ${JSON.stringify(errorData)}`;
         }
-        return `Request failed with status ${response.status}`;
+    } catch (e) {
+        // The response was not valid JSON. Return the raw text if possible.
+        try {
+            const textError = await response.text();
+            if (textError) {
+                return `An error occurred: ${textError}`;
+            }
+        } catch (textErr) {
+            // Failed to even get text from the response body.
+        }
     }
+    // Fallback for non-JSON responses or other issues
+    return `Request failed with status ${response.status} (${response.statusText})`;
 }
 
 function AuthToggle({ isSellerView }: { isSellerView: boolean }) {
