@@ -2490,12 +2490,12 @@ function Providers({ children }) {
             children: children
         }, void 0, false, {
             fileName: "[project]/src/context/Providers.tsx",
-            lineNumber: 10,
+            lineNumber: 11,
             columnNumber: 13
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/context/Providers.tsx",
-        lineNumber: 9,
+        lineNumber: 10,
         columnNumber: 9
     }, this);
 }
