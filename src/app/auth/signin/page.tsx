@@ -168,9 +168,6 @@ function SignInPageContent() {
       
       localStorage.setItem("token", token);
       
-      // Store a flag to show splash screen
-      localStorage.setItem('showSplash', 'true');
-
       if (isSellerView) {
         // For sellers, we fetch their details from the /sellers list
         const sellersResponse = await fetch('/api/sellers', {

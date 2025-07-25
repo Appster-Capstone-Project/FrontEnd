@@ -10,13 +10,9 @@ export default function LoadingPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const showSplash = localStorage.getItem('showSplash');
     const userRole = localStorage.getItem('userRole');
 
     const redirect = () => {
-      // Clear the splash flag
-      localStorage.removeItem('showSplash');
-      // Redirect based on role
       if (userRole === 'seller') {
         router.replace('/sell');
       } else {
@@ -24,14 +20,9 @@ export default function LoadingPage() {
       }
     };
     
-    // Only show splash screen if the flag is set
-    if (showSplash === 'true') {
-        const timer = setTimeout(redirect, 3000); // Show splash for 3 seconds
-        return () => clearTimeout(timer);
-    } else {
-        // If no flag, redirect immediately
-        redirect();
-    }
+    // Redirect immediately. The animation will show for the brief moment
+    // it takes for the redirect to happen.
+    redirect();
 
   }, [router]);
 
