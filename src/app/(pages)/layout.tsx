@@ -44,18 +44,14 @@ export default function UserAccountLayout({
 
   useEffect(() => {
     const name = localStorage.getItem("userName");
-    const role = localStorage.getItem("userRole");
-
-    if (!name || role !== 'user') {
-      router.push('/auth/signin');
-    }
-    
+    // Removed the redirect logic here. We will handle auth on a page-by-page basis if needed.
+    // This allows public access to pages within this layout group.
     setUserName(name);
   }, [router]);
 
   const handleLogout = () => {
     localStorage.clear();
-    router.push("/auth/signin");
+    router.push("/");
   };
 
   const navItems = [

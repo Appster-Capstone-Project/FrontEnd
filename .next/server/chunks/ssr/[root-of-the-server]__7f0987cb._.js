@@ -1461,7 +1461,7 @@ const Header = ()=>{
         setIsLoggedIn(false);
         setUserName('');
         setUserRole(null);
-        router.push('/auth/signin');
+        router.push('/');
         // A small delay to ensure state updates before the loading indicator is removed on the next page
         setTimeout(()=>setIsLoading(false), 50);
     };
@@ -2254,9 +2254,6 @@ function AppShell({ children }) {
     const noShellRoutes = [
         '/auth',
         '/sell',
-        '/dashboard',
-        '/orders',
-        '/promotions',
         '/loading'
     ];
     const showShell = !noShellRoutes.some((path)=>pathname.startsWith(path));
@@ -2316,12 +2313,12 @@ function Providers({ children }) {
             children: children
         }, void 0, false, {
             fileName: "[project]/src/context/Providers.tsx",
-            lineNumber: 10,
+            lineNumber: 11,
             columnNumber: 13
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/context/Providers.tsx",
-        lineNumber: 9,
+        lineNumber: 10,
         columnNumber: 9
     }, this);
 }
