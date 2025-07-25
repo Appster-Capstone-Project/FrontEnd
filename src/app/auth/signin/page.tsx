@@ -146,6 +146,27 @@ function SignInPageContent() {
     // Always clear previous session data on a new login attempt
     localStorage.clear();
 
+    // --- DUMMY LOGIN FOR DEVELOPMENT ---
+    if (!isSellerView && email === 'user@example.com' && password === 'password') {
+      toast({ title: "Signing in as Dummy User..." });
+      localStorage.setItem("token", "dummy-user-token");
+      localStorage.setItem("userName", "Dummy User");
+      localStorage.setItem("userId", "user123");
+      localStorage.setItem("userRole", "user");
+      router.push("/loading");
+      return;
+    }
+    if (isSellerView && email === 'seller@example.com' && password === 'password') {
+      toast({ title: "Signing in as Dummy Seller..." });
+      localStorage.setItem("token", "dummy-seller-token");
+      localStorage.setItem("userName", "Dummy Seller");
+      localStorage.setItem("sellerId", "seller123");
+      localStorage.setItem("userRole", "seller");
+      router.push('/loading');
+      return;
+    }
+    // --- END DUMMY LOGIN ---
+
     const endpoint = isSellerView ? '/api/sellers/login' : '/api/users/login';
     const body = JSON.stringify({ email, password });
 
