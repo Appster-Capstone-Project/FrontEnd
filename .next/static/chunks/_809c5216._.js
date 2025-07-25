@@ -50,10 +50,8 @@ function UserAccountLayout({ children }) {
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "UserAccountLayout.useEffect": ()=>{
             const name = localStorage.getItem("userName");
-            const role = localStorage.getItem("userRole");
-            if (!name || role !== 'user') {
-                router.push('/auth/signin');
-            }
+            // Removed the redirect logic here. We will handle auth on a page-by-page basis if needed.
+            // This allows public access to pages within this layout group.
             setUserName(name);
         }
     }["UserAccountLayout.useEffect"], [
@@ -61,7 +59,7 @@ function UserAccountLayout({ children }) {
     ]);
     const handleLogout = ()=>{
         localStorage.clear();
-        router.push("/auth/signin");
+        router.push("/");
     };
     const navItems = [
         {
@@ -102,20 +100,20 @@ function UserAccountLayout({ children }) {
                                                 className: "h-7 w-7 text-primary"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/(pages)/layout.tsx",
-                                                lineNumber: 87,
+                                                lineNumber: 83,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$heart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Heart$3e$__["Heart"], {
                                                 className: "absolute top-0 right-0 h-3.5 w-3.5 text-accent fill-accent transform translate-x-1/4 -translate-y-1/4"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/(pages)/layout.tsx",
-                                                lineNumber: 88,
+                                                lineNumber: 84,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/(pages)/layout.tsx",
-                                        lineNumber: 86,
+                                        lineNumber: 82,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -123,18 +121,18 @@ function UserAccountLayout({ children }) {
                                         children: "TiffinBox"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/(pages)/layout.tsx",
-                                        lineNumber: 90,
+                                        lineNumber: 86,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/(pages)/layout.tsx",
-                                lineNumber: 85,
+                                lineNumber: 81,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/(pages)/layout.tsx",
-                            lineNumber: 84,
+                            lineNumber: 80,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -151,36 +149,36 @@ function UserAccountLayout({ children }) {
                                                 className: "h-4 w-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/(pages)/layout.tsx",
-                                                lineNumber: 108,
+                                                lineNumber: 104,
                                                 columnNumber: 21
                                             }, this),
                                             item.label
                                         ]
                                     }, item.href, true, {
                                         fileName: "[project]/src/app/(pages)/layout.tsx",
-                                        lineNumber: 100,
+                                        lineNumber: 96,
                                         columnNumber: 19
                                     }, this);
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/src/app/(pages)/layout.tsx",
-                                lineNumber: 94,
+                                lineNumber: 90,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/(pages)/layout.tsx",
-                            lineNumber: 93,
+                            lineNumber: 89,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/(pages)/layout.tsx",
-                    lineNumber: 83,
+                    lineNumber: 79,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/(pages)/layout.tsx",
-                lineNumber: 82,
+                lineNumber: 78,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -200,7 +198,7 @@ function UserAccountLayout({ children }) {
                                             className: "h-5 w-5"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/(pages)/layout.tsx",
-                                            lineNumber: 121,
+                                            lineNumber: 117,
                                             columnNumber: 15
                                         }, this),
                                         itemCount > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -209,18 +207,18 @@ function UserAccountLayout({ children }) {
                                             children: itemCount
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/(pages)/layout.tsx",
-                                            lineNumber: 123,
+                                            lineNumber: 119,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/(pages)/layout.tsx",
-                                    lineNumber: 120,
+                                    lineNumber: 116,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/(pages)/layout.tsx",
-                                lineNumber: 119,
+                                lineNumber: 115,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenu"], {
@@ -236,7 +234,7 @@ function UserAccountLayout({ children }) {
                                                     className: "h-5 w-5"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/(pages)/layout.tsx",
-                                                    lineNumber: 132,
+                                                    lineNumber: 128,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -244,18 +242,18 @@ function UserAccountLayout({ children }) {
                                                     children: "Toggle user menu"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/(pages)/layout.tsx",
-                                                    lineNumber: 133,
+                                                    lineNumber: 129,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/(pages)/layout.tsx",
-                                            lineNumber: 131,
+                                            lineNumber: 127,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/(pages)/layout.tsx",
-                                        lineNumber: 130,
+                                        lineNumber: 126,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuContent"], {
@@ -265,12 +263,12 @@ function UserAccountLayout({ children }) {
                                                 children: userName || "My Account"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/(pages)/layout.tsx",
-                                                lineNumber: 137,
+                                                lineNumber: 133,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuSeparator"], {}, void 0, false, {
                                                 fileName: "[project]/src/app/(pages)/layout.tsx",
-                                                lineNumber: 138,
+                                                lineNumber: 134,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
@@ -280,14 +278,14 @@ function UserAccountLayout({ children }) {
                                                         className: "mr-2 h-4 w-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/(pages)/layout.tsx",
-                                                        lineNumber: 140,
+                                                        lineNumber: 136,
                                                         columnNumber: 18
                                                     }, this),
                                                     "View Site"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/(pages)/layout.tsx",
-                                                lineNumber: 139,
+                                                lineNumber: 135,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
@@ -295,12 +293,12 @@ function UserAccountLayout({ children }) {
                                                 children: "Support"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/(pages)/layout.tsx",
-                                                lineNumber: 143,
+                                                lineNumber: 139,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuSeparator"], {}, void 0, false, {
                                                 fileName: "[project]/src/app/(pages)/layout.tsx",
-                                                lineNumber: 144,
+                                                lineNumber: 140,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
@@ -310,32 +308,32 @@ function UserAccountLayout({ children }) {
                                                         className: "mr-2 h-4 w-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/(pages)/layout.tsx",
-                                                        lineNumber: 146,
+                                                        lineNumber: 142,
                                                         columnNumber: 17
                                                     }, this),
                                                     "Logout"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/(pages)/layout.tsx",
-                                                lineNumber: 145,
+                                                lineNumber: 141,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/(pages)/layout.tsx",
-                                        lineNumber: 136,
+                                        lineNumber: 132,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/(pages)/layout.tsx",
-                                lineNumber: 129,
+                                lineNumber: 125,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/(pages)/layout.tsx",
-                        lineNumber: 118,
+                        lineNumber: 114,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -343,19 +341,19 @@ function UserAccountLayout({ children }) {
                         children: children
                     }, void 0, false, {
                         fileName: "[project]/src/app/(pages)/layout.tsx",
-                        lineNumber: 152,
+                        lineNumber: 148,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/(pages)/layout.tsx",
-                lineNumber: 117,
+                lineNumber: 113,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/(pages)/layout.tsx",
-        lineNumber: 81,
+        lineNumber: 77,
         columnNumber: 5
     }, this);
 }
