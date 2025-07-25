@@ -1,4 +1,11 @@
 {
+  "/(pages)/dashboard/page": "app/(pages)/dashboard/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/auth/signin/page": "app/auth/signin/page.js",
-  "/page": "app/page.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/loading/page": "app/loading/page.js",
+  "/page": "app/page.js",
+  "/sell/add/page": "app/sell/add/page.js",
+  "/sell/page": "app/sell/page.js",
+  "/vendors/page": "app/vendors/page.js"
 }

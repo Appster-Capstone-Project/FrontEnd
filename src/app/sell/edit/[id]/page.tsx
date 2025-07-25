@@ -77,38 +77,31 @@ export default function EditListingPage() {
     
     setIsSubmitting(true);
     
-    // NOTE: This is a placeholder. The API documentation does not specify a
-    // PUT or PATCH endpoint for /listings/{id}. This needs to be implemented
-    // in the backend before this functionality will work.
-    
-    // const updatedData = {
-    //   title,
-    //   description,
-    //   price: parseFloat(price),
-    //   available,
-    // };
+    const updatedData = {
+      title,
+      description,
+      price: parseFloat(price),
+      available,
+    };
 
     try {
-      // Example of what the fetch call would look like:
-      // const response = await fetch(`/api/listings/${listingId}`, {
-      //   method: 'PUT', // or 'PATCH'
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${token}`,
-      //   },
-      //   body: JSON.stringify(updatedData),
-      // });
+      const response = await fetch(`/api/listings/${listingId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedData),
+      });
 
-      // if (!response.ok) {
-      //   throw new Error("Failed to update listing.");
-      // }
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to update listing.");
+      }
       
-      // For demonstration purposes, we'll simulate a successful update.
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
       toast({
-        title: "Update Successful (DEMO)",
-        description: "Your dish has been updated. This is a demo as the backend endpoint is not ready.",
+        title: "Update Successful",
+        description: `Your dish '${title}' has been updated.`,
       });
       router.push('/sell');
 
