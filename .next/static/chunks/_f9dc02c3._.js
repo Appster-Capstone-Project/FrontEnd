@@ -546,6 +546,30 @@ function SignInPageContent() {
             setIsLoading(true);
             // Always clear previous session data on a new login attempt
             localStorage.clear();
+            // --- DUMMY LOGIN FOR DEVELOPMENT ---
+            if (!isSellerView && email === 'user@example.com' && password === 'password') {
+                toast({
+                    title: "Signing in as Dummy User..."
+                });
+                localStorage.setItem("token", "dummy-user-token");
+                localStorage.setItem("userName", "Dummy User");
+                localStorage.setItem("userId", "user123");
+                localStorage.setItem("userRole", "user");
+                router.push("/loading");
+                return;
+            }
+            if (isSellerView && email === 'seller@example.com' && password === 'password') {
+                toast({
+                    title: "Signing in as Dummy Seller..."
+                });
+                localStorage.setItem("token", "dummy-seller-token");
+                localStorage.setItem("userName", "Dummy Seller");
+                localStorage.setItem("sellerId", "seller123");
+                localStorage.setItem("userRole", "seller");
+                router.push('/loading');
+                return;
+            }
+            // --- END DUMMY LOGIN ---
             const endpoint = isSellerView ? '/api/sellers/login' : '/api/users/login';
             const body = JSON.stringify({
                 email,
@@ -628,7 +652,7 @@ function SignInPageContent() {
         isLoading: isLoading
     }, void 0, false, {
         fileName: "[project]/src/app/auth/signin/page.tsx",
-        lineNumber: 227,
+        lineNumber: 248,
         columnNumber: 5
     }, this);
 }
@@ -646,22 +670,22 @@ function SignInPage() {
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Suspense"], {
             fallback: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(AuthCardSkeleton, {}, void 0, false, {
                 fileName: "[project]/src/app/auth/signin/page.tsx",
-                lineNumber: 238,
+                lineNumber: 259,
                 columnNumber: 27
             }, void 0),
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SignInPageContent, {}, void 0, false, {
                 fileName: "[project]/src/app/auth/signin/page.tsx",
-                lineNumber: 239,
+                lineNumber: 260,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/app/auth/signin/page.tsx",
-            lineNumber: 238,
+            lineNumber: 259,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/auth/signin/page.tsx",
-        lineNumber: 237,
+        lineNumber: 258,
         columnNumber: 5
     }, this);
 }
