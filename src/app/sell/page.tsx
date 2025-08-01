@@ -14,6 +14,22 @@ import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 
+const fetchSignedUrl = async (imageUrl: string, token: string): Promise<string> => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${imageUrl}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) {
+            throw new Error('Failed to get signed URL');
+        }
+        const data = await response.json();
+        return data.signed_url || 'https://placehold.co/100x100.png';
+    } catch (error) {
+        console.error("Error fetching signed URL:", error);
+        return 'https://placehold.co/100x100.png';
+    }
+};
+
 export default function SellDashboardPage() {
   const { toast } = useToast();
   const router = useRouter();
@@ -22,21 +38,8 @@ export default function SellDashboardPage() {
   const [isListingsLoading, setIsListingsLoading] = React.useState(true);
   const [sellerName, setSellerName] = React.useState<string | null>(null);
 
-  const fetchListings = React.useCallback(async () => {
+  const fetchListings = React.useCallback(async (token: string, sellerId: string) => {
     setIsListingsLoading(true);
-    const token = localStorage.getItem('token');
-    const sellerId = localStorage.getItem('sellerId');
-
-    if (!token || !sellerId) {
-      toast({
-        variant: "destructive",
-        title: "Authentication Error",
-        description: "Please sign in as a seller to view this page.",
-      });
-      router.push('/auth/signin?type=seller');
-      return;
-    }
-
     try {
       const response = await fetch(`/api/listings?sellerId=${sellerId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -44,9 +47,18 @@ export default function SellDashboardPage() {
 
       if (response.ok) {
         const data = await response.json();
-        const augmentedData = Array.isArray(data) ? data.map(item => ({
-          ...item,
-          imageUrl: item.image ? `${process.env.NEXT_PUBLIC_API_BASE_URL}${item.image}` : 'https://placehold.co/100x100.png'
+        const augmentedData = Array.isArray(data) ? await Promise.all(data.map(async item => {
+          let signedUrl = 'https://placehold.co/100x100.png';
+          if (item.image) {
+            // The image path from the listing now needs to be converted to a signed URL
+            const filename = item.image.split('/').pop();
+            const signedUrlPath = `/api/listings/${item.id}/image/${filename}`;
+             signedUrl = await fetchSignedUrl(signedUrlPath, token);
+          }
+          return {
+            ...item,
+            imageUrl: signedUrl,
+          };
         })) : [];
         setListings(augmentedData);
       } else {
@@ -64,20 +76,26 @@ export default function SellDashboardPage() {
     } finally {
       setIsListingsLoading(false);
     }
-  }, [toast, router]);
+  }, [toast]);
 
   React.useEffect(() => {
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
     const name = localStorage.getItem('userName');
+    const sellerId = localStorage.getItem('sellerId');
     setSellerName(name);
 
-    if (!token || userRole !== 'seller') {
+    if (!token || userRole !== 'seller' || !sellerId) {
+       toast({
+        variant: "destructive",
+        title: "Authentication Error",
+        description: "Please sign in as a seller to view this page.",
+      });
       router.push('/auth/signin?type=seller');
     } else {
-      fetchListings();
+      fetchListings(token, sellerId);
     }
-  }, [router, fetchListings]);
+  }, [router, fetchListings, toast]);
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -122,7 +140,7 @@ export default function SellDashboardPage() {
                               <div className="flex items-center gap-4">
                                 <div className="relative h-16 w-16 rounded-md overflow-hidden bg-muted">
                                   {listing.imageUrl ? (
-                                    <Image src={listing.imageUrl} alt={listing.title} layout="fill" objectFit="cover" />
+                                     <Image src={listing.imageUrl} alt={listing.title} layout="fill" objectFit="cover" />
                                   ): (
                                     <div className="flex items-center justify-center h-full"><ImageIcon className="h-6 w-6 text-muted-foreground"/></div>
                                   )}

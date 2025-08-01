@@ -12,6 +12,7 @@ import ReviewCard from '@/components/shared/ReviewCard';
 import SectionTitle from '@/components/shared/SectionTitle';
 import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { headers } from 'next/headers';
 
 
 async function submitReview(formData: FormData) {
@@ -28,14 +29,13 @@ async function submitReview(formData: FormData) {
 }
 
 async function getVendorDetails(id: string): Promise<Vendor | null> {
-  try {
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
-    // Use relative paths to leverage Next.js rewrites configured in next.config.ts
-    const [sellerRes, listingsRes] = await Promise.all([
-      fetch(`${apiBaseUrl}/api/sellers/${id}`),
-      fetch(`${apiBaseUrl}/api/listings?sellerId=${id}`)
-    ]);
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+  // The 'Authorization' header will be undefined if no one is logged in.
+  const authHeader = headers().get('Authorization'); 
 
+  try {
+    const sellerRes = await fetch(`${apiBaseUrl}/api/sellers/${id}`);
+    
     if (!sellerRes.ok) {
       if (sellerRes.status === 404) {
         console.log(`Vendor with ID ${id} not found.`);
@@ -45,14 +45,48 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     }
 
     const seller = await sellerRes.json();
-    const listings = listingsRes.ok ? await listingsRes.json() : [];
+    let listings: Dish[] = [];
+    
+    // Only attempt to fetch listings if there is an auth header
+    // The listings endpoint is protected.
+    if (authHeader) {
+      try {
+          const listingsRes = await fetch(`${apiBaseUrl}/api/listings?sellerId=${id}`, {
+            headers: { 'Authorization': authHeader }
+          });
+          if (listingsRes.ok) {
+              const rawListings = await listingsRes.json();
 
-    const augmentedListings: Dish[] = Array.isArray(listings) ? listings.map(listing => ({
-      ...listing,
-      // The backend now provides an image path. We construct the full URL.
-      imageUrl: listing.image ? `${apiBaseUrl}${listing.image}` : 'https://placehold.co/300x200.png',
-      dataAiHint: 'food dish',
-    })) : [];
+              // Get signed URLs for each listing image
+              listings = Array.isArray(rawListings) ? await Promise.all(rawListings.map(async (listing: Dish) => {
+                  let signedUrl = 'https://placehold.co/300x200.png';
+                  if (listing.image) {
+                      try {
+                          const filename = listing.image.split('/').pop();
+                          const signedUrlRes = await fetch(`${apiBaseUrl}/api/listings/${listing.id}/image/${filename}`, {
+                              headers: { 'Authorization': authHeader }
+                          });
+                          if (signedUrlRes.ok) {
+                              const signedUrlData = await signedUrlRes.json();
+                              signedUrl = signedUrlData.signed_url;
+                          }
+                      } catch (e) {
+                          console.error(`Failed to get signed URL for listing ${listing.id}`, e);
+                      }
+                  }
+                  return {
+                      ...listing,
+                      imageUrl: signedUrl,
+                      dataAiHint: 'food dish',
+                  };
+              })) : [];
+          } else {
+              console.warn(`Could not fetch listings for seller ${id}. Status: ${listingsRes.status}`);
+          }
+      } catch (e) {
+          console.error(`An error occurred fetching listings for seller ${id}`, e);
+      }
+    }
 
     // Placeholder reviews as there is no API endpoint for it
     const mockReviews: Review[] = [
@@ -60,7 +94,6 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
       { id: 'r1-2', userName: 'Anita S.', rating: 4, comment: 'Delicious, a bit spicy for me though.', date: '2024-07-14T18:30:00Z', userImageUrl: 'https://placehold.co/40x40.png', dataAiHintUser: 'woman portrait' },
     ];
     
-    // Augment the seller data with placeholder values for UI completeness
     return {
       id: seller.id,
       name: seller.name,
@@ -76,12 +109,11 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
       specialty: 'Delicious Home Food',
       operatingHours: '10 AM - 10 PM',
       deliveryOptions: ['Pickup', 'Delivery'],
-      menu: augmentedListings,
-      reviews: mockReviews, // Using mock reviews
+      menu: listings,
+      reviews: mockReviews,
     };
   } catch (error) {
     console.error("Failed to fetch vendor details:", error);
-    // Re-throwing the error is important for the error boundary to catch it
     if (error instanceof Error) {
         throw new Error(`Network request failed: ${error.message}`);
     }
@@ -180,7 +212,7 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
               ))}
             </div>
           ) : (
-            <p className="text-center text-muted-foreground py-8">This vendor hasn't added any dishes to their menu yet.</p>
+            <p className="text-center text-muted-foreground py-8">This vendor hasn't added any dishes to their menu yet, or you may need to log in to view them.</p>
           )}
         </TabsContent>
 
@@ -234,3 +266,4 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
     </div>
   );
 }
+

@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { ShoppingCart, Package, Users } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
+
 interface DishCardProps {
   dish: Dish;
 }
@@ -24,12 +25,12 @@ const DishCard: React.FC<DishCardProps> = ({ dish }) => {
     <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col h-full">
       <CardHeader className="p-0 relative">
         <Image
-          src={dish.imageUrl || 'https://placehold.co/300x200.png'}
-          alt={dish.title}
-          width={300}
-          height={200}
-          className="w-full h-40 object-cover"
-          data-ai-hint={dish.dataAiHint || 'food dish'}
+            src={dish.imageUrl || 'https://placehold.co/300x200.png'}
+            alt={dish.title}
+            width={300}
+            height={200}
+            className="w-full h-40 object-cover"
+            data-ai-hint={dish.dataAiHint || 'food dish'}
         />
          <Badge 
             variant={dish.available ? "default" : "destructive"} 

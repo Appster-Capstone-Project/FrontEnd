@@ -119,7 +119,7 @@ function SellDashboardPage() {
                     const augmentedData = Array.isArray(data) ? data.map({
                         "SellDashboardPage.useCallback[fetchListings]": (item)=>({
                                 ...item,
-                                imageUrl: item.image ? `${"TURBOPACK compile-time value", "http://localhost:3000"}${item.image}` : 'https://placehold.co/100x100.png'
+                                imageUrl: item.image ? `${"TURBOPACK compile-time value", "http://20.185.241.50:8000"}${item.image}` : 'https://placehold.co/100x100.png'
                             })
                     }["SellDashboardPage.useCallback[fetchListings]"]) : [];
                     setListings(augmentedData);
