@@ -12,7 +12,6 @@ import ReviewCard from '@/components/shared/ReviewCard';
 import SectionTitle from '@/components/shared/SectionTitle';
 import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { headers } from 'next/headers';
 
 
 async function submitReview(formData: FormData) {
@@ -28,18 +27,12 @@ async function submitReview(formData: FormData) {
   // Since there is no review endpoint, this is for demonstration.
 }
 
-const fetchSignedUrl = async (imageUrlPath: string, token?: string): Promise<string> => {
+const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
     try {
-        const fetchHeaders: HeadersInit = {};
-        if (token) {
-            // Forward the token from the original request
-            fetchHeaders['Authorization'] = `Bearer ${token}`;
-        }
-        
         // Use absolute URL for server-side fetching
         const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}${imageUrlPath}`;
 
-        const response = await fetch(apiUrl, { headers: fetchHeaders, cache: 'no-store' });
+        const response = await fetch(apiUrl, { cache: 'no-store' });
         
         if (!response.ok) {
             throw new Error(`Failed to get signed URL for ${imageUrlPath}: ${response.statusText}`);
@@ -60,9 +53,6 @@ const fetchSignedUrl = async (imageUrlPath: string, token?: string): Promise<str
 };
 
 async function getVendorDetails(id: string): Promise<Vendor | null> {
-  const authHeader = headers().get('Authorization'); 
-  const token = authHeader?.split(' ')[1];
-
   try {
     const sellerRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sellers/${id}`);
     
@@ -78,7 +68,6 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     let listings: Dish[] = [];
     
     try {
-        // This endpoint can now be public, but we pass the token if available for other potential uses
         const listingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/listings?sellerId=${id}`);
 
         if (listingsRes.ok) {
@@ -89,7 +78,7 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
                    rawListings.map(async (listing) => {
                      let finalImageUrl = 'https://placehold.co/300x200.png';
                      if (listing.image) {
-                       finalImageUrl = await fetchSignedUrl(listing.image, token);
+                       finalImageUrl = await fetchSignedUrl(listing.image);
                      }
                      return {
                        ...listing,
