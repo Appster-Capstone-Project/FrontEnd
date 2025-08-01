@@ -15,7 +15,8 @@ RUN npm install
 COPY . .
 
 # 6. Expose HTTPS port
-EXPOSE 443
+EXPOSE 80
 
 # 7. Start the app with custom server
-CMD ["npm", "run", "dev:https"]
+CMD ["npm", "run", "dev"]
+
