@@ -25,6 +25,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: '20.185.241.50',
+        port: '9000',
+        pathname: '/**',
+      }
     ],
   },
   async rewrites() {
@@ -41,3 +47,5 @@ const nextConfig: NextConfig = {
 };
 
 export default withPwa(nextConfig);
+
+    

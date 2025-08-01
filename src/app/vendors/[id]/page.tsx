@@ -29,12 +29,11 @@ async function submitReview(formData: FormData) {
 }
 
 async function getVendorDetails(id: string): Promise<Vendor | null> {
-  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
-  // The 'Authorization' header will be undefined if no one is logged in.
   const authHeader = headers().get('Authorization'); 
 
   try {
-    const sellerRes = await fetch(`${apiBaseUrl}/api/sellers/${id}`);
+    // Corrected URL: Use relative path for server-side fetching with rewrites
+    const sellerRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sellers/${id}`);
     
     if (!sellerRes.ok) {
       if (sellerRes.status === 404) {
@@ -47,23 +46,22 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     const seller = await sellerRes.json();
     let listings: Dish[] = [];
     
-    // Only attempt to fetch listings if there is an auth header
-    // The listings endpoint is protected.
     if (authHeader) {
       try {
-          const listingsRes = await fetch(`${apiBaseUrl}/api/listings?sellerId=${id}`, {
+          // Corrected URL: Use relative path
+          const listingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/listings?sellerId=${id}`, {
             headers: { 'Authorization': authHeader }
           });
+
           if (listingsRes.ok) {
               const rawListings = await listingsRes.json();
-
-              // Get signed URLs for each listing image
               listings = Array.isArray(rawListings) ? await Promise.all(rawListings.map(async (listing: Dish) => {
                   let signedUrl = 'https://placehold.co/300x200.png';
                   if (listing.image) {
                       try {
                           const filename = listing.image.split('/').pop();
-                          const signedUrlRes = await fetch(`${apiBaseUrl}/api/listings/${listing.id}/image/${filename}`, {
+                          // Corrected URL: Use relative path
+                          const signedUrlRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/listings/${listing.id}/image/${filename}`, {
                               headers: { 'Authorization': authHeader }
                           });
                           if (signedUrlRes.ok) {
@@ -267,3 +265,4 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
   );
 }
 
+    
