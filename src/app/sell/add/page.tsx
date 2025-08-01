@@ -21,8 +21,7 @@ export default function AddListingPage() {
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [price, setPrice] = React.useState("");
-  const [portionSize, setPortionSize] = React.useState("1");
-  const [leftSize, setLeftSize] = React.useState("10");
+  const [portionSize, setPortionSize] = React.useState("10"); // This will now represent total initial portions
   const [available, setAvailable] = React.useState(true);
   const [imageFile, setImageFile] = React.useState<File | null>(null);
   const [imagePreview, setImagePreview] = React.useState<string | null>(null);
@@ -55,7 +54,7 @@ export default function AddListingPage() {
     const sellerId = localStorage.getItem("sellerId");
     const token = localStorage.getItem('token');
 
-    if (!title || !price || !description || !portionSize || !leftSize) {
+    if (!title || !price || !description || !portionSize) {
       toast({
         variant: "destructive",
         title: "Missing Information",
@@ -82,7 +81,7 @@ export default function AddListingPage() {
       available,
       sellerId,
       portionSize: parseInt(portionSize, 10),
-      leftSize: parseInt(leftSize, 10),
+      leftSize: parseInt(portionSize, 10), // Set leftSize to initial portionSize
     };
 
     try {
@@ -186,15 +185,9 @@ export default function AddListingPage() {
                     <Input id="price" type="number" step="0.01" placeholder="12.99" value={price} onChange={e => setPrice(e.target.value)} disabled={isSubmitting} required />
                 </div>
             </div>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label htmlFor="portionSize">Portion Size (units)</Label>
-                    <Input id="portionSize" type="number" placeholder="e.g., 1 (for 1 box)" value={portionSize} onChange={e => setPortionSize(e.target.value)} disabled={isSubmitting} required />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="leftSize">Portions Available</Label>
-                    <Input id="leftSize" type="number" placeholder="e.g., 10" value={leftSize} onChange={e => setLeftSize(e.target.value)} disabled={isSubmitting} required />
-                </div>
+             <div className="space-y-2">
+                <Label htmlFor="portionSize">Total Portions to Sell</Label>
+                <Input id="portionSize" type="number" placeholder="e.g., 10" value={portionSize} onChange={e => setPortionSize(e.target.value)} disabled={isSubmitting} required />
             </div>
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>

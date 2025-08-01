@@ -26,7 +26,7 @@ export default function EditListingPage() {
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [price, setPrice] = React.useState("");
-  const [portionSize, setPortionSize] = React.useState("");
+  const [portionSize, setPortionSize] = React.useState(""); // This will now be locked after creation
   const [leftSize, setLeftSize] = React.useState("");
   const [available, setAvailable] = React.useState(true);
   const [imageFile, setImageFile] = React.useState<File | null>(null);
@@ -60,9 +60,6 @@ export default function EditListingPage() {
                     setLeftSize(data.leftSize?.toString() || "0");
                     setAvailable(data.available);
                     if (data.image) {
-                        // The backend gives a relative path, but we need the full path for display
-                        // This assumes your file server is at the same origin.
-                        // If it's on a different CDN, you'll need the full base URL here.
                         setImagePreview(`${process.env.NEXT_PUBLIC_API_BASE_URL}${data.image}`);
                     }
                 } else {
@@ -99,21 +96,23 @@ export default function EditListingPage() {
         return;
     }
 
-    if (!title || !price || !description || !portionSize || !leftSize) {
+    if (!title || !price || !description || !leftSize) {
       toast({ variant: "destructive", title: "Missing Information", description: "All fields are required." });
       return;
     }
     
     setIsSubmitting(true);
     
-    const updatedData = {
+    const updatedData: Partial<Dish> = {
       title,
       description,
       price: parseFloat(price),
       available,
-      portionSize: parseInt(portionSize, 10),
       leftSize: parseInt(leftSize, 10),
     };
+    
+    // portionSize should not be updated after creation
+    // so we don't include it in the updatedData payload
 
     try {
       // Step 1: Update text data
@@ -235,11 +234,12 @@ export default function EditListingPage() {
             </div>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="portionSize">Portion Size (units)</Label>
-                    <Input id="portionSize" type="number" placeholder="e.g., 1 (for 1 box)" value={portionSize} onChange={e => setPortionSize(e.target.value)} disabled={isSubmitting} required />
+                    <Label htmlFor="portionSize">Portions per Dish (Servings)</Label>
+                    <Input id="portionSize" type="number" value={portionSize} disabled={true} />
+                    <p className="text-xs text-muted-foreground">This cannot be changed after creation.</p>
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="leftSize">Portions Available</Label>
+                    <Label htmlFor="leftSize">Update Available Portions</Label>
                     <Input id="leftSize" type="number" placeholder="e.g., 10" value={leftSize} onChange={e => setLeftSize(e.target.value)} disabled={isSubmitting} required />
                 </div>
             </div>
