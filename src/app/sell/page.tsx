@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { List, PlusCircle, CheckCircle, XCircle, Edit } from "lucide-react";
+import { List, PlusCircle, CheckCircle, XCircle, Edit, ImageIcon } from "lucide-react";
 import SectionTitle from "@/components/shared/SectionTitle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +11,26 @@ import type { Dish } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
+
+const fetchSignedUrl = async (imageUrlPath: string, token: string): Promise<string> => {
+    try {
+        const response = await fetch(`/api${imageUrlPath}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) {
+            throw new Error('Failed to get signed URL');
+        }
+        const data = await response.json();
+        // Replace localhost from the backend with the public IP.
+        const publicUrl = data.signed_url.replace('localhost:9000', '20.185.241.50:9000');
+        return publicUrl;
+    } catch (error) {
+        console.error("Error fetching signed URL:", error);
+        return 'https://placehold.co/100x100.png';
+    }
+};
 
 export default function SellDashboardPage() {
   const { toast } = useToast();
@@ -20,21 +40,8 @@ export default function SellDashboardPage() {
   const [isListingsLoading, setIsListingsLoading] = React.useState(true);
   const [sellerName, setSellerName] = React.useState<string | null>(null);
 
-  const fetchListings = React.useCallback(async () => {
+  const fetchListings = React.useCallback(async (token: string, sellerId: string) => {
     setIsListingsLoading(true);
-    const token = localStorage.getItem('token');
-    const sellerId = localStorage.getItem('sellerId');
-
-    if (!token || !sellerId) {
-      toast({
-        variant: "destructive",
-        title: "Authentication Error",
-        description: "Please sign in as a seller to view this page.",
-      });
-      router.push('/auth/signin?type=seller');
-      return;
-    }
-
     try {
       const response = await fetch(`/api/listings?sellerId=${sellerId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -42,7 +49,18 @@ export default function SellDashboardPage() {
 
       if (response.ok) {
         const data = await response.json();
-        setListings(Array.isArray(data) ? data : []);
+        const augmentedData = Array.isArray(data) ? await Promise.all(data.map(async item => {
+          let finalImageUrl = 'https://placehold.co/100x100.png';
+          if (item.image) {
+             // item.image is the relative path, e.g., /listings/{id}/image/{filename}
+             finalImageUrl = await fetchSignedUrl(item.image, token);
+          }
+          return {
+            ...item,
+            imageUrl: finalImageUrl, 
+          };
+        })) : [];
+        setListings(augmentedData);
       } else {
         const errorData = await response.json();
         throw new Error(errorData.error || "Could not load your current dishes.");
@@ -58,20 +76,26 @@ export default function SellDashboardPage() {
     } finally {
       setIsListingsLoading(false);
     }
-  }, [toast, router]);
+  }, [toast]);
 
   React.useEffect(() => {
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
     const name = localStorage.getItem('userName');
+    const sellerId = localStorage.getItem('sellerId');
     setSellerName(name);
 
-    if (!token || userRole !== 'seller') {
+    if (!token || userRole !== 'seller' || !sellerId) {
+       toast({
+        variant: "destructive",
+        title: "Authentication Error",
+        description: "Please sign in as a seller to view this page.",
+      });
       router.push('/auth/signin?type=seller');
     } else {
-      fetchListings();
+      fetchListings(token, sellerId);
     }
-  }, [router, fetchListings]);
+  }, [router, fetchListings, toast]);
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -97,14 +121,30 @@ export default function SellDashboardPage() {
             </CardHeader>
             <CardContent>
               {isListingsLoading ? (
-                  <div className="space-y-3">
-                      {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-10 w-full" />)}
+                  <div className="space-y-4">
+                      {[...Array(3)].map((_, i) => (
+                        <div key={i} className="flex items-center space-x-4">
+                          <Skeleton className="h-12 w-12 rounded-md" />
+                          <div className="flex-1 space-y-2">
+                            <Skeleton className="h-4 w-3/4" />
+                            <Skeleton className="h-4 w-1/2" />
+                          </div>
+                           <Skeleton className="h-8 w-20" />
+                        </div>
+                      ))}
                   </div>
               ) : listings.length > 0 ? (
                   <ul className="space-y-3 text-sm">
                       {listings.map((listing) => (
-                          <li key={listing.id} className="flex justify-between items-center border-b pb-2 last:border-b-0">
+                          <li key={listing.id} className="flex justify-between items-center border-b pb-3 pt-2 last:border-b-0">
                               <div className="flex items-center gap-4">
+                                <div className="relative h-16 w-16 rounded-md overflow-hidden bg-muted">
+                                  {listing.imageUrl && !listing.imageUrl.includes('placehold.co') ? (
+                                     <Image src={listing.imageUrl} alt={listing.title} layout="fill" objectFit="cover" />
+                                  ): (
+                                    <div className="flex items-center justify-center h-full"><ImageIcon className="h-6 w-6 text-muted-foreground"/></div>
+                                  )}
+                                </div>
                                 <div>
                                     <span className="font-medium text-foreground">{listing.title}</span>
                                     <div className="flex items-center text-xs text-muted-foreground">
@@ -114,11 +154,13 @@ export default function SellDashboardPage() {
                                             <XCircle className="h-4 w-4 mr-1 text-red-500" />
                                         )}
                                         {listing.available ? 'Available' : 'Unavailable'}
+                                         <span className="mx-2">|</span> 
+                                         <span>{listing.leftSize || 0} portions left</span>
                                     </div>
                                 </div>
                               </div>
                               <div className="flex items-center gap-2">
-                                <span className="font-mono text-foreground">${listing.price.toFixed(2)}</span>
+                                <Badge variant="outline" className="font-mono">${listing.price.toFixed(2)}</Badge>
                                 <Button variant="outline" size="icon" asChild>
                                     <Link href={`/sell/edit/${listing.id}`}>
                                         <Edit className="h-4 w-4" />

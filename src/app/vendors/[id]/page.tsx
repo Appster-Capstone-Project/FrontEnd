@@ -27,14 +27,35 @@ async function submitReview(formData: FormData) {
   // Since there is no review endpoint, this is for demonstration.
 }
 
+const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
+    try {
+        // Use absolute URL for server-side fetching
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}${imageUrlPath}`;
+
+        const response = await fetch(apiUrl, { cache: 'no-store' });
+        
+        if (!response.ok) {
+            throw new Error(`Failed to get signed URL for ${imageUrlPath}: ${response.statusText}`);
+        }
+        const data = await response.json();
+
+        if (!data.signed_url) {
+            throw new Error('Signed URL not found in response');
+        }
+
+        // Replace localhost from the backend with the public IP.
+        const publicUrl = data.signed_url.replace('localhost:9000', '20.185.241.50:9000');
+        return publicUrl;
+    } catch (error) {
+        console.error("Error fetching signed URL:", error);
+        return 'https://placehold.co/300x200.png'; // Fallback URL
+    }
+};
+
 async function getVendorDetails(id: string): Promise<Vendor | null> {
   try {
-    // Use relative paths to leverage Next.js rewrites configured in next.config.ts
-    const [sellerRes, listingsRes] = await Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sellers/${id}`),
-      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/listings?sellerId=${id}`)
-    ]);
-
+    const sellerRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sellers/${id}`);
+    
     if (!sellerRes.ok) {
       if (sellerRes.status === 404) {
         console.log(`Vendor with ID ${id} not found.`);
@@ -44,13 +65,35 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     }
 
     const seller = await sellerRes.json();
-    const listings = listingsRes.ok ? await listingsRes.json() : [];
+    let listings: Dish[] = [];
+    
+    try {
+        const listingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/listings?sellerId=${id}`);
 
-    const augmentedListings: Dish[] = Array.isArray(listings) ? listings.map(listing => ({
-      ...listing,
-      imageUrl: 'https://placehold.co/300x200.png',
-      dataAiHint: 'food dish',
-    })) : [];
+        if (listingsRes.ok) {
+            const rawListings = await listingsRes.json();
+            
+            if (Array.isArray(rawListings)) {
+                 listings = await Promise.all(
+                   rawListings.map(async (listing) => {
+                     let finalImageUrl = 'https://placehold.co/300x200.png';
+                     if (listing.image) {
+                       finalImageUrl = await fetchSignedUrl(listing.image);
+                     }
+                     return {
+                       ...listing,
+                       imageUrl: finalImageUrl,
+                       dataAiHint: 'food dish',
+                     };
+                   })
+                 );
+            }
+        } else {
+            console.warn(`Could not fetch listings for seller ${id}. Status: ${listingsRes.status}`);
+        }
+    } catch (e) {
+        console.error(`An error occurred fetching listings for seller ${id}`, e);
+    }
 
     // Placeholder reviews as there is no API endpoint for it
     const mockReviews: Review[] = [
@@ -58,7 +101,6 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
       { id: 'r1-2', userName: 'Anita S.', rating: 4, comment: 'Delicious, a bit spicy for me though.', date: '2024-07-14T18:30:00Z', userImageUrl: 'https://placehold.co/40x40.png', dataAiHintUser: 'woman portrait' },
     ];
     
-    // Augment the seller data with placeholder values for UI completeness
     return {
       id: seller.id,
       name: seller.name,
@@ -74,12 +116,11 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
       specialty: 'Delicious Home Food',
       operatingHours: '10 AM - 10 PM',
       deliveryOptions: ['Pickup', 'Delivery'],
-      menu: augmentedListings,
-      reviews: mockReviews, // Using mock reviews
+      menu: listings,
+      reviews: mockReviews,
     };
   } catch (error) {
     console.error("Failed to fetch vendor details:", error);
-    // Re-throwing the error is important for the error boundary to catch it
     if (error instanceof Error) {
         throw new Error(`Network request failed: ${error.message}`);
     }

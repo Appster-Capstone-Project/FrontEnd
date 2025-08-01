@@ -11,6 +11,9 @@ export interface Dish {
   dataAiHint?: string;
   category?: string;
   available: boolean;
+  portionSize?: number;
+  leftSize?: number;
+  image?: string; // To hold the image path from API
 }
 
 export interface Review {

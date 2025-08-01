@@ -25,19 +25,27 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: '20.185.241.50',
+        port: '9000',
+        pathname: '/**',
+      }
     ],
   },
   async rewrites() {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://172.190.60.228:8000/:path*', // your backend IP with port
+        destination: 'http://20.185.241.50:8000/:path*', // your backend IP with port
       },
     ];
   },
   env: {
-    NEXT_PUBLIC_API_BASE_URL: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : '',
+    NEXT_PUBLIC_API_BASE_URL: 'http://20.185.241.50:8000',
   }
 };
 
 export default withPwa(nextConfig);
+
+    
