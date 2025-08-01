@@ -32,7 +32,6 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
   const authHeader = headers().get('Authorization'); 
 
   try {
-    // Corrected URL: Use relative path for server-side fetching with rewrites
     const sellerRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sellers/${id}`);
     
     if (!sellerRes.ok) {
@@ -46,44 +45,50 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     const seller = await sellerRes.json();
     let listings: Dish[] = [];
     
-    if (authHeader) {
-      try {
-          // Corrected URL: Use relative path
-          const listingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/listings?sellerId=${id}`, {
-            headers: { 'Authorization': authHeader }
-          });
+    try {
+        // This endpoint should be public. No Authorization header is sent.
+        const listingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/listings?sellerId=${id}`);
 
-          if (listingsRes.ok) {
-              const rawListings = await listingsRes.json();
-              listings = Array.isArray(rawListings) ? await Promise.all(rawListings.map(async (listing: Dish) => {
-                  let signedUrl = 'https://placehold.co/300x200.png';
-                  if (listing.image) {
-                      try {
-                          const filename = listing.image.split('/').pop();
-                          // Corrected URL: Use relative path
-                          const signedUrlRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/listings/${listing.id}/image/${filename}`, {
-                              headers: { 'Authorization': authHeader }
-                          });
-                          if (signedUrlRes.ok) {
-                              const signedUrlData = await signedUrlRes.json();
-                              signedUrl = signedUrlData.signed_url;
-                          }
-                      } catch (e) {
-                          console.error(`Failed to get signed URL for listing ${listing.id}`, e);
-                      }
-                  }
-                  return {
-                      ...listing,
-                      imageUrl: signedUrl,
-                      dataAiHint: 'food dish',
-                  };
-              })) : [];
-          } else {
-              console.warn(`Could not fetch listings for seller ${id}. Status: ${listingsRes.status}`);
-          }
-      } catch (e) {
-          console.error(`An error occurred fetching listings for seller ${id}`, e);
-      }
+        if (listingsRes.ok) {
+            const rawListings = await listingsRes.json();
+            // The logic to fetch signed URLs requires an auth token.
+            // We can only do this if a user (any user) is logged in.
+            if (Array.isArray(rawListings) && authHeader) {
+                listings = await Promise.all(rawListings.map(async (listing: Dish) => {
+                    let signedUrl = 'https://placehold.co/300x200.png';
+                    if (listing.image) {
+                        try {
+                            const filename = listing.image.split('/').pop();
+                            const signedUrlRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/listings/${listing.id}/image/${filename}`, {
+                                headers: { 'Authorization': authHeader }
+                            });
+                            if (signedUrlRes.ok) {
+                                const signedUrlData = await signedUrlRes.json();
+                                signedUrl = signedUrlData.signed_url;
+                            }
+                        } catch (e) {
+                            console.error(`Failed to get signed URL for listing ${listing.id}`, e);
+                        }
+                    }
+                    return {
+                        ...listing,
+                        imageUrl: signedUrl,
+                        dataAiHint: 'food dish',
+                    };
+                }));
+            } else if (Array.isArray(rawListings)) {
+                // Handle case for non-logged-in users (images might not load if they require auth)
+                 listings = rawListings.map(listing => ({
+                    ...listing,
+                    imageUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}${listing.image}` || 'https://placehold.co/300x200.png',
+                    dataAiHint: 'food dish',
+                }));
+            }
+        } else {
+            console.warn(`Could not fetch listings for seller ${id}. Status: ${listingsRes.status}`);
+        }
+    } catch (e) {
+        console.error(`An error occurred fetching listings for seller ${id}`, e);
     }
 
     // Placeholder reviews as there is no API endpoint for it
@@ -210,7 +215,7 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
               ))}
             </div>
           ) : (
-            <p className="text-center text-muted-foreground py-8">This vendor hasn't added any dishes to their menu yet, or you may need to log in to view them.</p>
+            <p className="text-center text-muted-foreground py-8">This vendor hasn't added any dishes to their menu yet.</p>
           )}
         </TabsContent>
 
@@ -264,5 +269,3 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
     </div>
   );
 }
-
-    
