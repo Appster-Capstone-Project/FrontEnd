@@ -32,11 +32,12 @@ const fetchSignedUrl = async (imageUrlPath: string, token?: string): Promise<str
     try {
         const fetchHeaders: HeadersInit = {};
         if (token) {
+            // Forward the token from the original request
             fetchHeaders['Authorization'] = `Bearer ${token}`;
         }
         
-        // Construct the full URL for the API call to Next.js server
-        const apiUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api${imageUrlPath}`;
+        // Use absolute URL for server-side fetching
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}${imageUrlPath}`;
 
         const response = await fetch(apiUrl, { headers: fetchHeaders, cache: 'no-store' });
         
@@ -54,7 +55,7 @@ const fetchSignedUrl = async (imageUrlPath: string, token?: string): Promise<str
         return publicUrl;
     } catch (error) {
         console.error("Error fetching signed URL:", error);
-        return 'https://placehold.co/300x200.png';
+        return 'https://placehold.co/300x200.png'; // Fallback URL
     }
 };
 
@@ -77,7 +78,7 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     let listings: Dish[] = [];
     
     try {
-        // This endpoint should be public. No Authorization header is sent.
+        // This endpoint can now be public, but we pass the token if available for other potential uses
         const listingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/listings?sellerId=${id}`);
 
         if (listingsRes.ok) {
