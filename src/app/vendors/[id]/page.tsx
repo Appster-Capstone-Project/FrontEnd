@@ -30,6 +30,7 @@ async function submitReview(formData: FormData) {
 const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
     try {
         // For server-side fetch, we must use an absolute URL to our own API route.
+        // This hits the Next.js server which then proxies to the backend.
         const host = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
         const apiUrl = `${host}/api${imageUrlPath}`;
         
@@ -69,7 +70,7 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     let listings: Dish[] = [];
     
     try {
-        // This endpoint is now public, so no token is needed.
+        // This endpoint is public, so no token is needed.
         const listingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/listings?sellerId=${id}`);
 
         if (listingsRes.ok) {
@@ -77,10 +78,11 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
             
             if (Array.isArray(rawListings)) {
                  listings = await Promise.all(
-                   rawListings
-                    .filter(listing => listing.image) // Only process listings that have an image
-                    .map(async (listing) => {
-                        const finalImageUrl = await fetchSignedUrl(listing.image);
+                   rawListings.map(async (listing) => {
+                        let finalImageUrl = 'https://placehold.co/300x200.png'; // Default placeholder
+                        if (listing.image) {
+                            finalImageUrl = await fetchSignedUrl(listing.image);
+                        }
                         return {
                             ...listing,
                             imageUrl: finalImageUrl,
