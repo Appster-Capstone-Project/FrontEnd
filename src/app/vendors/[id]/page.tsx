@@ -46,41 +46,15 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     let listings: Dish[] = [];
     
     try {
-        // This endpoint should be public. No Authorization header is sent.
         const listingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/listings?sellerId=${id}`);
 
         if (listingsRes.ok) {
             const rawListings = await listingsRes.json();
-            // The logic to fetch signed URLs requires an auth token.
-            // We can only do this if a user (any user) is logged in.
-            if (Array.isArray(rawListings) && authHeader) {
-                listings = await Promise.all(rawListings.map(async (listing: Dish) => {
-                    let signedUrl = 'https://placehold.co/300x200.png';
-                    if (listing.image) {
-                        try {
-                            const filename = listing.image.split('/').pop();
-                            const signedUrlRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/listings/${listing.id}/image/${filename}`, {
-                                headers: { 'Authorization': authHeader }
-                            });
-                            if (signedUrlRes.ok) {
-                                const signedUrlData = await signedUrlRes.json();
-                                signedUrl = signedUrlData.signed_url;
-                            }
-                        } catch (e) {
-                            console.error(`Failed to get signed URL for listing ${listing.id}`, e);
-                        }
-                    }
-                    return {
-                        ...listing,
-                        imageUrl: signedUrl,
-                        dataAiHint: 'food dish',
-                    };
-                }));
-            } else if (Array.isArray(rawListings)) {
-                // Handle case for non-logged-in users (images might not load if they require auth)
+            
+            if (Array.isArray(rawListings)) {
                  listings = rawListings.map(listing => ({
                     ...listing,
-                    imageUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}${listing.image}` || 'https://placehold.co/300x200.png',
+                    imageUrl: listing.image ? `${process.env.NEXT_PUBLIC_API_BASE_URL}${listing.image}` : 'https://placehold.co/300x200.png',
                     dataAiHint: 'food dish',
                 }));
             }

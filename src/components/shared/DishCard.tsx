@@ -20,12 +20,14 @@ const DishCard: React.FC<DishCardProps> = ({ dish }) => {
   const handleAddToCart = () => {
     addToCart(dish);
   };
+  
+  const imageUrl = dish.image ? `${process.env.NEXT_PUBLIC_API_BASE_URL}${dish.image}` : 'https://placehold.co/300x200.png';
 
   return (
     <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col h-full">
       <CardHeader className="p-0 relative">
         <Image
-            src={dish.imageUrl || 'https://placehold.co/300x200.png'}
+            src={imageUrl}
             alt={dish.title}
             width={300}
             height={200}
