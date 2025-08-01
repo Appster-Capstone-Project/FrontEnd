@@ -175,20 +175,22 @@ export default function AddListingPage() {
               </div> 
             </div>
 
+            <div className="space-y-2">
+                <Label htmlFor="title">Dish Title</Label>
+                <Input id="title" placeholder="e.g., Butter Chicken" value={title} onChange={e => setTitle(e.target.value)} disabled={isSubmitting} required />
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label htmlFor="title">Dish Title</Label>
-                    <Input id="title" placeholder="e.g., Butter Chicken" value={title} onChange={e => setTitle(e.target.value)} disabled={isSubmitting} required />
-                </div>
                 <div className="space-y-2">
                     <Label htmlFor="price">Price ($)</Label>
                     <Input id="price" type="number" step="0.01" placeholder="12.99" value={price} onChange={e => setPrice(e.target.value)} disabled={isSubmitting} required />
                 </div>
+                <div className="space-y-2">
+                    <Label htmlFor="portionSize">Total Portions to Sell</Label>
+                    <Input id="portionSize" type="number" placeholder="e.g., 10" value={portionSize} onChange={e => setPortionSize(e.target.value)} disabled={isSubmitting} required />
+                </div>
             </div>
-             <div className="space-y-2">
-                <Label htmlFor="portionSize">Total Portions to Sell</Label>
-                <Input id="portionSize" type="number" placeholder="e.g., 10" value={portionSize} onChange={e => setPortionSize(e.target.value)} disabled={isSubmitting} required />
-            </div>
+            
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
               <Textarea id="description" placeholder="Describe your dish..." value={description} onChange={e => setDescription(e.target.value)} disabled={isSubmitting} required />
