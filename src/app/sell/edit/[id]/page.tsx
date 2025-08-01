@@ -14,6 +14,7 @@ import { useRouter, useParams } from "next/navigation";
 import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Dish } from "@/lib/types";
+import Image from 'next/image';
 
 export default function EditListingPage() {
   const { toast } = useToast();
@@ -25,7 +26,11 @@ export default function EditListingPage() {
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [price, setPrice] = React.useState("");
+  const [portionSize, setPortionSize] = React.useState("");
+  const [leftSize, setLeftSize] = React.useState("");
   const [available, setAvailable] = React.useState(true);
+  const [imageFile, setImageFile] = React.useState<File | null>(null);
+  const [imagePreview, setImagePreview] = React.useState<string | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -51,7 +56,15 @@ export default function EditListingPage() {
                     setTitle(data.title);
                     setDescription(data.description || "");
                     setPrice(data.price.toString());
+                    setPortionSize(data.portionSize?.toString() || "1");
+                    setLeftSize(data.leftSize?.toString() || "0");
                     setAvailable(data.available);
+                    if (data.image) {
+                        // The backend gives a relative path, but we need the full path for display
+                        // This assumes your file server is at the same origin.
+                        // If it's on a different CDN, you'll need the full base URL here.
+                        setImagePreview(`${process.env.NEXT_PUBLIC_API_BASE_URL}${data.image}`);
+                    }
                 } else {
                     throw new Error("Failed to fetch listing details.");
                 }
@@ -66,11 +79,27 @@ export default function EditListingPage() {
     }
   }, [listingId, router, toast]);
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
+    if (!token) {
+        toast({ variant: "destructive", title: "Authentication Error" });
+        return;
+    }
 
-    if (!title || !price || !description) {
+    if (!title || !price || !description || !portionSize || !leftSize) {
       toast({ variant: "destructive", title: "Missing Information", description: "All fields are required." });
       return;
     }
@@ -82,10 +111,13 @@ export default function EditListingPage() {
       description,
       price: parseFloat(price),
       available,
+      portionSize: parseInt(portionSize, 10),
+      leftSize: parseInt(leftSize, 10),
     };
 
     try {
-      const response = await fetch(`/api/listings/${listingId}`, {
+      // Step 1: Update text data
+      const listingResponse = await fetch(`/api/listings/${listingId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -94,11 +126,34 @@ export default function EditListingPage() {
         body: JSON.stringify(updatedData),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to update listing.");
+      if (!listingResponse.ok) {
+        const errorData = await listingResponse.json();
+        throw new Error(errorData.error || "Failed to update listing text data.");
       }
       
+      // Step 2: Update image if a new one was selected
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append('file', imageFile);
+
+        const imageResponse = await fetch(`/api/listings/${listingId}/image`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: formData,
+        });
+
+        if (!imageResponse.ok) {
+            const errorData = await imageResponse.json();
+            toast({
+                variant: "destructive",
+                title: "Image Upload Failed",
+                description: errorData.error || "The dish details were updated, but the new image could not be uploaded.",
+            });
+        }
+      }
+
       toast({
         title: "Update Successful",
         description: `Your dish '${title}' has been updated.`,
@@ -119,8 +174,12 @@ export default function EditListingPage() {
         <Card className="shadow-lg max-w-2xl mx-auto w-full">
             <CardHeader><Skeleton className="h-6 w-1/3" /></CardHeader>
             <CardContent className="space-y-6">
-                <Skeleton className="h-32 w-full" />
+                <Skeleton className="h-48 w-full" />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-10 w-full" />
+                </div>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Skeleton className="h-10 w-full" />
                     <Skeleton className="h-10 w-full" />
                 </div>
@@ -147,19 +206,22 @@ export default function EditListingPage() {
               </CardTitle>
             </CardHeader>
           <CardContent className="space-y-6">
-             <div className="space-y-2">
-                <Label htmlFor="image">Dish Image (Optional)</Label>
+            <div className="space-y-2">
+                <Label htmlFor="image">Dish Image</Label>
                 <div className="flex items-center justify-center w-full">
-                    <Label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-card hover:bg-muted">
+                    <Label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-card hover:bg-muted relative">
+                      {imagePreview ? (
+                        <Image src={imagePreview} alt="Image preview" layout="fill" objectFit="cover" className="rounded-lg" />
+                      ) : (
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
                             <Upload className="w-8 h-8 mb-2 text-muted-foreground" />
                             <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                            <p className="text-xs text-muted-foreground">PNG, JPG, or GIF (MAX. 800x400px)</p>
+                            <p className="text-xs text-muted-foreground">PNG, JPG (MAX. 800x400px)</p>
                         </div>
-                        <Input id="dropzone-file" type="file" className="hidden" disabled />
+                       )}
+                       <Input id="dropzone-file" type="file" className="hidden" onChange={handleImageChange} accept="image/png, image/jpeg" disabled={isSubmitting} />
                     </Label>
                 </div> 
-                <p className="text-xs text-muted-foreground text-center">Image upload is not functional yet.</p>
              </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -169,6 +231,16 @@ export default function EditListingPage() {
                 <div className="space-y-2">
                     <Label htmlFor="price">Price ($)</Label>
                     <Input id="price" type="number" step="0.01" placeholder="12.99" value={price} onChange={e => setPrice(e.target.value)} disabled={isSubmitting} required />
+                </div>
+            </div>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="portionSize">Portion Size (units)</Label>
+                    <Input id="portionSize" type="number" placeholder="e.g., 1 (for 1 box)" value={portionSize} onChange={e => setPortionSize(e.target.value)} disabled={isSubmitting} required />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="leftSize">Portions Available</Label>
+                    <Input id="leftSize" type="number" placeholder="e.g., 10" value={leftSize} onChange={e => setLeftSize(e.target.value)} disabled={isSubmitting} required />
                 </div>
             </div>
             <div className="space-y-2">

@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { List, PlusCircle, CheckCircle, XCircle, Edit } from "lucide-react";
+import { List, PlusCircle, CheckCircle, XCircle, Edit, ImageIcon } from "lucide-react";
 import SectionTitle from "@/components/shared/SectionTitle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +11,8 @@ import type { Dish } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
 
 export default function SellDashboardPage() {
   const { toast } = useToast();
@@ -42,7 +44,11 @@ export default function SellDashboardPage() {
 
       if (response.ok) {
         const data = await response.json();
-        setListings(Array.isArray(data) ? data : []);
+        const augmentedData = Array.isArray(data) ? data.map(item => ({
+          ...item,
+          imageUrl: item.image ? `${process.env.NEXT_PUBLIC_API_BASE_URL}${item.image}` : 'https://placehold.co/100x100.png'
+        })) : [];
+        setListings(augmentedData);
       } else {
         const errorData = await response.json();
         throw new Error(errorData.error || "Could not load your current dishes.");
@@ -97,14 +103,30 @@ export default function SellDashboardPage() {
             </CardHeader>
             <CardContent>
               {isListingsLoading ? (
-                  <div className="space-y-3">
-                      {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-10 w-full" />)}
+                  <div className="space-y-4">
+                      {[...Array(3)].map((_, i) => (
+                        <div key={i} className="flex items-center space-x-4">
+                          <Skeleton className="h-12 w-12 rounded-md" />
+                          <div className="flex-1 space-y-2">
+                            <Skeleton className="h-4 w-3/4" />
+                            <Skeleton className="h-4 w-1/2" />
+                          </div>
+                           <Skeleton className="h-8 w-20" />
+                        </div>
+                      ))}
                   </div>
               ) : listings.length > 0 ? (
                   <ul className="space-y-3 text-sm">
                       {listings.map((listing) => (
-                          <li key={listing.id} className="flex justify-between items-center border-b pb-2 last:border-b-0">
+                          <li key={listing.id} className="flex justify-between items-center border-b pb-3 pt-2 last:border-b-0">
                               <div className="flex items-center gap-4">
+                                <div className="relative h-16 w-16 rounded-md overflow-hidden bg-muted">
+                                  {listing.imageUrl ? (
+                                    <Image src={listing.imageUrl} alt={listing.title} layout="fill" objectFit="cover" />
+                                  ): (
+                                    <div className="flex items-center justify-center h-full"><ImageIcon className="h-6 w-6 text-muted-foreground"/></div>
+                                  )}
+                                </div>
                                 <div>
                                     <span className="font-medium text-foreground">{listing.title}</span>
                                     <div className="flex items-center text-xs text-muted-foreground">
@@ -114,11 +136,13 @@ export default function SellDashboardPage() {
                                             <XCircle className="h-4 w-4 mr-1 text-red-500" />
                                         )}
                                         {listing.available ? 'Available' : 'Unavailable'}
+                                         <span className="mx-2">|</span> 
+                                         <span>{listing.leftSize || 0} portions left</span>
                                     </div>
                                 </div>
                               </div>
                               <div className="flex items-center gap-2">
-                                <span className="font-mono text-foreground">${listing.price.toFixed(2)}</span>
+                                <Badge variant="outline" className="font-mono">${listing.price.toFixed(2)}</Badge>
                                 <Button variant="outline" size="icon" asChild>
                                     <Link href={`/sell/edit/${listing.id}`}>
                                         <Edit className="h-4 w-4" />

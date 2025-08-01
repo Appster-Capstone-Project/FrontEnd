@@ -246,33 +246,28 @@ function EditListingPage() {
             return;
         }
         setIsSubmitting(true);
-        // NOTE: This is a placeholder. The API documentation does not specify a
-        // PUT or PATCH endpoint for /listings/{id}. This needs to be implemented
-        // in the backend before this functionality will work.
-        // const updatedData = {
-        //   title,
-        //   description,
-        //   price: parseFloat(price),
-        //   available,
-        // };
+        const updatedData = {
+            title,
+            description,
+            price: parseFloat(price),
+            available
+        };
         try {
-            // Example of what the fetch call would look like:
-            // const response = await fetch(`/api/listings/${listingId}`, {
-            //   method: 'PUT', // or 'PATCH'
-            //   headers: {
-            //     'Content-Type': 'application/json',
-            //     'Authorization': `Bearer ${token}`,
-            //   },
-            //   body: JSON.stringify(updatedData),
-            // });
-            // if (!response.ok) {
-            //   throw new Error("Failed to update listing.");
-            // }
-            // For demonstration purposes, we'll simulate a successful update.
-            await new Promise((resolve)=>setTimeout(resolve, 1000));
+            const response = await fetch(`/api/listings/${listingId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(updatedData)
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Failed to update listing.");
+            }
             toast({
-                title: "Update Successful (DEMO)",
-                description: "Your dish has been updated. This is a demo as the backend endpoint is not ready."
+                title: "Update Successful",
+                description: `Your dish '${title}' has been updated.`
             });
             router.push('/sell');
         } catch (error) {
@@ -294,7 +289,7 @@ function EditListingPage() {
                     subtitle: "Loading dish details..."
                 }, void 0, false, {
                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                    lineNumber: 125,
+                    lineNumber: 118,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -305,12 +300,12 @@ function EditListingPage() {
                                 className: "h-6 w-1/3"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                lineNumber: 127,
+                                lineNumber: 120,
                                 columnNumber: 25
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                            lineNumber: 127,
+                            lineNumber: 120,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -320,7 +315,7 @@ function EditListingPage() {
                                     className: "h-32 w-full"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                    lineNumber: 129,
+                                    lineNumber: 122,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -330,59 +325,59 @@ function EditListingPage() {
                                             className: "h-10 w-full"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                            lineNumber: 131,
+                                            lineNumber: 124,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
                                             className: "h-10 w-full"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                            lineNumber: 132,
+                                            lineNumber: 125,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                    lineNumber: 130,
+                                    lineNumber: 123,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
                                     className: "h-20 w-full"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                    lineNumber: 134,
+                                    lineNumber: 127,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
                                     className: "h-6 w-1/2"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                    lineNumber: 135,
+                                    lineNumber: 128,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
                                     className: "h-10 w-full"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                    lineNumber: 136,
+                                    lineNumber: 129,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                            lineNumber: 128,
+                            lineNumber: 121,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                    lineNumber: 126,
+                    lineNumber: 119,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-            lineNumber: 124,
+            lineNumber: 117,
             columnNumber: 7
         }, this);
     }
@@ -394,7 +389,7 @@ function EditListingPage() {
                 subtitle: `Update the details for '${listing?.title || 'your dish'}'`
             }, void 0, false, {
                 fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                lineNumber: 145,
+                lineNumber: 138,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -411,19 +406,19 @@ function EditListingPage() {
                                         className: "mr-2 h-5 w-5 text-primary"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                        lineNumber: 153,
+                                        lineNumber: 146,
                                         columnNumber: 17
                                     }, this),
                                     " Dish Details"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                lineNumber: 152,
+                                lineNumber: 145,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                            lineNumber: 151,
+                            lineNumber: 144,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -437,7 +432,7 @@ function EditListingPage() {
                                             children: "Dish Image (Optional)"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                            lineNumber: 158,
+                                            lineNumber: 151,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -453,7 +448,7 @@ function EditListingPage() {
                                                                 className: "w-8 h-8 mb-2 text-muted-foreground"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                                                lineNumber: 162,
+                                                                lineNumber: 155,
                                                                 columnNumber: 29
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -464,14 +459,14 @@ function EditListingPage() {
                                                                         children: "Click to upload"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                                                        lineNumber: 163,
+                                                                        lineNumber: 156,
                                                                         columnNumber: 79
                                                                     }, this),
                                                                     " or drag and drop"
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                                                lineNumber: 163,
+                                                                lineNumber: 156,
                                                                 columnNumber: 29
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -479,13 +474,13 @@ function EditListingPage() {
                                                                 children: "PNG, JPG, or GIF (MAX. 800x400px)"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                                                lineNumber: 164,
+                                                                lineNumber: 157,
                                                                 columnNumber: 29
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                                        lineNumber: 161,
+                                                        lineNumber: 154,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -495,18 +490,18 @@ function EditListingPage() {
                                                         disabled: true
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                                        lineNumber: 166,
+                                                        lineNumber: 159,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                                lineNumber: 160,
+                                                lineNumber: 153,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                            lineNumber: 159,
+                                            lineNumber: 152,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -514,13 +509,13 @@ function EditListingPage() {
                                             children: "Image upload is not functional yet."
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                            lineNumber: 169,
+                                            lineNumber: 162,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                    lineNumber: 157,
+                                    lineNumber: 150,
                                     columnNumber: 14
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -534,7 +529,7 @@ function EditListingPage() {
                                                     children: "Dish Title"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                                    lineNumber: 173,
+                                                    lineNumber: 166,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -546,13 +541,13 @@ function EditListingPage() {
                                                     required: true
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                                    lineNumber: 174,
+                                                    lineNumber: 167,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                            lineNumber: 172,
+                                            lineNumber: 165,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -563,7 +558,7 @@ function EditListingPage() {
                                                     children: "Price ($)"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                                    lineNumber: 177,
+                                                    lineNumber: 170,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -577,19 +572,19 @@ function EditListingPage() {
                                                     required: true
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                                    lineNumber: 178,
+                                                    lineNumber: 171,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                            lineNumber: 176,
+                                            lineNumber: 169,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                    lineNumber: 171,
+                                    lineNumber: 164,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -600,7 +595,7 @@ function EditListingPage() {
                                             children: "Description"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                            lineNumber: 182,
+                                            lineNumber: 175,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -612,13 +607,13 @@ function EditListingPage() {
                                             required: true
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                            lineNumber: 183,
+                                            lineNumber: 176,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                    lineNumber: 181,
+                                    lineNumber: 174,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -631,7 +626,7 @@ function EditListingPage() {
                                             disabled: isSubmitting
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                            lineNumber: 186,
+                                            lineNumber: 179,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
@@ -640,13 +635,13 @@ function EditListingPage() {
                                             children: available ? "This dish is currently available" : "This dish is currently unavailable"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                            lineNumber: 187,
+                                            lineNumber: 180,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                    lineNumber: 185,
+                                    lineNumber: 178,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -656,30 +651,30 @@ function EditListingPage() {
                                     children: isSubmitting ? "Saving Changes..." : "Save Changes"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                                    lineNumber: 191,
+                                    lineNumber: 184,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                            lineNumber: 156,
+                            lineNumber: 149,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                    lineNumber: 150,
+                    lineNumber: 143,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-                lineNumber: 149,
+                lineNumber: 142,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/sell/edit/[id]/page.tsx",
-        lineNumber: 144,
+        lineNumber: 137,
         columnNumber: 5
     }, this);
 }

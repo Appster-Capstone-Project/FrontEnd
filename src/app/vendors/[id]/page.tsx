@@ -29,10 +29,11 @@ async function submitReview(formData: FormData) {
 
 async function getVendorDetails(id: string): Promise<Vendor | null> {
   try {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
     // Use relative paths to leverage Next.js rewrites configured in next.config.ts
     const [sellerRes, listingsRes] = await Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sellers/${id}`),
-      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/listings?sellerId=${id}`)
+      fetch(`${apiBaseUrl}/api/sellers/${id}`),
+      fetch(`${apiBaseUrl}/api/listings?sellerId=${id}`)
     ]);
 
     if (!sellerRes.ok) {
@@ -48,7 +49,8 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
 
     const augmentedListings: Dish[] = Array.isArray(listings) ? listings.map(listing => ({
       ...listing,
-      imageUrl: 'https://placehold.co/300x200.png',
+      // The backend now provides an image path. We construct the full URL.
+      imageUrl: listing.image ? `${apiBaseUrl}${listing.image}` : 'https://placehold.co/300x200.png',
       dataAiHint: 'food dish',
     })) : [];
 
