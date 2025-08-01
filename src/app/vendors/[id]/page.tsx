@@ -34,16 +34,24 @@ const fetchSignedUrl = async (imageUrlPath: string, token?: string): Promise<str
         if (token) {
             fetchHeaders['Authorization'] = `Bearer ${token}`;
         }
+        
+        // Construct the full URL for the API call to Next.js server
+        const apiUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api${imageUrlPath}`;
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${imageUrlPath}`, {
-            headers: fetchHeaders,
-        });
+        const response = await fetch(apiUrl, { headers: fetchHeaders, cache: 'no-store' });
         
         if (!response.ok) {
-            throw new Error(`Failed to get signed URL: ${response.statusText}`);
+            throw new Error(`Failed to get signed URL for ${imageUrlPath}: ${response.statusText}`);
         }
         const data = await response.json();
-        return data.signed_url || 'https://placehold.co/300x200.png';
+
+        if (!data.signed_url) {
+            throw new Error('Signed URL not found in response');
+        }
+
+        // Replace localhost from the backend with the public IP.
+        const publicUrl = data.signed_url.replace('localhost:9000', '20.185.241.50:9000');
+        return publicUrl;
     } catch (error) {
         console.error("Error fetching signed URL:", error);
         return 'https://placehold.co/300x200.png';
@@ -52,6 +60,7 @@ const fetchSignedUrl = async (imageUrlPath: string, token?: string): Promise<str
 
 async function getVendorDetails(id: string): Promise<Vendor | null> {
   const authHeader = headers().get('Authorization'); 
+  const token = authHeader?.split(' ')[1];
 
   try {
     const sellerRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sellers/${id}`);
@@ -77,15 +86,13 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
             if (Array.isArray(rawListings)) {
                  listings = await Promise.all(
                    rawListings.map(async (listing) => {
-                     let signedUrl = 'https://placehold.co/300x200.png';
+                     let finalImageUrl = 'https://placehold.co/300x200.png';
                      if (listing.image) {
-                       // The token is needed for the signed URL endpoint
-                       const token = authHeader?.split(' ')[1];
-                       signedUrl = await fetchSignedUrl(listing.image, token);
+                       finalImageUrl = await fetchSignedUrl(listing.image, token);
                      }
                      return {
                        ...listing,
-                       imageUrl: signedUrl,
+                       imageUrl: finalImageUrl,
                        dataAiHint: 'food dish',
                      };
                    })

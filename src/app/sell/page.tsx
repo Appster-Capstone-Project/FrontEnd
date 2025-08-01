@@ -23,7 +23,9 @@ const fetchSignedUrl = async (imageUrlPath: string, token: string): Promise<stri
             throw new Error('Failed to get signed URL');
         }
         const data = await response.json();
-        return data.signed_url || 'https://placehold.co/100x100.png';
+        // Replace localhost from the backend with the public IP.
+        const publicUrl = data.signed_url.replace('localhost:9000', '20.185.241.50:9000');
+        return publicUrl;
     } catch (error) {
         console.error("Error fetching signed URL:", error);
         return 'https://placehold.co/100x100.png';
@@ -48,14 +50,14 @@ export default function SellDashboardPage() {
       if (response.ok) {
         const data = await response.json();
         const augmentedData = Array.isArray(data) ? await Promise.all(data.map(async item => {
-          let signedUrl = 'https://placehold.co/100x100.png';
+          let finalImageUrl = 'https://placehold.co/100x100.png';
           if (item.image) {
              // item.image is the relative path, e.g., /listings/{id}/image/{filename}
-             signedUrl = await fetchSignedUrl(item.image, token);
+             finalImageUrl = await fetchSignedUrl(item.image, token);
           }
           return {
             ...item,
-            imageUrl: signedUrl, // Use the fetched signed URL
+            imageUrl: finalImageUrl, 
           };
         })) : [];
         setListings(augmentedData);
