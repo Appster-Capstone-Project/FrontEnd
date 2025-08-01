@@ -29,13 +29,14 @@ async function submitReview(formData: FormData) {
 
 const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
     try {
-        // Use absolute URL for server-side fetching
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}${imageUrlPath}`;
-
+        // For server-side fetch, we must use an absolute URL to our own API route.
+        const host = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+        const apiUrl = `${host}/api${imageUrlPath}`;
+        
         const response = await fetch(apiUrl, { cache: 'no-store' });
         
         if (!response.ok) {
-            throw new Error(`Failed to get signed URL for ${imageUrlPath}: ${response.statusText}`);
+            throw new Error(`Failed to get signed URL for ${imageUrlPath}. Status: ${response.status} ${response.statusText}`);
         }
         const data = await response.json();
 
@@ -68,6 +69,7 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     let listings: Dish[] = [];
     
     try {
+        // This endpoint is now public, so no token is needed.
         const listingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/listings?sellerId=${id}`);
 
         if (listingsRes.ok) {
@@ -75,16 +77,15 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
             
             if (Array.isArray(rawListings)) {
                  listings = await Promise.all(
-                   rawListings.map(async (listing) => {
-                     let finalImageUrl = 'https://placehold.co/300x200.png';
-                     if (listing.image) {
-                       finalImageUrl = await fetchSignedUrl(listing.image);
-                     }
-                     return {
-                       ...listing,
-                       imageUrl: finalImageUrl,
-                       dataAiHint: 'food dish',
-                     };
+                   rawListings
+                    .filter(listing => listing.image) // Only process listings that have an image
+                    .map(async (listing) => {
+                        const finalImageUrl = await fetchSignedUrl(listing.image);
+                        return {
+                            ...listing,
+                            imageUrl: finalImageUrl,
+                            dataAiHint: 'food dish',
+                        };
                    })
                  );
             }
@@ -273,3 +274,4 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
     </div>
   );
 }
+
