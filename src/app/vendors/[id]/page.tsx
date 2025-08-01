@@ -28,6 +28,28 @@ async function submitReview(formData: FormData) {
   // Since there is no review endpoint, this is for demonstration.
 }
 
+const fetchSignedUrl = async (imageUrlPath: string, token?: string): Promise<string> => {
+    try {
+        const fetchHeaders: HeadersInit = {};
+        if (token) {
+            fetchHeaders['Authorization'] = `Bearer ${token}`;
+        }
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${imageUrlPath}`, {
+            headers: fetchHeaders,
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Failed to get signed URL: ${response.statusText}`);
+        }
+        const data = await response.json();
+        return data.signed_url || 'https://placehold.co/300x200.png';
+    } catch (error) {
+        console.error("Error fetching signed URL:", error);
+        return 'https://placehold.co/300x200.png';
+    }
+};
+
 async function getVendorDetails(id: string): Promise<Vendor | null> {
   const authHeader = headers().get('Authorization'); 
 
@@ -46,17 +68,28 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     let listings: Dish[] = [];
     
     try {
+        // This endpoint should be public. No Authorization header is sent.
         const listingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/listings?sellerId=${id}`);
 
         if (listingsRes.ok) {
             const rawListings = await listingsRes.json();
             
             if (Array.isArray(rawListings)) {
-                 listings = rawListings.map(listing => ({
-                    ...listing,
-                    imageUrl: listing.image ? `${process.env.NEXT_PUBLIC_API_BASE_URL}${listing.image}` : 'https://placehold.co/300x200.png',
-                    dataAiHint: 'food dish',
-                }));
+                 listings = await Promise.all(
+                   rawListings.map(async (listing) => {
+                     let signedUrl = 'https://placehold.co/300x200.png';
+                     if (listing.image) {
+                       // The token is needed for the signed URL endpoint
+                       const token = authHeader?.split(' ')[1];
+                       signedUrl = await fetchSignedUrl(listing.image, token);
+                     }
+                     return {
+                       ...listing,
+                       imageUrl: signedUrl,
+                       dataAiHint: 'food dish',
+                     };
+                   })
+                 );
             }
         } else {
             console.warn(`Could not fetch listings for seller ${id}. Status: ${listingsRes.status}`);

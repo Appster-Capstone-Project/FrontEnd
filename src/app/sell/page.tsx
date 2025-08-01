@@ -14,9 +14,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 
-const fetchSignedUrl = async (imageUrl: string, token: string): Promise<string> => {
+const fetchSignedUrl = async (imageUrlPath: string, token: string): Promise<string> => {
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${imageUrl}`, {
+        const response = await fetch(`/api${imageUrlPath}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!response.ok) {
@@ -50,14 +50,12 @@ export default function SellDashboardPage() {
         const augmentedData = Array.isArray(data) ? await Promise.all(data.map(async item => {
           let signedUrl = 'https://placehold.co/100x100.png';
           if (item.image) {
-            // The image path from the listing now needs to be converted to a signed URL
-            const filename = item.image.split('/').pop();
-            const signedUrlPath = `/api/listings/${item.id}/image/${filename}`;
-             signedUrl = await fetchSignedUrl(signedUrlPath, token);
+             // item.image is the relative path, e.g., /listings/{id}/image/{filename}
+             signedUrl = await fetchSignedUrl(item.image, token);
           }
           return {
             ...item,
-            imageUrl: signedUrl,
+            imageUrl: signedUrl, // Use the fetched signed URL
           };
         })) : [];
         setListings(augmentedData);
@@ -139,7 +137,7 @@ export default function SellDashboardPage() {
                           <li key={listing.id} className="flex justify-between items-center border-b pb-3 pt-2 last:border-b-0">
                               <div className="flex items-center gap-4">
                                 <div className="relative h-16 w-16 rounded-md overflow-hidden bg-muted">
-                                  {listing.imageUrl ? (
+                                  {listing.imageUrl && !listing.imageUrl.includes('placehold.co') ? (
                                      <Image src={listing.imageUrl} alt={listing.title} layout="fill" objectFit="cover" />
                                   ): (
                                     <div className="flex items-center justify-center h-full"><ImageIcon className="h-6 w-6 text-muted-foreground"/></div>
