@@ -30,6 +30,12 @@ const nextConfig: NextConfig = {
         hostname: '20.185.241.50',
         port: '9000',
         pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'minio',
+        port: '9000',
+        pathname: '/**',
       }
     ],
   },
