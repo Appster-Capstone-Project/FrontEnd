@@ -11,7 +11,6 @@ import type { Dish } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 
 const fetchSignedUrl = async (imageUrlPath: string, token: string): Promise<string> => {
@@ -24,7 +23,7 @@ const fetchSignedUrl = async (imageUrlPath: string, token: string): Promise<stri
         }
         const data = await response.json();
         // Replace MinIO's internal Docker hostname with the public IP.
-        const publicUrl = data.signed_url.replace('minio:9000', '20.185.241.50:9000');
+        const publicUrl = data.signed_url.replace('minio:9000', '20.185.241.50:9000').replace('localhost:9000', '20.185.241.50:9000');
         return publicUrl;
     } catch (error) {
         console.error("Error fetching signed URL:", error);
@@ -139,7 +138,9 @@ export default function SellDashboardPage() {
                               <div className="flex items-center gap-4">
                                 <div className="relative h-16 w-16 rounded-md overflow-hidden bg-muted">
                                   {listing.imageUrl && !listing.imageUrl.includes('placehold.co') ? (
-                                     <Image src={listing.imageUrl} alt={listing.title} layout="fill" objectFit="cover" />
+                                     // Using a standard img tag to avoid Next/Image optimization issues with signed URLs
+                                     // The object-cover and layout-fill equivalent classes ensure the image fits well.
+                                     <img src={listing.imageUrl} alt={listing.title} className="absolute h-full w-full object-cover" />
                                   ): (
                                     <div className="flex items-center justify-center h-full"><ImageIcon className="h-6 w-6 text-muted-foreground"/></div>
                                   )}
