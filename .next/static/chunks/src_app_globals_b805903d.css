@@ -646,6 +646,10 @@ h1, h2, h3, h4, h5, h6 {
   aspect-ratio: 16 / 9;
 }
 
+.aspect-\[3\/2\] {
+  aspect-ratio: 3 / 2;
+}
+
 .size-4 {
   width: 1rem;
   height: 1rem;
@@ -2056,6 +2060,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .ease-linear {
   animation-timing-function: linear;
+}
+
+.running {
+  animation-play-state: running;
 }
 
 body {

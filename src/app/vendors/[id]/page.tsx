@@ -29,6 +29,8 @@ async function submitReview(formData: FormData) {
 
 const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
     try {
+        // Construct the full URL for the API endpoint, assuming the app is running on localhost:3000
+        // and the API proxy is correctly set up. This is necessary for server-side fetching.
         const host = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
         const apiUrl = `${host}/api${imageUrlPath}`;
         
@@ -43,14 +45,14 @@ const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
             throw new Error('Signed URL not found in response');
         }
         
-        // Replace MinIO's internal Docker hostname with the public IP.
-        const publicUrl = data.signed_url.replace('minio:9000', '20.185.241.50:9000');
+        const publicUrl = data.signed_url.replace('minio:9000', '20.185.241.50:9000').replace('localhost:9000', '20.185.241.50:9000');
         return publicUrl;
     } catch (error) {
         console.error("Error fetching signed URL:", error);
         return 'https://placehold.co/300x200.png'; // Fallback URL
     }
 };
+
 
 async function getVendorDetails(id: string): Promise<Vendor | null> {
   try {
@@ -73,20 +75,20 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
         if (listingsRes.ok) {
             const rawListings = await listingsRes.json();
             
-            if (Array.isArray(rawListings)) {
-                 listings = await Promise.all(
-                   rawListings.map(async (listing) => {
-                        let finalImageUrl = 'https://placehold.co/300x200.png'; 
-                        if (listing.image) {
-                            finalImageUrl = await fetchSignedUrl(listing.image);
-                        }
-                        return {
-                            ...listing,
-                            imageUrl: finalImageUrl,
-                            dataAiHint: 'food dish',
-                        };
-                   })
-                 );
+             if (Array.isArray(rawListings)) {
+                listings = await Promise.all(
+                  rawListings.map(async (listing) => {
+                    let finalImageUrl = 'https://placehold.co/300x200.png'; 
+                    if (listing.image) {
+                        finalImageUrl = await fetchSignedUrl(listing.image);
+                    }
+                    return {
+                        ...listing,
+                        imageUrl: finalImageUrl,
+                        dataAiHint: 'food dish',
+                    };
+                  })
+                );
             }
         } else {
             console.warn(`Could not fetch listings for seller ${id}. Status: ${listingsRes.status}`);

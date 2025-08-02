@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -13,11 +12,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 
-const fetchSignedUrl = async (imageUrlPath: string, token: string): Promise<string> => {
+const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
     try {
-        const response = await fetch(`/api${imageUrlPath}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const response = await fetch(`/api${imageUrlPath}`);
         if (!response.ok) {
             throw new Error('Failed to get signed URL');
         }
@@ -51,7 +48,7 @@ export default function SellDashboardPage() {
         const augmentedData = Array.isArray(data) ? await Promise.all(data.map(async item => {
           let finalImageUrl = 'https://placehold.co/100x100.png';
           if (item.image) {
-             finalImageUrl = await fetchSignedUrl(item.image, token);
+             finalImageUrl = await fetchSignedUrl(item.image);
           }
           return {
             ...item,
@@ -122,7 +119,7 @@ export default function SellDashboardPage() {
                   <div className="space-y-4">
                       {[...Array(3)].map((_, i) => (
                         <div key={i} className="flex items-center space-x-4">
-                          <Skeleton className="h-12 w-12 rounded-md" />
+                          <Skeleton className="h-16 w-16 rounded-md" />
                           <div className="flex-1 space-y-2">
                             <Skeleton className="h-4 w-3/4" />
                             <Skeleton className="h-4 w-1/2" />
@@ -138,8 +135,6 @@ export default function SellDashboardPage() {
                               <div className="flex items-center gap-4">
                                 <div className="relative h-16 w-16 rounded-md overflow-hidden bg-muted">
                                   {listing.imageUrl && !listing.imageUrl.includes('placehold.co') ? (
-                                     // Using a standard img tag to avoid Next/Image optimization issues with signed URLs
-                                     // The object-cover and layout-fill equivalent classes ensure the image fits well.
                                      <img src={listing.imageUrl} alt={listing.title} className="absolute h-full w-full object-cover" />
                                   ): (
                                     <div className="flex items-center justify-center h-full"><ImageIcon className="h-6 w-6 text-muted-foreground"/></div>
