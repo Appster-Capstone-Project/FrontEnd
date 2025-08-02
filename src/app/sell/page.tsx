@@ -23,8 +23,8 @@ const fetchSignedUrl = async (imageUrlPath: string, token: string): Promise<stri
             throw new Error('Failed to get signed URL');
         }
         const data = await response.json();
-        // Replace localhost from the backend with the public IP.
-        const publicUrl = data.signed_url.replace('localhost:9000', '20.185.241.50:9000');
+        // Replace MinIO's internal Docker hostname with the public IP.
+        const publicUrl = data.signed_url.replace('minio:9000', '20.185.241.50:9000');
         return publicUrl;
     } catch (error) {
         console.error("Error fetching signed URL:", error);
@@ -52,7 +52,6 @@ export default function SellDashboardPage() {
         const augmentedData = Array.isArray(data) ? await Promise.all(data.map(async item => {
           let finalImageUrl = 'https://placehold.co/100x100.png';
           if (item.image) {
-             // item.image is the relative path, e.g., /listings/{id}/image/{filename}
              finalImageUrl = await fetchSignedUrl(item.image, token);
           }
           return {
