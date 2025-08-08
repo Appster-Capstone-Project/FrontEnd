@@ -31,6 +31,12 @@ const nextConfig: NextConfig = {
         port: '9000',
         pathname: '/**',
       },
+       {
+        protocol: 'http',
+        hostname: '20.185.241.50',
+        port: '9000',
+        pathname: '/**',
+      },
     ],
   },
   async rewrites() {
@@ -43,6 +49,7 @@ const nextConfig: NextConfig = {
   },
   env: {
     NEXT_PUBLIC_API_BASE_URL: 'http://52.255.203.119:8000',
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'http://localhost:3000',
   }
 };
 

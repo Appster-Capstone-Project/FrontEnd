@@ -28,18 +28,19 @@ async function submitReview(formData: FormData) {
 
 const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
     try {
-        // Construct the correct, publicly accessible URL for the API endpoint that returns the signed URL
-        const apiUrl = `http://52.255.203.119/api${imageUrlPath}`;
-        
-        const response = await fetch(apiUrl, { cache: 'no-store' });
+        // Use relative path to leverage the Next.js proxy, consistent with seller pages.
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api${imageUrlPath}`, { cache: 'no-store' });
         
         if (!response.ok) {
-            throw new Error(`Failed to get signed URL for ${imageUrlPath}. Status: ${response.status} ${response.statusText}`);
+            const errorBody = await response.text();
+            console.error(`Failed to get signed URL for ${imageUrlPath}: ${response.status} ${errorBody}`);
+            throw new Error('Failed to get signed URL');
         }
         const data = await response.json();
 
         if (!data.signed_url) {
-            throw new Error('Signed URL not found in response');
+            console.error("Signed URL not found in response for path:", imageUrlPath);
+            return 'https://placehold.co/300x200.png';
         }
         
         // The signed_url should already be public, but we ensure it points to the correct public IP.
