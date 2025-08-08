@@ -35,21 +35,19 @@ export default function EditListingPage() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   React.useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userRole = localStorage.getItem('userRole');
-    if (!token || userRole !== 'seller') {
-      toast({ variant: "destructive", title: "Unauthorized", description: "You must be logged in as a seller."});
-      router.push('/auth/signin?type=seller');
-      return;
-    }
+    // const token = localStorage.getItem('token');
+    // const userRole = localStorage.getItem('userRole');
+    // if (!token || userRole !== 'seller') {
+    //   toast({ variant: "destructive", title: "Unauthorized", description: "You must be logged in as a seller."});
+    //   router.push('/auth/signin?type=seller');
+    //   return;
+    // }
     
     if (listingId) {
         const fetchListing = async () => {
             setIsLoading(true);
             try {
-                const response = await fetch(`/api/listings/${listingId}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const response = await fetch(`/api/listings/${listingId}`);
                 if (response.ok) {
                     const data: Dish = await response.json();
                     setListing(data);

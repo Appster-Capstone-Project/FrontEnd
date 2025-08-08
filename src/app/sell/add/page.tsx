@@ -28,12 +28,12 @@ export default function AddListingPage() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   React.useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userRole = localStorage.getItem('userRole');
-    if (!token || userRole !== 'seller') {
-      toast({ variant: "destructive", title: "Unauthorized", description: "You must be logged in as a seller."});
-      router.push('/auth/signin?type=seller');
-    }
+    // const token = localStorage.getItem('token');
+    // const userRole = localStorage.getItem('userRole');
+    // if (!token || userRole !== 'seller') {
+    //   toast({ variant: "destructive", title: "Unauthorized", description: "You must be logged in as a seller."});
+    //   router.push('/auth/signin?type=seller');
+    // }
   }, [router, toast]);
   
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -48,7 +49,8 @@ export default function SellDashboardPage() {
         const augmentedData = Array.isArray(data) ? await Promise.all(data.map(async item => {
           let finalImageUrl = 'https://placehold.co/100x100.png';
           if (item.image) {
-             finalImageUrl = await fetchSignedUrl(item.image);
+             const publicUrl = item.image.replace('minio:9000', '20.185.241.50:9000').replace('localhost:9000', '20.185.241.50:9000');
+             finalImageUrl = await fetchSignedUrl(publicUrl);
           }
           return {
             ...item,
@@ -74,22 +76,28 @@ export default function SellDashboardPage() {
   }, [toast]);
 
   React.useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userRole = localStorage.getItem('userRole');
-    const name = localStorage.getItem('userName');
-    const sellerId = localStorage.getItem('sellerId');
-    setSellerName(name);
+    // const token = localStorage.getItem('token');
+    // const userRole = localStorage.getItem('userRole');
+    // const name = localStorage.getItem('userName');
+    // const sellerId = localStorage.getItem('sellerId');
+    // setSellerName(name);
 
-    if (!token || userRole !== 'seller' || !sellerId) {
-       toast({
-        variant: "destructive",
-        title: "Authentication Error",
-        description: "Please sign in as a seller to view this page.",
-      });
-      router.push('/auth/signin?type=seller');
-    } else {
-      fetchListings(token, sellerId);
-    }
+    // if (!token || userRole !== 'seller' || !sellerId) {
+    //    toast({
+    //     variant: "destructive",
+    //     title: "Authentication Error",
+    //     description: "Please sign in as a seller to view this page.",
+    //   });
+    //   router.push('/auth/signin?type=seller');
+    // } else {
+    //   fetchListings(token, sellerId);
+    // }
+    const name = localStorage.getItem('userName') || "Seller";
+    const sellerId = localStorage.getItem('sellerId') || "seller123";
+    const token = localStorage.getItem('token') || "dummy-token";
+    setSellerName(name);
+    fetchListings(token, sellerId);
+
   }, [router, fetchListings, toast]);
 
   return (
