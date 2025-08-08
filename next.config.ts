@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'http',
-        hostname: '20.185.241.50',
+        hostname: '55.255.203.119',
         port: '9000',
         pathname: '/**',
       }
@@ -37,7 +37,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://20.185.241.50:8000/:path*', // your backend IP with port
+        destination: 'http://55.255.203.119:8000/:path*', // your backend IP with port
       },
     ];
   },
