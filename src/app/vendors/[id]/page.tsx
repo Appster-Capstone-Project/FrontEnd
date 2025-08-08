@@ -29,8 +29,6 @@ async function submitReview(formData: FormData) {
 
 const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
     try {
-        // Construct the full URL for the API endpoint, assuming the app is running on localhost:3000
-        // and the API proxy is correctly set up. This is necessary for server-side fetching.
         const host = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
         const apiUrl = `${host}/api${imageUrlPath}`;
         

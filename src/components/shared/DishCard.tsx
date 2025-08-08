@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Dish } from '@/lib/types';
@@ -60,7 +61,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish }) => {
           onClick={handleAddToCart}
         >
           <ShoppingCart className="mr-2 h-4 w-4" />
-          {dish.available ? `Add to Cart (${dish.leftSize} left)` : 'Unavailable'}
+          {dish.available && (dish.leftSize || 0) > 0 ? `Add to Cart (${dish.leftSize} left)` : 'Unavailable'}
         </Button>
       </CardFooter>
     </Card>
