@@ -2062,10 +2062,6 @@ h1, h2, h3, h4, h5, h6 {
   animation-timing-function: linear;
 }
 
-.running {
-  animation-play-state: running;
-}
-
 body {
   font-family: PT Sans, sans-serif;
 }

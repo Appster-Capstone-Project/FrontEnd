@@ -26,16 +26,26 @@ async function submitReview(formData: FormData) {
   // Since there is no review endpoint, this is for demonstration.
 }
 
+// This function now takes the full image path from the database and constructs the correct
+// absolute URL to fetch the signed URL from the backend.
 const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
     try {
-        // Use relative path to leverage the Next.js proxy, consistent with seller pages.
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api${imageUrlPath}`, { cache: 'no-store' });
+        // Use the environment variable for the base URL, which should be http://52.255.203.119
+        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+        if (!baseUrl) {
+             throw new Error("API base URL is not configured");
+        }
+        // Construct the full URL to fetch the signed URL data
+        const fullUrl = `${baseUrl}${imageUrlPath}`;
+        
+        const response = await fetch(fullUrl, { cache: 'no-store' });
         
         if (!response.ok) {
-            const errorBody = await response.text();
-            console.error(`Failed to get signed URL for ${imageUrlPath}: ${response.status} ${errorBody}`);
-            throw new Error('Failed to get signed URL');
+             const errorBody = await response.text();
+             console.error(`Failed to get signed URL for ${fullUrl}: ${response.status} ${errorBody}`);
+             throw new Error(`Failed to get signed URL. Status: ${response.status}`);
         }
+        
         const data = await response.json();
 
         if (!data.signed_url) {
@@ -45,8 +55,8 @@ const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
         
         // The signed_url should already be public, but we ensure it points to the correct public IP.
         const publicUrl = data.signed_url
-            .replace('minio:9000', '52.255.203.119:9000')
-            .replace('localhost:9000', '52.255.203.119:9000');
+            .replace('minio:9000', '20.185.241.50:9000')
+            .replace('localhost:9000', '20.185.241.50:9000');
             
         return publicUrl;
     } catch (error) {
@@ -81,6 +91,7 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
                 listings = await Promise.all(
                   rawListings.map(async (listing) => {
                     let finalImageUrl = 'https://placehold.co/300x200.png'; 
+                    // Use the 'image' field which contains the path like /listings/...
                     if (listing.image) {
                         finalImageUrl = await fetchSignedUrl(listing.image);
                     }
@@ -274,3 +285,5 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
     </div>
   );
 }
+
+    
