@@ -1,6 +1,5 @@
 
 import type { Vendor, Dish, Review } from '@/lib/types';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -43,7 +42,10 @@ const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
             throw new Error('Signed URL not found in response');
         }
         
-        const publicUrl = data.signed_url.replace('minio:9000', '20.185.241.50:9000').replace('localhost:9000', '20.185.241.50:9000');
+        const publicUrl = data.signed_url
+            .replace('minio:9000', '20.185.241.50:9000')
+            .replace('localhost:9000', '20.185.241.50:9000');
+            
         return publicUrl;
     } catch (error) {
         console.error("Error fetching signed URL:", error);
@@ -143,13 +145,10 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
       <Card className="mb-8 overflow-hidden shadow-xl">
         <div className="md:flex">
           <div className="md:w-1/3 relative">
-            <Image
+            <img
               src={vendor.imageUrl || 'https://placehold.co/600x400.png'}
               alt={vendor.name}
-              width={600}
-              height={400}
               className="w-full h-64 md:h-full object-cover"
-              priority
               data-ai-hint={vendor.dataAiHint || "food vendor"}
             />
           </div>

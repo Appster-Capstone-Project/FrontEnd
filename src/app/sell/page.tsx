@@ -13,14 +13,28 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 
+// This function fetches a signed URL for a given backend image path.
+// It proxies the request through the Next.js API route to avoid CORS issues
+// and replaces internal hostnames with the public IP for browser access.
 const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
     try {
         const response = await fetch(`/api${imageUrlPath}`);
         if (!response.ok) {
+            const errorBody = await response.text();
+            console.error(`Failed to get signed URL for ${imageUrlPath}: ${response.status} ${errorBody}`);
             throw new Error('Failed to get signed URL');
         }
         const data = await response.json();
-        const publicUrl = data.signed_url.replace('minio:9000', '20.185.241.50:9000').replace('localhost:9000', '20.185.241.50:9000');
+
+        if (!data.signed_url) {
+            console.error("Signed URL not found in response for path:", imageUrlPath);
+            return 'https://placehold.co/100x100.png';
+        }
+
+        const publicUrl = data.signed_url
+            .replace('minio:9000', '20.185.241.50:9000')
+            .replace('localhost:9000', '20.185.241.50:9000');
+            
         return publicUrl;
     } catch (error) {
         console.error("Error fetching signed URL:", error);
@@ -45,16 +59,20 @@ export default function SellDashboardPage() {
 
       if (response.ok) {
         const data = await response.json();
-        const augmentedData = Array.isArray(data) ? await Promise.all(data.map(async item => {
-          let finalImageUrl = 'https://placehold.co/100x100.png';
-          if (item.image) {
-             finalImageUrl = await fetchSignedUrl(item.image);
-          }
-          return {
-            ...item,
-            imageUrl: finalImageUrl, 
-          };
-        })) : [];
+        
+        const augmentedData = Array.isArray(data) ? await Promise.all(
+            data.map(async item => {
+                let finalImageUrl = 'https://placehold.co/100x100.png';
+                if (item.image) {
+                    finalImageUrl = await fetchSignedUrl(item.image);
+                }
+                return {
+                    ...item,
+                    imageUrl: finalImageUrl, 
+                };
+            })
+        ) : [];
+
         setListings(augmentedData);
       } else {
         const errorData = await response.json();
@@ -75,7 +93,7 @@ export default function SellDashboardPage() {
 
   React.useEffect(() => {
     const token = localStorage.getItem('token');
-    const userRole = localStorage.getItem('userRole');
+    // const userRole = localStorage.getItem('userRole');
     const name = localStorage.getItem('userName');
     const sellerId = localStorage.getItem('sellerId');
     setSellerName(name);

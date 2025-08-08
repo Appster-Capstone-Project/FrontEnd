@@ -84,7 +84,6 @@ const fetchSignedUrl = async (imageUrlPath)=>{
             throw new Error('Failed to get signed URL');
         }
         const data = await response.json();
-        // Replace MinIO's internal Docker hostname with the public IP.
         const publicUrl = data.signed_url.replace('minio:9000', '20.185.241.50:9000').replace('localhost:9000', '20.185.241.50:9000');
         return publicUrl;
     } catch (error) {
@@ -111,8 +110,7 @@ function SellDashboardPage() {
                 const augmentedData = Array.isArray(data) ? await Promise.all(data.map(async (item)=>{
                     let finalImageUrl = 'https://placehold.co/100x100.png';
                     if (item.image) {
-                        const publicUrl = item.image.replace('minio:9000', '20.185.241.50:9000').replace('localhost:9000', '20.185.241.50:9000');
-                        finalImageUrl = await fetchSignedUrl(publicUrl);
+                        finalImageUrl = await fetchSignedUrl(item.image);
                     }
                     return {
                         ...item,
@@ -139,11 +137,11 @@ function SellDashboardPage() {
         toast
     ]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        // const token = localStorage.getItem('token');
-        // const userRole = localStorage.getItem('userRole');
-        // const name = localStorage.getItem('userName');
-        // const sellerId = localStorage.getItem('sellerId');
-        // setSellerName(name);
+        const token = localStorage.getItem('token');
+        const userRole = localStorage.getItem('userRole');
+        const name = localStorage.getItem('userName');
+        const sellerId = localStorage.getItem('sellerId');
+        setSellerName(name);
         // if (!token || userRole !== 'seller' || !sellerId) {
         //    toast({
         //     variant: "destructive",
@@ -154,11 +152,7 @@ function SellDashboardPage() {
         // } else {
         //   fetchListings(token, sellerId);
         // }
-        const name = localStorage.getItem('userName') || "Seller";
-        const sellerId = localStorage.getItem('sellerId') || "seller123";
-        const token = localStorage.getItem('token') || "dummy-token";
-        setSellerName(name);
-        fetchListings(token, sellerId);
+        fetchListings(token || "dummy-token", sellerId || "seller123");
     }, [
         router,
         fetchListings,
@@ -172,7 +166,7 @@ function SellDashboardPage() {
                 subtitle: "Here's an overview of your menu."
             }, void 0, false, {
                 fileName: "[project]/src/app/sell/page.tsx",
-                lineNumber: 105,
+                lineNumber: 99,
                 columnNumber: 8
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -189,27 +183,27 @@ function SellDashboardPage() {
                                                 className: "mr-2 h-5 w-5"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/sell/page.tsx",
-                                                lineNumber: 113,
+                                                lineNumber: 107,
                                                 columnNumber: 21
                                             }, this),
                                             " Your Menu"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/sell/page.tsx",
-                                        lineNumber: 112,
+                                        lineNumber: 106,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardDescription"], {
                                         children: "A list of all the dishes you are currently offering."
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/sell/page.tsx",
-                                        lineNumber: 115,
+                                        lineNumber: 109,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/sell/page.tsx",
-                                lineNumber: 111,
+                                lineNumber: 105,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -221,25 +215,25 @@ function SellDashboardPage() {
                                             className: "mr-2 h-4 w-4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/sell/page.tsx",
-                                            lineNumber: 121,
+                                            lineNumber: 115,
                                             columnNumber: 19
                                         }, this),
                                         " Add New Dish"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/sell/page.tsx",
-                                    lineNumber: 120,
+                                    lineNumber: 114,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/sell/page.tsx",
-                                lineNumber: 119,
+                                lineNumber: 113,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/sell/page.tsx",
-                        lineNumber: 110,
+                        lineNumber: 104,
                         columnNumber: 13
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -254,7 +248,7 @@ function SellDashboardPage() {
                                             className: "h-16 w-16 rounded-md"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/sell/page.tsx",
-                                            lineNumber: 130,
+                                            lineNumber: 124,
                                             columnNumber: 27
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -264,38 +258,38 @@ function SellDashboardPage() {
                                                     className: "h-4 w-3/4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/sell/page.tsx",
-                                                    lineNumber: 132,
+                                                    lineNumber: 126,
                                                     columnNumber: 29
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
                                                     className: "h-4 w-1/2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/sell/page.tsx",
-                                                    lineNumber: 133,
+                                                    lineNumber: 127,
                                                     columnNumber: 29
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/sell/page.tsx",
-                                            lineNumber: 131,
+                                            lineNumber: 125,
                                             columnNumber: 27
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
                                             className: "h-8 w-20"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/sell/page.tsx",
-                                            lineNumber: 135,
+                                            lineNumber: 129,
                                             columnNumber: 28
                                         }, this)
                                     ]
                                 }, i, true, {
                                     fileName: "[project]/src/app/sell/page.tsx",
-                                    lineNumber: 129,
+                                    lineNumber: 123,
                                     columnNumber: 25
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/src/app/sell/page.tsx",
-                            lineNumber: 127,
+                            lineNumber: 121,
                             columnNumber: 19
                         }, this) : listings.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
                             className: "space-y-3 text-sm",
@@ -313,7 +307,7 @@ function SellDashboardPage() {
                                                         className: "absolute h-full w-full object-cover"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/sell/page.tsx",
-                                                        lineNumber: 146,
+                                                        lineNumber: 140,
                                                         columnNumber: 38
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         className: "flex items-center justify-center h-full",
@@ -321,17 +315,17 @@ function SellDashboardPage() {
                                                             className: "h-6 w-6 text-muted-foreground"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/sell/page.tsx",
-                                                            lineNumber: 148,
+                                                            lineNumber: 142,
                                                             columnNumber: 94
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/sell/page.tsx",
-                                                        lineNumber: 148,
+                                                        lineNumber: 142,
                                                         columnNumber: 37
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/sell/page.tsx",
-                                                    lineNumber: 144,
+                                                    lineNumber: 138,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -341,7 +335,7 @@ function SellDashboardPage() {
                                                             children: listing.title
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/sell/page.tsx",
-                                                            lineNumber: 152,
+                                                            lineNumber: 146,
                                                             columnNumber: 37
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -351,13 +345,13 @@ function SellDashboardPage() {
                                                                     className: "h-4 w-4 mr-1 text-green-500"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/sell/page.tsx",
-                                                                    lineNumber: 155,
+                                                                    lineNumber: 149,
                                                                     columnNumber: 45
                                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__XCircle$3e$__["XCircle"], {
                                                                     className: "h-4 w-4 mr-1 text-red-500"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/sell/page.tsx",
-                                                                    lineNumber: 157,
+                                                                    lineNumber: 151,
                                                                     columnNumber: 45
                                                                 }, this),
                                                                 listing.available ? 'Available' : 'Unavailable',
@@ -366,7 +360,7 @@ function SellDashboardPage() {
                                                                     children: "|"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/sell/page.tsx",
-                                                                    lineNumber: 160,
+                                                                    lineNumber: 154,
                                                                     columnNumber: 42
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -376,25 +370,25 @@ function SellDashboardPage() {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/sell/page.tsx",
-                                                                    lineNumber: 161,
+                                                                    lineNumber: 155,
                                                                     columnNumber: 42
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/sell/page.tsx",
-                                                            lineNumber: 153,
+                                                            lineNumber: 147,
                                                             columnNumber: 37
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/sell/page.tsx",
-                                                    lineNumber: 151,
+                                                    lineNumber: 145,
                                                     columnNumber: 33
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/sell/page.tsx",
-                                            lineNumber: 143,
+                                            lineNumber: 137,
                                             columnNumber: 31
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -409,7 +403,7 @@ function SellDashboardPage() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/sell/page.tsx",
-                                                    lineNumber: 166,
+                                                    lineNumber: 160,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -423,7 +417,7 @@ function SellDashboardPage() {
                                                                 className: "h-4 w-4"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/sell/page.tsx",
-                                                                lineNumber: 169,
+                                                                lineNumber: 163,
                                                                 columnNumber: 41
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -434,35 +428,35 @@ function SellDashboardPage() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/sell/page.tsx",
-                                                                lineNumber: 170,
+                                                                lineNumber: 164,
                                                                 columnNumber: 41
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/sell/page.tsx",
-                                                        lineNumber: 168,
+                                                        lineNumber: 162,
                                                         columnNumber: 37
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/sell/page.tsx",
-                                                    lineNumber: 167,
+                                                    lineNumber: 161,
                                                     columnNumber: 33
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/sell/page.tsx",
-                                            lineNumber: 165,
+                                            lineNumber: 159,
                                             columnNumber: 31
                                         }, this)
                                     ]
                                 }, listing.id, true, {
                                     fileName: "[project]/src/app/sell/page.tsx",
-                                    lineNumber: 142,
+                                    lineNumber: 136,
                                     columnNumber: 27
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/src/app/sell/page.tsx",
-                            lineNumber: 140,
+                            lineNumber: 134,
                             columnNumber: 19
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "text-center py-12",
@@ -472,7 +466,7 @@ function SellDashboardPage() {
                                     children: "Your menu is empty"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/sell/page.tsx",
-                                    lineNumber: 179,
+                                    lineNumber: 173,
                                     columnNumber: 19
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -480,7 +474,7 @@ function SellDashboardPage() {
                                     children: "You haven't added any dishes yet. Let's add the first one!"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/sell/page.tsx",
-                                    lineNumber: 180,
+                                    lineNumber: 174,
                                     columnNumber: 19
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -492,42 +486,42 @@ function SellDashboardPage() {
                                                 className: "mr-2 h-4 w-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/sell/page.tsx",
-                                                lineNumber: 183,
+                                                lineNumber: 177,
                                                 columnNumber: 23
                                             }, this),
                                             " Add Your First Dish"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/sell/page.tsx",
-                                        lineNumber: 182,
+                                        lineNumber: 176,
                                         columnNumber: 21
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/sell/page.tsx",
-                                    lineNumber: 181,
+                                    lineNumber: 175,
                                     columnNumber: 19
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/sell/page.tsx",
-                            lineNumber: 178,
+                            lineNumber: 172,
                             columnNumber: 17
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/sell/page.tsx",
-                        lineNumber: 125,
+                        lineNumber: 119,
                         columnNumber: 13
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/sell/page.tsx",
-                lineNumber: 109,
+                lineNumber: 103,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/sell/page.tsx",
-        lineNumber: 104,
+        lineNumber: 98,
         columnNumber: 5
     }, this);
 }
