@@ -42,7 +42,7 @@ const nextConfig: NextConfig = {
     ];
   },
   env: {
-    NEXT_PUBLIC_API_BASE_URL: 'http://20.185.241.50:8000',
+    NEXT_PUBLIC_API_BASE_URL: 'http://55.255.203.119:8000',
   }
 };
 
