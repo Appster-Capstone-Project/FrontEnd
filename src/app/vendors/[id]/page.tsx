@@ -28,8 +28,8 @@ async function submitReview(formData: FormData) {
 
 const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
     try {
-        const host = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
-        const apiUrl = `${host}/api${imageUrlPath}`;
+        // Construct the correct, publicly accessible URL for the API endpoint that returns the signed URL
+        const apiUrl = `http://52.255.203.119/api${imageUrlPath}`;
         
         const response = await fetch(apiUrl, { cache: 'no-store' });
         
@@ -42,9 +42,10 @@ const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
             throw new Error('Signed URL not found in response');
         }
         
+        // The signed_url should already be public, but we ensure it points to the correct public IP.
         const publicUrl = data.signed_url
-            .replace('minio:9000', '20.185.241.50:9000')
-            .replace('localhost:9000', '20.185.241.50:9000');
+            .replace('minio:9000', '52.255.203.119:9000')
+            .replace('localhost:9000', '52.255.203.119:9000');
             
         return publicUrl;
     } catch (error) {
