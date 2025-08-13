@@ -13,29 +13,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 
-// This function fetches a signed URL for a given backend image path.
-// It proxies the request through the Next.js API route to avoid CORS issues
-// and replaces internal hostnames with the public IP for browser access.
 const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
     try {
         const response = await fetch(`/api${imageUrlPath}`);
         if (!response.ok) {
-            const errorBody = await response.text();
-            console.error(`Failed to get signed URL for ${imageUrlPath}: ${response.status} ${errorBody}`);
             throw new Error('Failed to get signed URL');
         }
         const data = await response.json();
-
         if (!data.signed_url) {
-            console.error("Signed URL not found in response for path:", imageUrlPath);
             return 'https://placehold.co/100x100.png';
         }
-
-        const publicUrl = data.signed_url
-            .replace('minio:9000', '20.185.241.50:9000')
-            .replace('localhost:9000', '20.185.241.50:9000');
-            
-        return publicUrl;
+        return data.signed_url.replace('minio:9000', '20.185.241.50:9000');
     } catch (error) {
         console.error("Error fetching signed URL:", error);
         return 'https://placehold.co/100x100.png';
@@ -93,7 +81,6 @@ export default function SellDashboardPage() {
 
   React.useEffect(() => {
     const token = localStorage.getItem('token');
-    // const userRole = localStorage.getItem('userRole');
     const name = localStorage.getItem('userName');
     const sellerId = localStorage.getItem('sellerId');
     setSellerName(name);

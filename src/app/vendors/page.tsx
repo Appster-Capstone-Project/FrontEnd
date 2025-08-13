@@ -49,17 +49,14 @@ export default function VendorsPage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    const role = localStorage.getItem('userRole');
-    setUserRole(role);
+    // const role = localStorage.getItem('userRole');
+    // setUserRole(role);
 
-    // If the current user is a seller, they should not be on this page.
-    // Redirect them to their own dashboard immediately.
-    if (role === 'seller') {
-      router.replace('/sell');
-      return; // Stop further execution in this component
-    }
+    // if (role === 'seller') {
+    //   router.replace('/sell');
+    //   return; 
+    // }
 
-    // If not a seller, proceed to render the page and fetch data
     setIsReady(true);
 
     const fetchVendors = async () => {
@@ -113,7 +110,6 @@ export default function VendorsPage() {
     setActiveCategory(category);
   };
   
-  // Render a loading state until the role check is complete to prevent content flashing.
   if (!isReady) {
     return (
       <div className="container py-12 md:py-16">
@@ -152,11 +148,11 @@ export default function VendorsPage() {
       </div>
       
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
             {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
       ) : filteredVendors.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
           {filteredVendors.map((vendor) => (
             <VendorCard key={vendor.id} vendor={vendor} />
           ))}
