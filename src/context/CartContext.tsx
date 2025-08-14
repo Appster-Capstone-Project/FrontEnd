@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import type { CartItem, Dish } from '@/lib/types';
 import { useToast } from "@/hooks/use-toast";
 
@@ -13,15 +13,46 @@ interface CartContextType {
   clearCart: () => void;
   getCartTotal: () => number;
   getItemCount: () => number;
+  getSellerId: () => string | null;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    if (typeof window === 'undefined') {
+      return [];
+    }
+    try {
+      const item = window.localStorage.getItem('cartItems');
+      return item ? JSON.parse(item) : [];
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  });
   const { toast } = useToast();
 
+  useEffect(() => {
+    try {
+        window.localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    } catch (error) {
+        console.log(error);
+    }
+  }, [cartItems]);
+
+
   const addToCart = (dish: Dish) => {
+    // Check if the new dish is from the same seller
+    if (cartItems.length > 0 && cartItems[0].sellerId !== dish.sellerId) {
+      toast({
+        variant: "destructive",
+        title: "Cannot Mix Sellers",
+        description: "You can only order from one seller at a time. Please clear your cart to add items from this seller.",
+      });
+      return;
+    }
+
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === dish.id);
       if (existingItem) {
@@ -65,8 +96,12 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return cartItems.reduce((count, item) => count + item.quantity, 0);
   };
 
+  const getSellerId = (): string | null => {
+    return cartItems.length > 0 ? cartItems[0].sellerId : null;
+  };
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQuantity, clearCart, getCartTotal, getItemCount }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQuantity, clearCart, getCartTotal, getItemCount, getSellerId }}>
       {children}
     </CartContext.Provider>
   );

@@ -17,19 +17,81 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { Trash2, ShoppingCart } from 'lucide-react';
+import { Trash2, ShoppingCart, Loader2 } from 'lucide-react';
+import React from 'react';
+import { useRouter } from 'next/navigation';
+
 
 export default function CartSheet({ children }: { children: React.ReactNode }) {
-  const { cartItems, updateQuantity, removeFromCart, getCartTotal, clearCart } = useCart();
+  const { cartItems, updateQuantity, removeFromCart, getCartTotal, getSellerId, clearCart } = useCart();
   const { toast } = useToast();
+  const router = useRouter();
   const total = getCartTotal();
+  const sellerId = getSellerId();
+  const [isCheckingOut, setIsCheckingOut] = React.useState(false);
 
-  const handleCheckout = () => {
-    toast({
-      title: "Order Placed!",
-      description: "Thank you for your purchase. Your delicious meal is on its way!",
-    });
-    clearCart();
+  const handleCheckout = async () => {
+    const token = localStorage.getItem('token');
+    const userRole = localStorage.getItem('userRole');
+
+    if (!token || userRole !== 'user') {
+        toast({
+            variant: "destructive",
+            title: "Not Logged In",
+            description: "You must be logged in as a customer to place an order.",
+        });
+        router.push('/auth/signin');
+        return;
+    }
+
+    if (!sellerId || cartItems.length === 0) {
+        toast({
+            variant: "destructive",
+            title: "Cart Error",
+            description: "Your cart is empty or contains items from multiple sellers.",
+        });
+        return;
+    }
+    
+    setIsCheckingOut(true);
+
+    const orderData = {
+        listingIds: cartItems.map(item => item.id),
+        sellerId: sellerId,
+        total: total,
+    };
+    
+    try {
+        const response = await fetch('/api/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(orderData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || "Failed to place order.");
+        }
+
+        toast({
+            title: "Order Placed!",
+            description: "Thank you for your purchase. You can track your order in the 'My Orders' page.",
+        });
+        clearCart();
+        router.push('/orders');
+
+    } catch (error) {
+        toast({
+            variant: "destructive",
+            title: "Checkout Failed",
+            description: (error as Error).message,
+        });
+    } finally {
+        setIsCheckingOut(false);
+    }
   };
 
   return (
@@ -83,7 +145,13 @@ export default function CartSheet({ children }: { children: React.ReactNode }) {
                   <span>${total.toFixed(2)}</span>
                 </div>
                 <SheetClose asChild>
-                  <Button onClick={handleCheckout} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" size="lg">
+                  <Button 
+                    onClick={handleCheckout} 
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" 
+                    size="lg"
+                    disabled={isCheckingOut}
+                  >
+                    {isCheckingOut && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Proceed to Checkout
                   </Button>
                 </SheetClose>

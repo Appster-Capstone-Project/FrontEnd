@@ -51,3 +51,13 @@ export interface Vendor {
 export interface CartItem extends Dish {
   quantity: number;
 }
+
+export interface Order {
+  id: string;
+  user_email: string;
+  sellerId: string;
+  listingIds: string[];
+  total: number;
+  status: 'pending' | 'accepted' | 'completed' | 'cancelled';
+  createdAt: number;
+}
