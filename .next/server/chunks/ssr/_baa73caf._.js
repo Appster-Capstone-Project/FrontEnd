@@ -578,15 +578,12 @@ function VendorsPage() {
     const [searchTerm, setSearchTerm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('');
     const { toast } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useToast"])();
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        const role = localStorage.getItem('userRole');
-        setUserRole(role);
-        // If the current user is a seller, they should not be on this page.
-        // Redirect them to their own dashboard immediately.
-        if (role === 'seller') {
-            router.replace('/sell');
-            return; // Stop further execution in this component
-        }
-        // If not a seller, proceed to render the page and fetch data
+        // const role = localStorage.getItem('userRole');
+        // setUserRole(role);
+        // if (role === 'seller') {
+        //   router.replace('/sell');
+        //   return; 
+        // }
         setIsReady(true);
         const fetchVendors = async ()=>{
             setIsLoading(true);
@@ -635,7 +632,6 @@ function VendorsPage() {
     const handleCategoryChange = (category)=>{
         setActiveCategory(category);
     };
-    // Render a loading state until the role check is complete to prevent content flashing.
     if (!isReady) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             className: "container py-12 md:py-16",
@@ -645,17 +641,17 @@ function VendorsPage() {
                     ...Array(6)
                 ].map((_, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(CardSkeleton, {}, i, false, {
                         fileName: "[project]/src/app/vendors/page.tsx",
-                        lineNumber: 121,
+                        lineNumber: 117,
                         columnNumber: 42
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/src/app/vendors/page.tsx",
-                lineNumber: 120,
+                lineNumber: 116,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/app/vendors/page.tsx",
-            lineNumber: 119,
+            lineNumber: 115,
             columnNumber: 7
         }, this);
     }
@@ -668,7 +664,7 @@ function VendorsPage() {
                 className: "text-center"
             }, void 0, false, {
                 fileName: "[project]/src/app/vendors/page.tsx",
-                lineNumber: 129,
+                lineNumber: 125,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -681,7 +677,7 @@ function VendorsPage() {
                                 className: "absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/vendors/page.tsx",
-                                lineNumber: 137,
+                                lineNumber: 133,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -691,13 +687,13 @@ function VendorsPage() {
                                 onChange: (e)=>setSearchTerm(e.target.value)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/vendors/page.tsx",
-                                lineNumber: 138,
+                                lineNumber: 134,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/vendors/page.tsx",
-                        lineNumber: 136,
+                        lineNumber: 132,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -708,45 +704,45 @@ function VendorsPage() {
                             onCategoryChange: handleCategoryChange
                         }, void 0, false, {
                             fileName: "[project]/src/app/vendors/page.tsx",
-                            lineNumber: 146,
+                            lineNumber: 142,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/vendors/page.tsx",
-                        lineNumber: 145,
+                        lineNumber: 141,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/vendors/page.tsx",
-                lineNumber: 135,
+                lineNumber: 131,
                 columnNumber: 7
             }, this),
             isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
+                className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8",
                 children: [
                     ...Array(6)
                 ].map((_, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(CardSkeleton, {}, i, false, {
                         fileName: "[project]/src/app/vendors/page.tsx",
-                        lineNumber: 156,
+                        lineNumber: 152,
                         columnNumber: 42
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/src/app/vendors/page.tsx",
-                lineNumber: 155,
+                lineNumber: 151,
                 columnNumber: 9
             }, this) : filteredVendors.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
+                className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8",
                 children: filteredVendors.map((vendor)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$shared$2f$VendorCard$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                         vendor: vendor
                     }, vendor.id, false, {
                         fileName: "[project]/src/app/vendors/page.tsx",
-                        lineNumber: 161,
+                        lineNumber: 157,
                         columnNumber: 13
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/src/app/vendors/page.tsx",
-                lineNumber: 159,
+                lineNumber: 155,
                 columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "text-center py-16",
@@ -755,18 +751,18 @@ function VendorsPage() {
                     children: "No vendors found."
                 }, void 0, false, {
                     fileName: "[project]/src/app/vendors/page.tsx",
-                    lineNumber: 166,
+                    lineNumber: 162,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/vendors/page.tsx",
-                lineNumber: 165,
+                lineNumber: 161,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/vendors/page.tsx",
-        lineNumber: 128,
+        lineNumber: 124,
         columnNumber: 5
     }, this);
 }
@@ -777,7 +773,7 @@ const CardSkeleton = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$pr
                 className: "h-[225px] w-full rounded-xl"
             }, void 0, false, {
                 fileName: "[project]/src/app/vendors/page.tsx",
-                lineNumber: 177,
+                lineNumber: 173,
                 columnNumber: 5
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -787,26 +783,26 @@ const CardSkeleton = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$pr
                         className: "h-4 w-4/5"
                     }, void 0, false, {
                         fileName: "[project]/src/app/vendors/page.tsx",
-                        lineNumber: 179,
+                        lineNumber: 175,
                         columnNumber: 7
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
                         className: "h-4 w-3/5"
                     }, void 0, false, {
                         fileName: "[project]/src/app/vendors/page.tsx",
-                        lineNumber: 180,
+                        lineNumber: 176,
                         columnNumber: 7
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/vendors/page.tsx",
-                lineNumber: 178,
+                lineNumber: 174,
                 columnNumber: 5
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/vendors/page.tsx",
-        lineNumber: 176,
+        lineNumber: 172,
         columnNumber: 3
     }, this);
 }}),

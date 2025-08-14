@@ -84,6 +84,11 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
       { id: 'r1-2', userName: 'Anita S.', rating: 4, comment: 'Delicious, a bit spicy for me though.', date: '2024-07-14T18:30:00Z', userImageUrl: 'https://placehold.co/40x40.png', dataAiHintUser: 'woman portrait' },
     ];
     
+    const isHomeCook = true; // Assuming all vendors are 'Home Cook' for now as per API
+    const vendorImageUrl = isHomeCook 
+      ? 'https://www.themanual.com/wp-content/uploads/sites/9/2020/04/panna-cotta-recipe-binging-with-babish-1.jpg' 
+      : 'https://placehold.co/600x400.png';
+
     return {
       id: seller.id,
       name: seller.name,
@@ -94,8 +99,8 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
       address: 'Location not specified',
       city: 'City',
       verified: seller.verified,
-      imageUrl: 'https://placehold.co/600x400.png',
-      dataAiHint: 'food vendor',
+      imageUrl: vendorImageUrl,
+      dataAiHint: isHomeCook ? 'home cooking' : 'food vendor',
       specialty: 'Delicious Home Food',
       operatingHours: '10 AM - 10 PM',
       deliveryOptions: ['Pickup', 'Delivery'],

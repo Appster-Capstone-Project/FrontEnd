@@ -14,22 +14,29 @@ import { Search } from "lucide-react";
 
 
 // Helper to augment seller data from the API with placeholder data for the UI
-const augmentSellerData = (seller): Vendor => ({
-  id: seller.id,
-  name: seller.name,
-  phone: seller.phone,
-  // Add placeholder data for fields not in the API response
-  type: 'Home Cook', // Default type, can be enhanced if API provides it
-  description: `Authentic meals from ${seller.name}. Explore a variety of delicious home-cooked food.`,
-  rating: 4.5, // Placeholder rating
-  address: 'Location not available',
-  city: 'Online',
-  imageUrl: 'https://placehold.co/400x250.png',
-  dataAiHint: 'food vendor',
-  menu: [],
-  reviews: [],
-  specialty: 'Home-style Cooking',
-});
+const augmentSellerData = (seller): Vendor => {
+  const isHomeCook = true; // Assuming all vendors are 'Home Cook' for now as per API
+  const imageUrl = isHomeCook 
+    ? 'https://www.themanual.com/wp-content/uploads/sites/9/2020/04/panna-cotta-recipe-binging-with-babish-1.jpg' 
+    : 'https://placehold.co/400x250.png';
+
+  return {
+    id: seller.id,
+    name: seller.name,
+    phone: seller.phone,
+    // Add placeholder data for fields not in the API response
+    type: 'Home Cook', // Default type, can be enhanced if API provides it
+    description: `Authentic meals from ${seller.name}. Explore a variety of delicious home-cooked food.`,
+    rating: 4.5, // Placeholder rating
+    address: 'Location not available',
+    city: 'Online',
+    imageUrl: imageUrl,
+    dataAiHint: isHomeCook ? 'home cooking' : 'food vendor',
+    menu: [],
+    reviews: [],
+    specialty: 'Home-style Cooking',
+  };
+};
 
 const categories = [
   { name: 'All', value: 'all' as const },

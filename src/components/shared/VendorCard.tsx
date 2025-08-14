@@ -14,6 +14,7 @@ interface VendorCardProps {
 
 const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
   const VendorIcon = vendor.type === 'Home Cook' ? ChefHat : Utensils;
+  
   return (
     <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
       <CardHeader className="p-0 relative">
@@ -32,7 +33,7 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             <VendorIcon className="mr-1 h-4 w-4" />
             {vendor.type}
           </Badge>
-          <StarRating rating={vendor.rating} size={18} />
+          <StarRating rating={vendor.rating || 0} size={18} />
         </div>
         <CardTitle className="font-headline text-xl mb-1 group">
           <Link href={`/vendors/${vendor.id}`} className="hover:text-primary transition-colors">
@@ -43,7 +44,7 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
         {vendor.specialty && <p className="text-xs text-accent mb-2">Specialty: {vendor.specialty}</p>}
          <div className="flex items-center text-xs text-muted-foreground">
           <MapPin className="h-3 w-3 mr-1" />
-          <span>{vendor.city}</span>
+          <span>{vendor.address}, {vendor.city}</span>
         </div>
       </CardContent>
       <CardFooter className="p-4 border-t">

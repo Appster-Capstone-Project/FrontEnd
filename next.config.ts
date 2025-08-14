@@ -48,6 +48,14 @@ const nextConfig: NextConfig = {
         hostname: '20.168.243.183',
         port: '8000',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.themanual.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
       }
     ],
   },
