@@ -48,13 +48,13 @@ export default function DashboardPage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    // const role = localStorage.getItem('userRole');
-    // setUserRole(role);
+    const role = localStorage.getItem('userRole');
+    setUserRole(role);
 
-    // if (role === 'seller') {
-    //   router.replace('/sell');
-    //   return; 
-    // }
+    if (role === 'seller') {
+      router.replace('/sell');
+      return; 
+    }
 
     setIsReady(true);
 

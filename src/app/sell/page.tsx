@@ -83,19 +83,19 @@ export default function SellDashboardPage() {
     const token = localStorage.getItem('token');
     const name = localStorage.getItem('userName');
     const sellerId = localStorage.getItem('sellerId');
+    const userRole = localStorage.getItem('userRole');
     setSellerName(name);
 
-    // if (!token || userRole !== 'seller' || !sellerId) {
-    //    toast({
-    //     variant: "destructive",
-    //     title: "Authentication Error",
-    //     description: "Please sign in as a seller to view this page.",
-    //   });
-    //   router.push('/auth/signin?type=seller');
-    // } else {
-    //   fetchListings(token, sellerId);
-    // }
-    fetchListings(token || "dummy-token", sellerId || "seller123");
+    if (!token || userRole !== 'seller' || !sellerId) {
+       toast({
+        variant: "destructive",
+        title: "Authentication Error",
+        description: "Please sign in as a seller to view this page.",
+      });
+      router.push('/auth/signin?type=seller');
+    } else {
+      fetchListings(token, sellerId);
+    }
 
   }, [router, fetchListings, toast]);
 
