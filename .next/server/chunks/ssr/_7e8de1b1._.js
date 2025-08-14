@@ -25,7 +25,7 @@ function VendorErrorPage({ error, reset }) {
                 className: "h-16 w-16 text-destructive mb-4"
             }, void 0, false, {
                 fileName: "[project]/src/app/vendors/[id]/error.tsx",
-                lineNumber: 16,
+                lineNumber: 17,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -33,26 +33,26 @@ function VendorErrorPage({ error, reset }) {
                 children: "Oops! Something went wrong."
             }, void 0, false, {
                 fileName: "[project]/src/app/vendors/[id]/error.tsx",
-                lineNumber: 17,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                className: "text-muted-foreground mb-6",
-                children: "We couldn't load the vendor details. This might be a temporary issue."
-            }, void 0, false, {
-                fileName: "[project]/src/app/vendors/[id]/error.tsx",
                 lineNumber: 18,
                 columnNumber: 7
             }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                className: "text-muted-foreground mb-6 max-w-md",
+                children: "We couldn't load the vendor details. This might be a temporary issue with the backend service or an invalid vendor ID."
+            }, void 0, false, {
+                fileName: "[project]/src/app/vendors/[id]/error.tsx",
+                lineNumber: 19,
+                columnNumber: 7
+            }, this),
             error?.message && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                className: "text-sm text-destructive mb-4",
+                className: "text-sm text-destructive bg-destructive/10 p-2 rounded-md mb-4",
                 children: [
                     "Error: ",
                     error.message
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/vendors/[id]/error.tsx",
-                lineNumber: 21,
+                lineNumber: 22,
                 columnNumber: 26
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -64,7 +64,7 @@ function VendorErrorPage({ error, reset }) {
                         children: "Try Again"
                     }, void 0, false, {
                         fileName: "[project]/src/app/vendors/[id]/error.tsx",
-                        lineNumber: 23,
+                        lineNumber: 24,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -74,24 +74,24 @@ function VendorErrorPage({ error, reset }) {
                             children: "Go to Homepage"
                         }, void 0, false, {
                             fileName: "[project]/src/app/vendors/[id]/error.tsx",
-                            lineNumber: 25,
+                            lineNumber: 26,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/vendors/[id]/error.tsx",
-                        lineNumber: 24,
+                        lineNumber: 25,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/vendors/[id]/error.tsx",
-                lineNumber: 22,
+                lineNumber: 23,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/vendors/[id]/error.tsx",
-        lineNumber: 15,
+        lineNumber: 16,
         columnNumber: 5
     }, this);
 }
