@@ -29,21 +29,27 @@ async function submitReview(formData: FormData) {
 async function getVendorDetails(id: string): Promise<Vendor | null> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const sellerRes = await fetch(`${baseUrl}/api/sellers/${id}`);
+    if (!baseUrl) {
+      throw new Error("API base URL is not configured.");
+    }
+    
+    // Fetch seller details from the absolute URL
+    const sellerRes = await fetch(`${baseUrl}/sellers/${id}`);
     
     if (!sellerRes.ok) {
       if (sellerRes.status === 404) {
         console.log(`Vendor with ID ${id} not found.`);
-        return null;
+        return null; // This will trigger the notFound() page later
       }
-      throw new Error(`Failed to fetch seller: ${sellerRes.statusText}`);
+      throw new Error(`Failed to fetch seller: ${sellerRes.status} ${sellerRes.statusText}`);
     }
 
     const seller = await sellerRes.json();
     let listings: Dish[] = [];
     
     try {
-        const listingsRes = await fetch(`${baseUrl}/api/listings?sellerId=${id}`);
+        // Fetch listings using the correct query parameter format and absolute URL
+        const listingsRes = await fetch(`${baseUrl}/listings?sellerId=${id}`);
 
         if (listingsRes.ok) {
             const rawListings = await listingsRes.json();
@@ -65,10 +71,11 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
                   });
             }
         } else {
-            console.warn(`Could not fetch listings for seller ${id}. Status: ${listingsRes.status}`);
+            console.warn(`Could not fetch listings for seller ${id}. Status: ${listingsRes.statusText}`);
         }
     } catch (e) {
         console.error(`An error occurred fetching listings for seller ${id}`, e);
+        // Decide if this is a critical error. For now, we'll allow the page to render without listings.
     }
 
     // Placeholder reviews as there is no API endpoint for it
@@ -97,9 +104,7 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     };
   } catch (error) {
     console.error("Failed to fetch vendor details:", error);
-    if (error instanceof Error && error.message.includes('fetch failed')) {
-        throw new Error(`Network request failed: could not connect to the backend service. Please ensure the backend is running and accessible.`);
-    }
+    // Throw the error to be caught by the error boundary
     if (error instanceof Error) {
         throw new Error(`Network request failed: ${error.message}`);
     }

@@ -975,6 +975,10 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 20rem;
 }
 
+.max-w-xl {
+  max-width: 36rem;
+}
+
 .flex-1 {
   flex: 1;
 }
@@ -1229,6 +1233,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .whitespace-nowrap {
   white-space: nowrap;
+}
+
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
 }
 
 .rounded-\[2px\] {
