@@ -1,5 +1,6 @@
 {
   "/(pages)/dashboard/page": "app/(pages)/dashboard/page.js",
+  "/(pages)/orders/page": "app/(pages)/orders/page.js",
   "/auth/signin/page": "app/auth/signin/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/loading/page": "app/loading/page.js",
