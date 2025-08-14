@@ -1432,6 +1432,10 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #0000;
 }
 
+.bg-destructive\/10 {
+  background-color: hsl(var(--destructive) / .1);
+}
+
 .bg-cover {
   background-size: cover;
 }
@@ -2060,6 +2064,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .ease-linear {
   animation-timing-function: linear;
+}
+
+.running {
+  animation-play-state: running;
 }
 
 body {

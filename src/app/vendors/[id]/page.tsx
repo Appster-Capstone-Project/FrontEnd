@@ -28,9 +28,8 @@ async function submitReview(formData: FormData) {
 
 async function getVendorDetails(id: string): Promise<Vendor | null> {
   try {
-    // Note: This fetch call runs on the server.
-    // Use a relative path to leverage the Next.js proxy for server-side fetches.
-    const sellerRes = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/sellers/${id}`);
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const sellerRes = await fetch(`${baseUrl}/api/sellers/${id}`);
     
     if (!sellerRes.ok) {
       if (sellerRes.status === 404) {
@@ -44,7 +43,7 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     let listings: Dish[] = [];
     
     try {
-        const listingsRes = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/listings?sellerId=${id}`);
+        const listingsRes = await fetch(`${baseUrl}/api/listings?sellerId=${id}`);
 
         if (listingsRes.ok) {
             const rawListings = await listingsRes.json();
@@ -98,6 +97,9 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     };
   } catch (error) {
     console.error("Failed to fetch vendor details:", error);
+    if (error instanceof Error && error.message.includes('fetch failed')) {
+        throw new Error(`Network request failed: could not connect to the backend service. Please ensure the backend is running and accessible.`);
+    }
     if (error instanceof Error) {
         throw new Error(`Network request failed: ${error.message}`);
     }
