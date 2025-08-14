@@ -63,7 +63,7 @@ export default function UserAccountLayout({
     },
     {
       href: "/orders",
-      label: "My Orders",
+      label: "Order History",
       icon: ListOrdered,
     },
     {
