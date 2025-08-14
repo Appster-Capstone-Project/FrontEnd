@@ -54,18 +54,27 @@ export default function SellerOrdersPage() {
   const [isUpdating, setIsUpdating] = React.useState<string | null>(null); // Holds the ID of the order being updated
   const [detailedDishes, setDetailedDishes] = React.useState<Record<string, Dish[]>>({});
   
-  const fetchOrders = React.useCallback(async (token: string) => {
+  const fetchOrders = React.useCallback(async (token: string, sellerId: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/orders/seller', {
+      const response = await fetch('/api/orders', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
       if (response.ok) {
-        let data = await response.json();
-        if (!Array.isArray(data)) data = [];
-        setOrders(data);
-      } else {
+        let allOrders = await response.json();
+        if (!Array.isArray(allOrders)) {
+          allOrders = [];
+        }
+        // Filter orders for the current seller on the client-side
+        const sellerOrders = allOrders.filter((order: Order) => order.sellerId === sellerId);
+        setOrders(sellerOrders);
+
+      } else if (response.status === 404) {
+        // If the endpoint returns 404, it might mean no orders exist at all.
+        setOrders([]);
+      }
+      else {
         const errorData = await response.json();
         throw new Error(errorData.error || "Could not load your orders.");
       }
@@ -85,8 +94,9 @@ export default function SellerOrdersPage() {
   React.useEffect(() => {
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
+    const sellerId = localStorage.getItem('sellerId');
 
-    if (!token || userRole !== 'seller') {
+    if (!token || userRole !== 'seller' || !sellerId) {
        toast({
         variant: "destructive",
         title: "Authentication Error",
@@ -94,12 +104,13 @@ export default function SellerOrdersPage() {
       });
       router.push('/auth/signin?type=seller');
     } else {
-      fetchOrders(token);
+      fetchOrders(token, sellerId);
     }
   }, [router, fetchOrders, toast]);
 
   const handleUpdateStatus = async (orderId: string, action: 'accept' | 'complete') => {
     const token = localStorage.getItem('token');
+    const sellerId = localStorage.getItem('sellerId');
     setIsUpdating(orderId);
     try {
         const response = await fetch(`/api/orders/${orderId}/${action}`, {
@@ -118,7 +129,7 @@ export default function SellerOrdersPage() {
         });
 
         // Refetch orders to show updated status
-        if (token) fetchOrders(token);
+        if (token && sellerId) fetchOrders(token, sellerId);
 
     } catch (error) {
         toast({
@@ -253,3 +264,5 @@ export default function SellerOrdersPage() {
     </div>
   );
 }
+
+    
