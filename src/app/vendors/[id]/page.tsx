@@ -29,8 +29,8 @@ async function submitReview(formData: FormData) {
 async function getVendorDetails(id: string): Promise<Vendor | null> {
   try {
     // Note: This fetch call runs on the server.
-    // It uses the full URL because it's hitting the backend API directly.
-    const sellerRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sellers/${id}`);
+    // Use a relative path to leverage the Next.js proxy for server-side fetches.
+    const sellerRes = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/sellers/${id}`);
     
     if (!sellerRes.ok) {
       if (sellerRes.status === 404) {
@@ -44,7 +44,7 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     let listings: Dish[] = [];
     
     try {
-        const listingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/listings?sellerId=${id}`);
+        const listingsRes = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/listings?sellerId=${id}`);
 
         if (listingsRes.ok) {
             const rawListings = await listingsRes.json();
