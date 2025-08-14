@@ -12,24 +12,6 @@ import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import Image from 'next/image';
-
-const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
-    try {
-        const response = await fetch(`/api${imageUrlPath}`);
-        if (!response.ok) {
-            throw new Error('Failed to get signed URL');
-        }
-        const data = await response.json();
-        if (!data.signed_url) {
-            return 'https://placehold.co/100x100.png';
-        }
-        return data.signed_url.replace('minio:9000', '20.185.241.50:9000');
-    } catch (error) {
-        console.error("Error fetching signed URL:", error);
-        return 'https://placehold.co/100x100.png';
-    }
-};
 
 export default function SellDashboardPage() {
   const { toast } = useToast();
@@ -47,20 +29,24 @@ export default function SellDashboardPage() {
       });
 
       if (response.ok) {
-        const data = await response.json();
+        let data = await response.json();
         
-        const augmentedData = Array.isArray(data) ? await Promise.all(
-            data.map(async item => {
-                let finalImageUrl = 'https://placehold.co/100x100.png';
-                if (item.image) {
-                    finalImageUrl = await fetchSignedUrl(item.image);
-                }
-                return {
-                    ...item,
-                    imageUrl: finalImageUrl, 
-                };
-            })
-        ) : [];
+        // Ensure data is an array
+        if (!Array.isArray(data)) {
+          data = [];
+        }
+
+        const augmentedData = data.map(item => {
+            let finalImageUrl = 'https://placehold.co/100x100.png';
+            if (item.image) {
+                // Directly construct the URL that the browser can fetch
+                finalImageUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}${item.image}`;
+            }
+            return {
+                ...item,
+                imageUrl: finalImageUrl, 
+            };
+        });
 
         setListings(augmentedData);
       } else {
@@ -143,7 +129,7 @@ export default function SellDashboardPage() {
                               <div className="flex items-center gap-4">
                                 <div className="relative h-16 w-16 rounded-md overflow-hidden bg-muted">
                                   {listing.imageUrl && !listing.imageUrl.includes('placehold.co') ? (
-                                     <Image src={listing.imageUrl} alt={listing.title} layout="fill" className="object-cover" />
+                                     <img src={listing.imageUrl} alt={listing.title} className="w-full h-full object-cover" />
                                   ): (
                                     <div className="flex items-center justify-center h-full"><ImageIcon className="h-6 w-6 text-muted-foreground"/></div>
                                   )}

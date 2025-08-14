@@ -26,36 +26,6 @@ async function submitReview(formData: FormData) {
   // Since there is no review endpoint, this is for demonstration.
 }
 
-const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
-    try {
-        const fullUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}${imageUrlPath}`;
-        const response = await fetch(fullUrl, { cache: 'no-store' });
-        
-        if (!response.ok) {
-             const errorBody = await response.text();
-             console.error(`Failed to get signed URL for ${fullUrl}: ${response.status} ${errorBody}`);
-             throw new Error(`Failed to get signed URL. Status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-
-        if (!data.signed_url) {
-            console.error("Signed URL not found in response for path:", imageUrlPath);
-            return 'https://placehold.co/300x200.png';
-        }
-        
-        const publicUrl = data.signed_url
-            .replace('minio:9000', '20.185.241.50:9000')
-            .replace('localhost:9000', '20.185.241.50:9000');
-            
-        return publicUrl;
-    } catch (error) {
-        console.error("Error fetching signed URL:", error);
-        return 'https://placehold.co/300x200.png';
-    }
-};
-
-
 async function getVendorDetails(id: string): Promise<Vendor | null> {
   try {
     const sellerRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sellers/${id}`);
@@ -78,19 +48,17 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
             const rawListings = await listingsRes.json();
             
              if (Array.isArray(rawListings)) {
-                listings = await Promise.all(
-                  rawListings.map(async (listing) => {
+                listings = rawListings.map((listing) => {
                     let finalImageUrl = 'https://placehold.co/300x200.png'; 
                     if (listing.image) {
-                        finalImageUrl = await fetchSignedUrl(listing.image);
+                        finalImageUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}${listing.image}`;
                     }
                     return {
                         ...listing,
                         imageUrl: finalImageUrl,
                         dataAiHint: 'food dish',
                     };
-                  })
-                );
+                  });
             }
         } else {
             console.warn(`Could not fetch listings for seller ${id}. Status: ${listingsRes.status}`);

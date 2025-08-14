@@ -14,27 +14,6 @@ import { useRouter, useParams } from "next/navigation";
 import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Dish } from "@/lib/types";
-import Image from 'next/image';
-
-const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
-    try {
-        const response = await fetch(`/api${imageUrlPath}`);
-        if (!response.ok) {
-            throw new Error('Failed to get signed URL');
-        }
-        const data = await response.json();
-
-        if (!data.signed_url) {
-            return 'https://placehold.co/100x100.png';
-        }
-        // Replace backend-internal hostname with public IP for browser access
-        const publicUrl = data.signed_url.replace('minio:9000', '20.185.241.50:9000').replace('localhost:9000', '20.185.241.50:9000');
-        return publicUrl;
-    } catch (error) {
-        console.error("Error fetching signed URL:", error);
-        return 'https://placehold.co/100x100.png';
-    }
-};
 
 export default function EditListingPage() {
   const { toast } = useToast();
@@ -59,7 +38,6 @@ export default function EditListingPage() {
         const fetchListing = async () => {
             setIsLoading(true);
             try {
-                // Correctly fetch from the main listing endpoint
                 const response = await fetch(`/api/listings/${listingId}`);
                 if (response.ok) {
                     const data: Dish = await response.json();
@@ -71,10 +49,9 @@ export default function EditListingPage() {
                     setLeftSize(data.leftSize?.toString() || "0");
                     setAvailable(data.available);
                     
-                    // If an image path exists, fetch the signed URL for it
                     if (data.image) {
-                        const signedUrl = await fetchSignedUrl(data.image);
-                        setImagePreview(signedUrl);
+                        const imageUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}${data.image}`;
+                        setImagePreview(imageUrl);
                     }
                 } else {
                     throw new Error("Failed to fetch listing details.");
