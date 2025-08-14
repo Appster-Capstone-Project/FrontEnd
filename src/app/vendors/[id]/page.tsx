@@ -28,6 +28,8 @@ async function submitReview(formData: FormData) {
 
 async function getVendorDetails(id: string): Promise<Vendor | null> {
   try {
+    // Note: This fetch call runs on the server.
+    // It uses the full URL because it's hitting the backend API directly.
     const sellerRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sellers/${id}`);
     
     if (!sellerRes.ok) {
@@ -51,7 +53,10 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
                 listings = rawListings.map((listing) => {
                     let finalImageUrl = 'https://placehold.co/300x200.png'; 
                     if (listing.image) {
-                        finalImageUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}${listing.image}`;
+                        // Use a relative path for client-side rendering to avoid mixed content.
+                        // The browser will resolve this relative to the current domain,
+                        // and the Next.js proxy will handle the request.
+                        finalImageUrl = `/api${listing.image}`;
                     }
                     return {
                         ...listing,

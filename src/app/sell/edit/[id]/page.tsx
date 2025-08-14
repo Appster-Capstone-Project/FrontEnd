@@ -50,7 +50,7 @@ export default function EditListingPage() {
                     setAvailable(data.available);
                     
                     if (data.image) {
-                        const imageUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}${data.image}`;
+                        const imageUrl = `/api${data.image}`;
                         setImagePreview(imageUrl);
                     }
                 } else {

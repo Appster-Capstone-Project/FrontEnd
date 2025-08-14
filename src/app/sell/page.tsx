@@ -39,8 +39,8 @@ export default function SellDashboardPage() {
         const augmentedData = data.map(item => {
             let finalImageUrl = 'https://placehold.co/100x100.png';
             if (item.image) {
-                // Directly construct the URL that the browser can fetch
-                finalImageUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}${item.image}`;
+                // Use a relative path to leverage the Next.js proxy and avoid mixed content errors
+                finalImageUrl = `/api${item.image}`;
             }
             return {
                 ...item,

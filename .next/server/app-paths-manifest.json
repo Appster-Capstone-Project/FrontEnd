@@ -4,6 +4,7 @@
   "/auth/signup/page": "app/auth/signup/page.js",
   "/loading/page": "app/loading/page.js",
   "/page": "app/page.js",
+  "/sell/add/page": "app/sell/add/page.js",
   "/sell/edit/[id]/page": "app/sell/edit/[id]/page.js",
   "/sell/page": "app/sell/page.js",
   "/vendors/[id]/page": "app/vendors/[id]/page.js"
