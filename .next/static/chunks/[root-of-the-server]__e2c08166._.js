@@ -20972,7 +20972,7 @@ function AppContainer(param) {
                             children: /*#__PURE__*/ (0, _jsxruntime.jsx)(_headmanagercontextsharedruntime.HeadManagerContext.Provider, {
                                 value: headManager,
                                 children: /*#__PURE__*/ (0, _jsxruntime.jsx)(_imageconfigcontextsharedruntime.ImageConfigContext.Provider, {
-                                    value: ("TURBOPACK compile-time value", JSON.parse('{"deviceSizes":[640,750,828,1080,1200,1920,2048,3840],"imageSizes":[16,32,48,64,96,128,256,384],"path":"/_next/image","loader":"default","dangerouslyAllowSVG":false,"unoptimized":false,"domains":[],"remotePatterns":[{"protocol":"https","hostname":"placehold.co","port":"","pathname":"/**"},{"protocol":"http","hostname":"20.185.241.50","port":"9000","pathname":"/**"},{"protocol":"http","hostname":"minio","port":"9000","pathname":"/**"}]}')),
+                                    value: ("TURBOPACK compile-time value", JSON.parse('{"deviceSizes":[640,750,828,1080,1200,1920,2048,3840],"imageSizes":[16,32,48,64,96,128,256,384],"path":"/_next/image","loader":"default","dangerouslyAllowSVG":false,"unoptimized":false,"domains":[],"remotePatterns":[{"protocol":"https","hostname":"placehold.co","port":"","pathname":"/**"},{"protocol":"http","hostname":"52.255.203.119","port":"9000","pathname":"/**"},{"protocol":"http","hostname":"20.185.241.50","port":"9000","pathname":"/**"}]}')),
                                     children: children
                                 })
                             })

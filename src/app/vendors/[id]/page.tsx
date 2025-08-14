@@ -26,18 +26,9 @@ async function submitReview(formData: FormData) {
   // Since there is no review endpoint, this is for demonstration.
 }
 
-// This function now takes the full image path from the database and constructs the correct
-// absolute URL to fetch the signed URL from the backend.
 const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
     try {
-        // Use the environment variable for the base URL, which should be http://52.255.203.119
-        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-        if (!baseUrl) {
-             throw new Error("API base URL is not configured");
-        }
-        // Construct the full URL to fetch the signed URL data
-        const fullUrl = `${baseUrl}${imageUrlPath}`;
-        
+        const fullUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}${imageUrlPath}`;
         const response = await fetch(fullUrl, { cache: 'no-store' });
         
         if (!response.ok) {
@@ -53,7 +44,6 @@ const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
             return 'https://placehold.co/300x200.png';
         }
         
-        // The signed_url should already be public, but we ensure it points to the correct public IP.
         const publicUrl = data.signed_url
             .replace('minio:9000', '20.185.241.50:9000')
             .replace('localhost:9000', '20.185.241.50:9000');
@@ -61,14 +51,14 @@ const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
         return publicUrl;
     } catch (error) {
         console.error("Error fetching signed URL:", error);
-        return 'https://placehold.co/300x200.png'; // Fallback URL
+        return 'https://placehold.co/300x200.png';
     }
 };
 
 
 async function getVendorDetails(id: string): Promise<Vendor | null> {
   try {
-    const sellerRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sellers/${id}`);
+    const sellerRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sellers/${id}`);
     
     if (!sellerRes.ok) {
       if (sellerRes.status === 404) {
@@ -82,7 +72,7 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     let listings: Dish[] = [];
     
     try {
-        const listingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/listings?sellerId=${id}`);
+        const listingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/listings?sellerId=${id}`);
 
         if (listingsRes.ok) {
             const rawListings = await listingsRes.json();
@@ -91,7 +81,6 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
                 listings = await Promise.all(
                   rawListings.map(async (listing) => {
                     let finalImageUrl = 'https://placehold.co/300x200.png'; 
-                    // Use the 'image' field which contains the path like /listings/...
                     if (listing.image) {
                         finalImageUrl = await fetchSignedUrl(listing.image);
                     }
@@ -285,5 +274,3 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
     </div>
   );
 }
-
-    
