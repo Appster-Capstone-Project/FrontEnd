@@ -86,7 +86,7 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     
     const isHomeCook = true; // Assuming all vendors are 'Home Cook' for now as per API
     const vendorImageUrl = isHomeCook 
-      ? 'https://www.themanual.com/wp-content/uploads/sites/9/2020/04/panna-cotta-recipe-binging-with-babish-1.jpg' 
+      ? 'https://www.themanual.com/wp-content/uploads/sites/9/2021/03/learning-to-cook.jpg?fit=800%2C533&p=1' 
       : 'https://placehold.co/600x400.png';
 
     return {

@@ -1,13 +1,4 @@
 {
-  "/(pages)/dashboard/page": "app/(pages)/dashboard/page.js",
-  "/auth/signin/page": "app/auth/signin/page.js",
-  "/auth/signup/page": "app/auth/signup/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/loading/page": "app/loading/page.js",
   "/page": "app/page.js",
-  "/sell/add/page": "app/sell/add/page.js",
-  "/sell/edit/[id]/page": "app/sell/edit/[id]/page.js",
-  "/sell/page": "app/sell/page.js",
-  "/vendors/[id]/page": "app/vendors/[id]/page.js",
   "/vendors/page": "app/vendors/page.js"
 }
