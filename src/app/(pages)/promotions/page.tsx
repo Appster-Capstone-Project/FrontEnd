@@ -18,17 +18,17 @@ interface Promotion {
 }
 
 const PromotionCard = ({ promotion }: { promotion: Promotion }) => (
-    <Card className="max-w-2xl mx-auto shadow-lg border-2 border-primary/20 overflow-hidden">
+    <Card className="shadow-lg border-2 border-primary/20 overflow-hidden flex flex-col h-full">
         <CardHeader className="text-center bg-primary/10 p-4">
             <div className="flex justify-center items-center gap-2">
                 <TicketPercent className="h-8 w-8 text-primary" />
                 <CardTitle className="font-headline text-2xl text-primary">Limited Time Offer!</CardTitle>
             </div>
             <CardDescription className="text-primary/90">
-                Get 20% OFF on the newest dish available on TiffinBox!
+                Get 20% OFF on this new dish!
             </CardDescription>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-6 flex-grow">
             <div className="flex flex-col sm:flex-row gap-6 items-center">
                 <div className="w-full sm:w-1/3">
                     <img
@@ -52,7 +52,7 @@ const PromotionCard = ({ promotion }: { promotion: Promotion }) => (
                 </div>
             </div>
         </CardContent>
-        <CardFooter className="bg-muted/50 p-4">
+        <CardFooter className="bg-muted/50 p-4 mt-auto">
             <Button asChild className="w-full" size="lg">
                 <Link href={`/vendors/${promotion.seller.id}`}>
                     <Tag className="mr-2 h-4 w-4" /> Claim Offer & View Menu
@@ -63,7 +63,7 @@ const PromotionCard = ({ promotion }: { promotion: Promotion }) => (
 );
 
 const PromotionSkeleton = () => (
-     <Card className="max-w-2xl mx-auto">
+     <Card>
         <CardHeader className="text-center bg-primary/10 p-4">
              <Skeleton className="h-8 w-64 mx-auto" />
              <Skeleton className="h-5 w-80 mx-auto mt-1" />
@@ -88,7 +88,7 @@ const PromotionSkeleton = () => (
 )
 
 const NoPromotions = () => (
-    <Card className="max-w-2xl mx-auto">
+    <Card className="col-span-full">
         <CardContent className="pt-6 text-center">
             <TicketPercent className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <p className="text-lg text-muted-foreground">No promotions are available right now.</p>
@@ -98,7 +98,7 @@ const NoPromotions = () => (
 );
 
 const ErrorState = ({ onRetry }: { onRetry: () => void }) => (
-    <Card className="max-w-2xl mx-auto text-center">
+    <Card className="col-span-full text-center">
         <CardContent className="pt-6">
             <ServerCrash className="h-12 w-12 mx-auto text-destructive mb-4" />
             <p className="text-lg text-destructive-foreground">Could not load promotions.</p>
@@ -172,11 +172,13 @@ export default function PromotionsPage() {
         subtitle="Your available discounts and special offers."
         className="text-center"
       />
-       {isLoading && <PromotionSkeleton />}
-       {!isLoading && error && <ErrorState onRetry={fetchPromotion} />}
-       {!isLoading && !error && promotion && <PromotionCard promotion={promotion} />}
-       {!isLoading && !error && !promotion && <NoPromotions />}
+       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+            {isLoading && <PromotionSkeleton />}
+            {!isLoading && error && <ErrorState onRetry={fetchPromotion} />}
+            {!isLoading && !error && promotion && <PromotionCard promotion={promotion} />}
+            {!isLoading && !error && !promotion && <NoPromotions />}
+            {/* When more promotions are available, they will be added here */}
+       </div>
     </div>
   );
 }
-
