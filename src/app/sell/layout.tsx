@@ -33,6 +33,7 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
+import OrderNotificationManager from "@/components/shared/OrderNotificationManager";
 
 export default function SellerLayout({
   children,
@@ -83,6 +84,7 @@ export default function SellerLayout({
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+      <OrderNotificationManager />
       <div className="hidden border-r bg-muted/40 md:block">
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">

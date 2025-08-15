@@ -62,6 +62,10 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        source: '/api/events/stream',
+        destination: 'http://20.168.243.183:8000/events/stream', // Proxy for SSE
+      },
+      {
         source: '/api/:path*',
         destination: 'http://20.168.243.183:8000/:path*', // your backend IP with port
       },
@@ -74,5 +78,3 @@ const nextConfig: NextConfig = {
 };
 
 export default withPwa(nextConfig);
-
-    

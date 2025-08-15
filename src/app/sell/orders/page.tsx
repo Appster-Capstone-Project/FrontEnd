@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { ListOrdered, Check, X, Eye, Loader2 } from "lucide-react";
+import { ListOrdered, Check, Eye, Loader2 } from "lucide-react";
 import SectionTitle from "@/components/shared/SectionTitle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,10 +27,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
+import { useOrder } from "@/context/OrderContext";
 
 async function fetchOrderDetails(orderIds: string[], token: string): Promise<Dish[]> {
     const dishPromises = orderIds.map(async (id) => {
+        // Use the absolute path for server-side fetching if this were a server component,
+        // but since it's a client component with a client-side call, we use the proxy path.
         const response = await fetch(`/api/listings/${id}`, {
              headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -48,70 +50,32 @@ async function fetchOrderDetails(orderIds: string[], token: string): Promise<Dis
 export default function SellerOrdersPage() {
   const { toast } = useToast();
   const router = useRouter();
+  const { orders, isLoading } = useOrder(); // Use orders from context
   
-  const [orders, setOrders] = React.useState<Order[]>([]);
-  const [isLoading, setIsLoading] = React.useState(true);
   const [isUpdating, setIsUpdating] = React.useState<string | null>(null); // Holds the ID of the order being updated
   const [detailedDishes, setDetailedDishes] = React.useState<Record<string, Dish[]>>({});
   
-  const fetchOrders = React.useCallback(async (token: string, sellerId: string) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/orders', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      if (response.ok) {
-        let allOrders = await response.json();
-        if (!Array.isArray(allOrders)) {
-          allOrders = [];
-        }
-        // Filter orders for the current seller on the client-side
-        const sellerOrders = allOrders.filter((order: Order) => order.sellerId === sellerId);
-        setOrders(sellerOrders);
-
-      } else if (response.status === 404) {
-        // If the endpoint returns 404, it might mean no orders exist at all.
-        setOrders([]);
-      }
-      else {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Could not load your orders.");
-      }
-    } catch (error) {
-      console.error("Failed to fetch orders", error);
-      toast({
-        variant: "destructive",
-        title: "Failed to Fetch Orders",
-        description: (error as Error).message,
-      });
-      setOrders([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [toast]);
-
   React.useEffect(() => {
-    const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
-    const sellerId = localStorage.getItem('sellerId');
-
-    if (!token || userRole !== 'seller' || !sellerId) {
+    if (userRole !== 'seller') {
        toast({
         variant: "destructive",
-        title: "Authentication Error",
-        description: "Please sign in as a seller.",
+        title: "Access Denied",
+        description: "You must be a seller to view this page.",
       });
       router.push('/auth/signin?type=seller');
-    } else {
-      fetchOrders(token, sellerId);
     }
-  }, [router, fetchOrders, toast]);
+  }, [router, toast]);
 
   const handleUpdateStatus = async (orderId: string, action: 'accept' | 'complete') => {
     const token = localStorage.getItem('token');
-    const sellerId = localStorage.getItem('sellerId');
+    if (!token) {
+        toast({ variant: "destructive", title: "Authentication Error" });
+        return;
+    }
+    
     setIsUpdating(orderId);
+
     try {
         const response = await fetch(`/api/orders/${orderId}/${action}`, {
             method: 'PATCH',
@@ -127,9 +91,9 @@ export default function SellerOrdersPage() {
             title: `Order ${action === 'accept' ? 'Accepted' : 'Completed'}`,
             description: "The order status has been updated.",
         });
-
-        // Refetch orders to show updated status
-        if (token && sellerId) fetchOrders(token, sellerId);
+        
+        // The context will update automatically if the SSE stream sends an update
+        // No need to manually refetch or update state here.
 
     } catch (error) {
         toast({
@@ -167,13 +131,13 @@ export default function SellerOrdersPage() {
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
       <SectionTitle
-        title="Recent Orders & Reviews"
-        subtitle="Manage incoming orders and see what customers are saying."
+        title="Recent Orders"
+        subtitle="Manage incoming orders from customers."
       />
       <Card className="max-w-6xl mx-auto w-full shadow-lg">
         <CardHeader>
             <CardTitle>Incoming Orders</CardTitle>
-            <CardDescription>Review and manage all orders placed by customers.</CardDescription>
+            <CardDescription>Review and manage all orders placed for your items. Updates in real-time.</CardDescription>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -221,11 +185,11 @@ export default function SellerOrdersPage() {
                                                     <p className="font-semibold">{dish.title}</p>
                                                     <p className="text-sm text-muted-foreground">${dish.price.toFixed(2)}</p>
                                                 </div>
-                                                <Badge variant="outline">{dish.portionSize} Serving(s)</Badge>
+                                                <Badge variant="outline">{dish.portionSize || 1} Serving(s)</Badge>
                                             </div>
                                         ))}
                                     </div>
-                                ) : <p>Loading details...</p>}
+                                ) : <Loader2 className="mx-auto h-6 w-6 animate-spin" />}
                                 </ScrollArea>
                             </DialogContent>
                             </Dialog>
@@ -256,7 +220,7 @@ export default function SellerOrdersPage() {
             <div className="text-center py-12">
                 <ListOrdered className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <h3 className="text-xl font-semibold">No orders yet</h3>
-                <p className="text-muted-foreground mt-2">New orders from customers will appear here.</p>
+                <p className="text-muted-foreground mt-2">New orders from customers will appear here automatically.</p>
             </div>
           )}
         </CardContent>
