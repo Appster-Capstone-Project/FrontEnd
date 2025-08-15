@@ -45,7 +45,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'http',
-        hostname: '20.168.243.183',
+        hostname: '172.191.11.228',
         port: '8000',
         pathname: '/**',
       },
@@ -64,12 +64,12 @@ const nextConfig: NextConfig = {
       {
         // This rewrite is for general API calls
         source: '/api/:path*',
-        destination: 'http://20.168.243.183:8000/:path*', 
+        destination: 'http://172.191.11.228:8000/:path*', 
       },
     ];
   },
   env: {
-    NEXT_PUBLIC_API_BASE_URL: 'http://20.168.243.183:8000',
+    NEXT_PUBLIC_API_BASE_URL: 'http://172.191.11.228:8000',
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'http://localhost:3000',
   }
 };
