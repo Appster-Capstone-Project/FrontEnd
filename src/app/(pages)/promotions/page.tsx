@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import SectionTitle from '@/components/shared/SectionTitle';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { TicketPercent, Tag, Loader2, ServerCrash, Utensils } from 'lucide-react';
 import type { Dish, Vendor } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
@@ -77,7 +77,7 @@ const NoPromotions = () => (
         <CardContent className="pt-6 text-center">
             <TicketPercent className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <p className="text-lg text-muted-foreground">No promotions are available right now.</p>
-            <p className="text-sm text-muted-foreground mt-1">This could be because there are no dishes listed yet. Check back later!</p>
+            <p className="text-sm text-muted-foreground mt-1">Dishes with 10 or more portions will appear here with a 20% discount. Check back later!</p>
         </CardContent>
     </Card>
 );
@@ -94,47 +94,54 @@ const ErrorState = ({ onRetry }: { onRetry: () => void }) => (
 )
 
 export default function PromotionsPage() {
-  const [promotion, setPromotion] = useState<Promotion | null>(null);
+  const [promotions, setPromotions] = useState<Promotion[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const { toast } = useToast();
 
-  const fetchPromotion = async () => {
+  const fetchPromotions = async () => {
       setIsLoading(true);
       setError(false);
       try {
-        // Fetch all listings to find the latest one
+        // Fetch all listings
         const listingsRes = await fetch('/api/listings');
         if (!listingsRes.ok) throw new Error("Could not fetch dishes.");
-        const listings: Dish[] = await listingsRes.json();
+        const allDishes: Dish[] = await listingsRes.json();
 
-        if (!listings || listings.length === 0) {
-            setPromotion(null); // No dishes, so no promotions
+        // Filter for dishes with 10 or more portions left
+        const eligibleDishes = allDishes.filter(dish => dish.leftSize !== undefined && dish.leftSize >= 10);
+
+        if (eligibleDishes.length === 0) {
+            setPromotions([]);
             return;
         }
 
-        // Assume the last dish in the array is the latest one
-        const latestDish = listings[listings.length - 1];
+        // Fetch seller details for each eligible dish
+        const promotionPromises = eligibleDishes.map(async (dish) => {
+            const sellerRes = await fetch(`/api/sellers/${dish.sellerId}`);
+            if (!sellerRes.ok) {
+                console.warn(`Could not fetch seller for dish ${dish.title}.`);
+                return null;
+            }
+            const seller: Vendor = await sellerRes.json();
 
-        // Now fetch the seller's details for that dish
-        const sellerRes = await fetch(`/api/sellers/${latestDish.sellerId}`);
-        if (!sellerRes.ok) throw new Error(`Could not fetch seller for dish ${latestDish.title}.`);
-        const seller: Vendor = await sellerRes.json();
-        
-        // Add image url to the dish if not present
-        if (!latestDish.imageUrl && latestDish.image) {
-            latestDish.imageUrl = `/api${latestDish.image}`;
-        }
+            // Add image url to the dish if not present
+            if (!dish.imageUrl && dish.image) {
+                dish.imageUrl = `/api${dish.image}`;
+            }
 
-
-        setPromotion({
-            dish: latestDish,
-            seller: seller,
-            discountedPrice: latestDish.price * 0.8,
+            return {
+                dish,
+                seller,
+                discountedPrice: dish.price * 0.8,
+            };
         });
+        
+        const settledPromotions = (await Promise.all(promotionPromises)).filter((p): p is Promotion => p !== null);
+        setPromotions(settledPromotions);
 
       } catch (err) {
-        console.error("Failed to fetch promotion", err);
+        console.error("Failed to fetch promotions", err);
         setError(true);
         toast({
             variant: "destructive",
@@ -147,7 +154,7 @@ export default function PromotionsPage() {
   }
 
   useEffect(() => {
-    fetchPromotion();
+    fetchPromotions();
   }, []);
 
   return (
@@ -157,11 +164,15 @@ export default function PromotionsPage() {
         subtitle="Your available discounts and special offers."
       />
        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
-            {isLoading && <PromotionSkeleton />}
-            {!isLoading && error && <ErrorState onRetry={fetchPromotion} />}
-            {!isLoading && !error && promotion && <PromotionCard promotion={promotion} />}
-            {!isLoading && !error && !promotion && <NoPromotions />}
-            {/* When more promotions are available, they will be added here */}
+            {isLoading && <>
+                <PromotionSkeleton />
+                <PromotionSkeleton />
+            </>}
+            {!isLoading && error && <ErrorState onRetry={fetchPromotions} />}
+            {!isLoading && !error && promotions.length > 0 && (
+                promotions.map((p, i) => <PromotionCard key={p.dish.id || i} promotion={p} />)
+            )}
+            {!isLoading && !error && promotions.length === 0 && <NoPromotions />}
        </div>
     </div>
   );
