@@ -103,26 +103,28 @@ export default function PromotionsPage() {
       setIsLoading(true);
       setError(false);
       try {
-        // Fetch all listings
+        // Step 1: Fetch all listings
         const listingsRes = await fetch('/api/listings');
         if (!listingsRes.ok) throw new Error("Could not fetch dishes.");
         const allDishes: Dish[] = await listingsRes.json();
 
-        // Filter for dishes with 10 or more portions left
+        // Step 2: Filter for dishes with 10 or more portions left
         const eligibleDishes = allDishes.filter(dish => dish.leftSize !== undefined && dish.leftSize >= 10);
 
+        // Step 3: If no dishes are eligible, stop early
         if (eligibleDishes.length === 0) {
             setPromotions([]);
-            // No need to set loading to false here, finally block handles it.
+            setIsLoading(false); // Important: set loading to false
             return;
         }
 
-        // Fetch all sellers in one go to be more efficient
+        // Step 4: Fetch all sellers ONLY if there are eligible dishes
         const sellersRes = await fetch('/api/sellers');
         if (!sellersRes.ok) throw new Error("Could not fetch sellers.");
         const allSellers: Vendor[] = await sellersRes.json();
         const sellersMap = new Map(allSellers.map(s => [s.id, s]));
 
+        // Step 5: Combine dishes with their seller data
         const settledPromotions = eligibleDishes.map(dish => {
             const seller = sellersMap.get(dish.sellerId);
             if (!seller) {
@@ -167,6 +169,7 @@ export default function PromotionsPage() {
       <SectionTitle
         title="Promotions & Vouchers"
         subtitle="Your available discounts and special offers."
+        className="text-left"
       />
        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
             {isLoading && <>
