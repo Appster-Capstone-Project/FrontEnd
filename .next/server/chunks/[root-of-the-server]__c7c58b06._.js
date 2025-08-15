@@ -87,7 +87,10 @@ async function GET(req) {
                 'Content-Type': 'text/event-stream',
                 Connection: 'keep-alive',
                 'Cache-Control': 'no-cache'
-            }
+            },
+            // IMPORTANT: This request should not be buffered.
+            // @ts-ignore
+            duplex: 'half'
         });
         if (!response.ok || !response.body) {
             const text = await response.text();
