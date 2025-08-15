@@ -939,6 +939,10 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
 }
 
+.w-fit {
+  width: fit-content;
+}
+
 .min-w-0 {
   min-width: 0;
 }
@@ -1472,6 +1476,10 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #0000;
 }
 
+.bg-primary\/10 {
+  background-color: hsl(var(--primary) / .1);
+}
+
 .bg-cover {
   background-size: cover;
 }
@@ -1608,6 +1616,11 @@ h1, h2, h3, h4, h5, h6 {
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.py-24 {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
 }
 
 .pb-2 {
@@ -3159,6 +3172,11 @@ body {
   .lg\:px-6 {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+  }
+
+  .lg\:px-8 {
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }
 
