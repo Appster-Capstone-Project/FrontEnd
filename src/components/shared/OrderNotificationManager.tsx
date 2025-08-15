@@ -26,6 +26,8 @@ const OrderNotificationManager = () => {
     ctrl.current = new AbortController();
 
     const connect = async () => {
+        // We connect to our OWN API route, which will then proxy to the backend.
+        // This allows us to securely send the Authorization header.
         await fetchEventSource(`/api/events/stream`, {
             method: 'GET',
             headers: {
