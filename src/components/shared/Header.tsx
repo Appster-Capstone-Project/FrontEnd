@@ -207,11 +207,6 @@ const Header = () => {
           <CartSheet>
             <Button variant="ghost" size="icon" aria-label="Cart" className="relative">
               <ShoppingBag className="h-5 w-5" />
-              {isClient && itemCount > 0 && (
-                <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 justify-center rounded-full p-0 text-xs">
-                  {itemCount}
-                </Badge>
-              )}
             </Button>
           </CartSheet>
         </nav>
@@ -221,11 +216,6 @@ const Header = () => {
             <CartSheet>
                 <Button variant="ghost" size="icon" aria-label="Cart" className="relative mr-2">
                   <ShoppingBag className="h-5 w-5" />
-                  {isClient && itemCount > 0 && (
-                    <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 justify-center rounded-full p-0 text-xs">
-                      {itemCount}
-                    </Badge>
-                  )}
                 </Button>
             </CartSheet>
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>

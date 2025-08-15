@@ -41,8 +41,6 @@ export default function UserAccountLayout({
   const pathname = usePathname();
   const router = useRouter();
   const [userName, setUserName] = useState<string | null>(null);
-  const { getItemCount } = useCart();
-  const itemCount = getItemCount();
 
   useEffect(() => {
     const name = localStorage.getItem("userName");
@@ -122,11 +120,6 @@ export default function UserAccountLayout({
           <CartSheet>
             <Button variant="ghost" size="icon" aria-label="Cart" className="relative">
               <ShoppingBag className="h-5 w-5" />
-              {itemCount > 0 && (
-                <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 justify-center rounded-full p-0 text-xs">
-                  {itemCount}
-                </Badge>
-              )}
             </Button>
           </CartSheet>
           <DropdownMenu>
