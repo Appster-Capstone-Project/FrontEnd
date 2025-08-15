@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -128,14 +129,12 @@ export default function VendorsPage() {
   }
 
   return (
-    <div className="container py-12 md:py-16">
+    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
       <SectionTitle 
         title="Find Your Next Meal"
         subtitle="Browse our collection of talented home cooks and reliable tiffin services."
-        className="text-center"
       />
-      
-      <div className="max-w-2xl mx-auto w-full space-y-4">
+      <div className="space-y-4">
         <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input 
@@ -155,11 +154,11 @@ export default function VendorsPage() {
       </div>
       
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
       ) : filteredVendors.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredVendors.map((vendor) => (
             <VendorCard key={vendor.id} vendor={vendor} />
           ))}

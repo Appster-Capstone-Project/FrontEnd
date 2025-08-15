@@ -1,5 +1,7 @@
 
+
 import type { Vendor, Dish, Review } from '@/lib/types';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,7 +11,7 @@ import StarRating from '@/components/shared/StarRating';
 import DishCard from '@/components/shared/DishCard';
 import ReviewCard from '@/components/shared/ReviewCard';
 import SectionTitle from '@/components/shared/SectionTitle';
-import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat } from 'lucide-react';
+import { MapPin, Clock, Truck, Phone, MessageSquare, Utensils, ChefHat, ArrowLeft } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 
@@ -127,7 +129,14 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
   const VendorIcon = vendor.type === 'Home Cook' ? ChefHat : Utensils;
 
   return (
-    <div className="container py-8 md:py-12">
+    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
+      <div className="mb-6">
+        <Link href="/vendors" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to All Vendors
+        </Link>
+      </div>
+
       {/* Vendor Hero Section */}
       <Card className="mb-8 overflow-hidden shadow-xl">
         <div className="md:flex">
