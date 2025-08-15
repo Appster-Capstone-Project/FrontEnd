@@ -1,83 +1,46 @@
 
-// src/app/api/events/stream/route.ts
-import {NextRequest} from 'next/server';
-import {PassThrough} from 'stream';
-
-// This is the backend endpoint we will be proxying to.
-const BACKEND_SSE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/stream`;
+import type { NextRequest } from "next/server";
 
 export const dynamic = 'force-dynamic'; // Ensures this route is not statically built
 
-export async function GET(req: NextRequest) {
-  const authToken = req.headers.get('Authorization');
-
-  if (!authToken) {
-    console.error('[SSE PROXY] Authorization header is required');
-    return new Response('Authorization header is required', {status: 401});
+export const GET = async (req: NextRequest) => {
+  const token = req.headers.get("authorization"); // get frontend token
+  if (!token) {
+    console.error('[SSE PROXY] Authorization header missing from client request.');
+    return new Response("Unauthorized: Authorization header is required", { status: 401 });
   }
 
-  // Create a transform stream that will be piped to the client.
-  const stream = new PassThrough();
+  // Open a server-to-server connection to your backend SSE
+  const backendUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/events/stream`;
+  
+  console.log(`[SSE PROXY] Attempting to connect to backend: ${backendUrl}`);
 
   try {
-    console.log(`[SSE PROXY] Attempting to connect to backend: ${BACKEND_SSE_URL}`);
-    const response = await fetch(BACKEND_SSE_URL, {
-      method: 'GET',
-      headers: {
-        Authorization: authToken,
-        'Content-Type': 'text/event-stream',
-        Connection: 'keep-alive',
-        'Cache-Control': 'no-cache',
-      },
-      // IMPORTANT: This request should not be buffered.
+    const backendRes = await fetch(backendUrl, {
+      headers: { Authorization: token },
       // @ts-ignore
-      duplex: 'half',
+      duplex: 'half', // Required for streaming with Node.js fetch
     });
 
-    if (!response.ok || !response.body) {
-      const text = await response.text();
-      console.error(
-        `[SSE PROXY] Backend connection failed: ${response.status} ${response.statusText}`,
-        text
-      );
-      return new Response(
-        `Failed to connect to the backend event stream: ${text}`,
-        {status: response.status}
-      );
+    if (!backendRes.ok || !backendRes.body) {
+      const errorBody = await backendRes.text();
+      console.error(`[SSE PROXY] Backend connection failed with status ${backendRes.status}: ${errorBody}`);
+      return new Response(`Backend SSE connection failed: ${errorBody}`, { status: backendRes.status });
     }
+    
+    console.log('[SSE PROXY] Successfully connected to backend stream. Piping to client.');
 
-    console.log('[SSE PROXY] Successfully connected to backend stream.');
-    const reader = response.body.getReader();
-
-    const push = async () => {
-      while (true) {
-        const {done, value} = await reader.read();
-        if (done) {
-          console.log('[SSE PROXY] Backend stream ended.');
-          stream.end();
-          break;
-        }
-        stream.write(value);
-      }
-    };
-
-    push().catch(e => {
-      console.error('[SSE PROXY] Error while reading from backend:', e);
-      stream.end();
-    });
-
-    // Return the stream to the client.
-    return new Response(stream as any, {
+    // Pipe the backend SSE stream directly to the frontend
+    return new Response(backendRes.body, {
       headers: {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        Connection: 'keep-alive',
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive",
       },
     });
+
   } catch (error) {
-    console.error('[SSE PROXY] Fetching backend stream failed:', error);
-    return new Response('Internal Server Error while connecting to stream', {
-      status: 500,
-    });
+    console.error('[SSE PROXY] An unexpected error occurred:', error);
+    return new Response('Internal Server Error while connecting to stream', { status: 500 });
   }
-}
+};
