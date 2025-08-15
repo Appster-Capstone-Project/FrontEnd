@@ -10,5 +10,6 @@
   "/sell/earnings/page": "app/sell/earnings/page.js",
   "/sell/orders/page": "app/sell/orders/page.js",
   "/sell/page": "app/sell/page.js",
-  "/vendors/[id]/page": "app/vendors/[id]/page.js"
+  "/vendors/[id]/page": "app/vendors/[id]/page.js",
+  "/vendors/page": "app/vendors/page.js"
 }

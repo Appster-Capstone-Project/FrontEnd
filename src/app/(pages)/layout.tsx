@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import Link from "next/link";
@@ -13,6 +14,7 @@ import {
   ExternalLink,
   ShoppingBag,
   Search,
+  Utensils,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -57,9 +59,14 @@ export default function UserAccountLayout({
   const navItems = [
     {
       href: "/dashboard",
-      label: "Browse Food",
-      icon: Search,
+      label: "Dashboard",
+      icon: LayoutDashboard,
       exact: true,
+    },
+    {
+      href: "/vendors",
+      label: "Browse Food",
+      icon: Utensils,
     },
     {
       href: "/orders",
@@ -111,7 +118,7 @@ export default function UserAccountLayout({
         </div>
       </div>
       <div className="flex flex-col">
-        <header className="flex h-14 items-center justify-end gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-8">
+        <header className="flex h-14 items-center justify-end gap-4 border-b bg-muted/40 px-6 lg:h-[60px] lg:px-8">
           <CartSheet>
             <Button variant="ghost" size="icon" aria-label="Cart" className="relative">
               <ShoppingBag className="h-5 w-5" />
@@ -145,7 +152,7 @@ export default function UserAccountLayout({
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="flex-grow bg-background overflow-auto">
+        <main className="flex-grow bg-background overflow-auto p-4 md:p-8">
             {children}
         </main>
       </div>
