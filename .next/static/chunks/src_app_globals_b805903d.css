@@ -1139,6 +1139,10 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
 }
 
+.items-baseline {
+  align-items: baseline;
+}
+
 .items-stretch {
   align-items: stretch;
 }
@@ -3088,6 +3092,10 @@ body {
 
   .md\:p-8 {
     padding: 2rem;
+  }
+
+  .md\:p-6 {
+    padding: 1.5rem;
   }
 
   .md\:py-0 {
