@@ -22,6 +22,8 @@ const OrderNotificationManager = () => {
     }
     
     // The EventSource API is used for Server-Sent Events (SSE)
+    // The token is passed as a query parameter because EventSource doesn't support auth headers.
+    // The backend must be configured to accept the token from the 'token' query parameter.
     const eventSource = new EventSource(`/api/events/stream?token=${token}`);
     
     // Handler for when the connection opens
@@ -58,9 +60,8 @@ const OrderNotificationManager = () => {
     // Handler for any errors with the SSE connection
     eventSource.onerror = (error) => {
       console.error('SSE Error:', error);
-      // The browser will automatically try to reconnect. If it fails persistently,
-      // we close the connection.
-      eventSource.close();
+      // Do not close the connection here. The browser's EventSource implementation
+      // will automatically attempt to reconnect. Closing it would prevent recovery.
     };
 
     // Cleanup function: close the connection when the component unmounts
