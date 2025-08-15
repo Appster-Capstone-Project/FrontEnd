@@ -14,22 +14,29 @@ import { Search } from "lucide-react";
 
 
 // Helper to augment seller data from the API with placeholder data for the UI
-const augmentSellerData = (seller): Vendor => ({
-  id: seller.id,
-  name: seller.name,
-  phone: seller.phone,
-  // Add placeholder data for fields not in the API response
-  type: 'Home Cook', // Default type, can be enhanced if API provides it
-  description: `Authentic meals from ${seller.name}. Explore a variety of delicious home-cooked food.`,
-  rating: 4.5, // Placeholder rating
-  address: 'Location not available',
-  city: 'Online',
-  imageUrl: 'https://placehold.co/400x250.png',
-  dataAiHint: 'food vendor',
-  menu: [],
-  reviews: [],
-  specialty: 'Home-style Cooking',
-});
+const augmentSellerData = (seller): Vendor => {
+  const isHomeCook = true; // Assuming all vendors are 'Home Cook' for now as per API
+  const imageUrl = isHomeCook 
+    ? 'https://www.themanual.com/wp-content/uploads/sites/9/2021/03/learning-to-cook.jpg?fit=800%2C533&p=1' 
+    : 'https://placehold.co/400x250.png';
+
+  return {
+    id: seller.id,
+    name: seller.name,
+    phone: seller.phone,
+    // Add placeholder data for fields not in the API response
+    type: 'Home Cook', // Default type, can be enhanced if API provides it
+    description: `Authentic meals from ${seller.name}. Explore a variety of delicious home-cooked food.`,
+    rating: 4.5, // Placeholder rating
+    address: 'Location not available',
+    city: 'Online',
+    imageUrl: imageUrl,
+    dataAiHint: isHomeCook ? 'home cooking' : 'food vendor',
+    menu: [],
+    reviews: [],
+    specialty: 'Home-style Cooking',
+  };
+};
 
 const categories = [
   { name: 'All', value: 'all' as const },
@@ -49,17 +56,14 @@ export default function VendorsPage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    const role = localStorage.getItem('userRole');
-    setUserRole(role);
+    // const role = localStorage.getItem('userRole');
+    // setUserRole(role);
 
-    // If the current user is a seller, they should not be on this page.
-    // Redirect them to their own dashboard immediately.
-    if (role === 'seller') {
-      router.replace('/sell');
-      return; // Stop further execution in this component
-    }
+    // if (role === 'seller') {
+    //   router.replace('/sell');
+    //   return; 
+    // }
 
-    // If not a seller, proceed to render the page and fetch data
     setIsReady(true);
 
     const fetchVendors = async () => {
@@ -113,7 +117,6 @@ export default function VendorsPage() {
     setActiveCategory(category);
   };
   
-  // Render a loading state until the role check is complete to prevent content flashing.
   if (!isReady) {
     return (
       <div className="container py-12 md:py-16">
@@ -152,11 +155,11 @@ export default function VendorsPage() {
       </div>
       
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
             {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
       ) : filteredVendors.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
           {filteredVendors.map((vendor) => (
             <VendorCard key={vendor.id} vendor={vendor} />
           ))}

@@ -11,26 +11,7 @@ import type { Dish } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-
-const fetchSignedUrl = async (imageUrlPath: string, token: string): Promise<string> => {
-    try {
-        const response = await fetch(`/api${imageUrlPath}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!response.ok) {
-            throw new Error('Failed to get signed URL');
-        }
-        const data = await response.json();
-        // Replace localhost from the backend with the public IP.
-        const publicUrl = data.signed_url.replace('localhost:9000', '20.185.241.50:9000');
-        return publicUrl;
-    } catch (error) {
-        console.error("Error fetching signed URL:", error);
-        return 'https://placehold.co/100x100.png';
-    }
-};
 
 export default function SellDashboardPage() {
   const { toast } = useToast();
@@ -48,18 +29,25 @@ export default function SellDashboardPage() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        const augmentedData = Array.isArray(data) ? await Promise.all(data.map(async item => {
-          let finalImageUrl = 'https://placehold.co/100x100.png';
-          if (item.image) {
-             // item.image is the relative path, e.g., /listings/{id}/image/{filename}
-             finalImageUrl = await fetchSignedUrl(item.image, token);
-          }
-          return {
-            ...item,
-            imageUrl: finalImageUrl, 
-          };
-        })) : [];
+        let data = await response.json();
+        
+        // Ensure data is an array
+        if (!Array.isArray(data)) {
+          data = [];
+        }
+
+        const augmentedData = data.map(item => {
+            let finalImageUrl = 'https://placehold.co/100x100.png';
+            if (item.image) {
+                // Use a relative path to leverage the Next.js proxy and avoid mixed content errors
+                finalImageUrl = `/api${item.image}`;
+            }
+            return {
+                ...item,
+                imageUrl: finalImageUrl, 
+            };
+        });
+
         setListings(augmentedData);
       } else {
         const errorData = await response.json();
@@ -80,9 +68,9 @@ export default function SellDashboardPage() {
 
   React.useEffect(() => {
     const token = localStorage.getItem('token');
-    const userRole = localStorage.getItem('userRole');
     const name = localStorage.getItem('userName');
     const sellerId = localStorage.getItem('sellerId');
+    const userRole = localStorage.getItem('userRole');
     setSellerName(name);
 
     if (!token || userRole !== 'seller' || !sellerId) {
@@ -95,6 +83,7 @@ export default function SellDashboardPage() {
     } else {
       fetchListings(token, sellerId);
     }
+
   }, [router, fetchListings, toast]);
 
   return (
@@ -124,7 +113,7 @@ export default function SellDashboardPage() {
                   <div className="space-y-4">
                       {[...Array(3)].map((_, i) => (
                         <div key={i} className="flex items-center space-x-4">
-                          <Skeleton className="h-12 w-12 rounded-md" />
+                          <Skeleton className="h-16 w-16 rounded-md" />
                           <div className="flex-1 space-y-2">
                             <Skeleton className="h-4 w-3/4" />
                             <Skeleton className="h-4 w-1/2" />
@@ -140,7 +129,7 @@ export default function SellDashboardPage() {
                               <div className="flex items-center gap-4">
                                 <div className="relative h-16 w-16 rounded-md overflow-hidden bg-muted">
                                   {listing.imageUrl && !listing.imageUrl.includes('placehold.co') ? (
-                                     <Image src={listing.imageUrl} alt={listing.title} layout="fill" objectFit="cover" />
+                                     <img src={listing.imageUrl} alt={listing.title} className="w-full h-full object-cover" />
                                   ): (
                                     <div className="flex items-center justify-center h-full"><ImageIcon className="h-6 w-6 text-muted-foreground"/></div>
                                   )}

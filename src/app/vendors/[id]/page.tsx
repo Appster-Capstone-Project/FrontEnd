@@ -1,6 +1,5 @@
 
 import type { Vendor, Dish, Review } from '@/lib/types';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -27,72 +26,56 @@ async function submitReview(formData: FormData) {
   // Since there is no review endpoint, this is for demonstration.
 }
 
-const fetchSignedUrl = async (imageUrlPath: string): Promise<string> => {
-    try {
-        // Use absolute URL for server-side fetching
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}${imageUrlPath}`;
-
-        const response = await fetch(apiUrl, { cache: 'no-store' });
-        
-        if (!response.ok) {
-            throw new Error(`Failed to get signed URL for ${imageUrlPath}: ${response.statusText}`);
-        }
-        const data = await response.json();
-
-        if (!data.signed_url) {
-            throw new Error('Signed URL not found in response');
-        }
-
-        // Replace localhost from the backend with the public IP.
-        const publicUrl = data.signed_url.replace('localhost:9000', '20.185.241.50:9000');
-        return publicUrl;
-    } catch (error) {
-        console.error("Error fetching signed URL:", error);
-        return 'https://placehold.co/300x200.png'; // Fallback URL
-    }
-};
-
 async function getVendorDetails(id: string): Promise<Vendor | null> {
   try {
-    const sellerRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sellers/${id}`);
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!baseUrl) {
+      throw new Error("API base URL is not configured.");
+    }
+    
+    // Fetch seller details from the absolute URL
+    const sellerRes = await fetch(`${baseUrl}/sellers/${id}`);
     
     if (!sellerRes.ok) {
       if (sellerRes.status === 404) {
         console.log(`Vendor with ID ${id} not found.`);
-        return null;
+        return null; // This will trigger the notFound() page later
       }
-      throw new Error(`Failed to fetch seller: ${sellerRes.statusText}`);
+      throw new Error(`Failed to fetch seller: ${sellerRes.status} ${sellerRes.statusText}`);
     }
 
     const seller = await sellerRes.json();
     let listings: Dish[] = [];
     
     try {
-        const listingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/listings?sellerId=${id}`);
+        // Fetch listings using the correct query parameter format and absolute URL
+        const listingsRes = await fetch(`${baseUrl}/listings?sellerId=${id}`);
 
         if (listingsRes.ok) {
             const rawListings = await listingsRes.json();
             
-            if (Array.isArray(rawListings)) {
-                 listings = await Promise.all(
-                   rawListings.map(async (listing) => {
-                     let finalImageUrl = 'https://placehold.co/300x200.png';
-                     if (listing.image) {
-                       finalImageUrl = await fetchSignedUrl(listing.image);
-                     }
-                     return {
-                       ...listing,
-                       imageUrl: finalImageUrl,
-                       dataAiHint: 'food dish',
-                     };
-                   })
-                 );
+             if (Array.isArray(rawListings)) {
+                listings = rawListings.map((listing) => {
+                    let finalImageUrl = 'https://placehold.co/300x200.png'; 
+                    if (listing.image) {
+                        // Use a relative path for client-side rendering to avoid mixed content.
+                        // The browser will resolve this relative to the current domain,
+                        // and the Next.js proxy will handle the request.
+                        finalImageUrl = `/api${listing.image}`;
+                    }
+                    return {
+                        ...listing,
+                        imageUrl: finalImageUrl,
+                        dataAiHint: 'food dish',
+                    };
+                  });
             }
         } else {
-            console.warn(`Could not fetch listings for seller ${id}. Status: ${listingsRes.status}`);
+            console.warn(`Could not fetch listings for seller ${id}. Status: ${listingsRes.statusText}`);
         }
     } catch (e) {
         console.error(`An error occurred fetching listings for seller ${id}`, e);
+        // Decide if this is a critical error. For now, we'll allow the page to render without listings.
     }
 
     // Placeholder reviews as there is no API endpoint for it
@@ -101,6 +84,11 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
       { id: 'r1-2', userName: 'Anita S.', rating: 4, comment: 'Delicious, a bit spicy for me though.', date: '2024-07-14T18:30:00Z', userImageUrl: 'https://placehold.co/40x40.png', dataAiHintUser: 'woman portrait' },
     ];
     
+    const isHomeCook = true; // Assuming all vendors are 'Home Cook' for now as per API
+    const vendorImageUrl = isHomeCook 
+      ? 'https://www.themanual.com/wp-content/uploads/sites/9/2021/03/learning-to-cook.jpg?fit=800%2C533&p=1' 
+      : 'https://placehold.co/600x400.png';
+
     return {
       id: seller.id,
       name: seller.name,
@@ -111,8 +99,8 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
       address: 'Location not specified',
       city: 'City',
       verified: seller.verified,
-      imageUrl: 'https://placehold.co/600x400.png',
-      dataAiHint: 'food vendor',
+      imageUrl: vendorImageUrl,
+      dataAiHint: isHomeCook ? 'home cooking' : 'food vendor',
       specialty: 'Delicious Home Food',
       operatingHours: '10 AM - 10 PM',
       deliveryOptions: ['Pickup', 'Delivery'],
@@ -121,6 +109,7 @@ async function getVendorDetails(id: string): Promise<Vendor | null> {
     };
   } catch (error) {
     console.error("Failed to fetch vendor details:", error);
+    // Throw the error to be caught by the error boundary
     if (error instanceof Error) {
         throw new Error(`Network request failed: ${error.message}`);
     }
@@ -143,13 +132,10 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
       <Card className="mb-8 overflow-hidden shadow-xl">
         <div className="md:flex">
           <div className="md:w-1/3 relative">
-            <Image
+            <img
               src={vendor.imageUrl || 'https://placehold.co/600x400.png'}
               alt={vendor.name}
-              width={600}
-              height={400}
               className="w-full h-64 md:h-full object-cover"
-              priority
               data-ai-hint={vendor.dataAiHint || "food vendor"}
             />
           </div>

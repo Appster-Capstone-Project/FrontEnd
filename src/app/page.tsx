@@ -9,8 +9,8 @@ export default function HomePage() {
     <div className="flex min-h-[calc(100vh-var(--header-height)-var(--footer-height))] flex-col">
       <div 
         className="relative flex flex-grow flex-col items-center justify-center p-4 sm:p-8 bg-cover bg-center"
-        style={{ backgroundImage: "url('https://placehold.co/1200x800.png')" }}
-        data-ai-hint="delicious food variety"
+        style={{ backgroundImage: "url('https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')" }}
+        data-ai-hint="home cooking"
       >
         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
         

@@ -1,7 +1,6 @@
 
 "use client";
 
-import Image from 'next/image';
 import type { Dish } from '@/lib/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -26,14 +25,14 @@ const DishCard: React.FC<DishCardProps> = ({ dish }) => {
   return (
     <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col h-full">
       <CardHeader className="p-0 relative">
-        <Image
-            src={imageUrl}
-            alt={dish.title}
-            width={300}
-            height={200}
-            className="w-full h-40 object-cover"
-            data-ai-hint={dish.dataAiHint || 'food dish'}
-        />
+        <div className="aspect-[3/2] w-full bg-muted">
+            <img
+                src={imageUrl}
+                alt={dish.title}
+                className="w-full h-full object-cover"
+                data-ai-hint={dish.dataAiHint || 'food dish'}
+            />
+        </div>
          <Badge 
             variant={dish.available ? "default" : "destructive"} 
             className="absolute top-2 right-2 text-xs"
@@ -62,7 +61,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish }) => {
           onClick={handleAddToCart}
         >
           <ShoppingCart className="mr-2 h-4 w-4" />
-          {dish.available ? `Add to Cart (${dish.leftSize} left)` : 'Unavailable'}
+          {dish.available && (dish.leftSize || 0) > 0 ? `Add to Cart (${dish.leftSize} left)` : 'Unavailable'}
         </Button>
       </CardFooter>
     </Card>
