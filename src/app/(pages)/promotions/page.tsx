@@ -99,7 +99,7 @@ export default function PromotionsPage() {
   const discountedPrice = originalPrice * 0.8;
 
   return (
-    <div className="flex-1 space-y-4 p-4 pt-6 md:p-6">
+    <div className="flex-1 space-y-8 p-4 pt-6 md:p-8">
       <SectionTitle
         title="Special Promotions"
         subtitle="Exclusive discounts on freshly added meals"
@@ -114,30 +114,34 @@ export default function PromotionsPage() {
           </CardContent>
         </Card>
       ) : promotion ? (
-        <Card className="overflow-hidden shadow-lg border-2 border-primary/20 max-w-2xl mx-auto">
-            <div className="relative">
-                <img
-                    src={promotion.imageUrl}
-                    alt={promotion.title}
-                    className="w-full h-40 object-cover"
-                    data-ai-hint={promotion.dataAiHint}
-                />
-                 <Badge variant="destructive" className="absolute top-2 right-2">
-                    <Tag className="mr-2 h-4 w-4" /> 20% OFF
-                </Badge>
-            </div>
-            <CardContent className="p-4">
-                 <h3 className="font-headline text-2xl font-bold text-primary">{promotion.title}</h3>
-                <p className="text-sm text-muted-foreground mt-1">
-                    Offered by <span className="font-semibold text-foreground">{promotion.seller.name}</span>
-                </p>
-                <div className="flex items-baseline space-x-2 mt-2">
-                    <p className="text-lg font-semibold text-muted-foreground line-through">${originalPrice.toFixed(2)}</p>
-                    <p className="text-2xl font-bold text-foreground">${discountedPrice.toFixed(2)}</p>
+        <Card className="overflow-hidden shadow-lg border-2 border-primary/20 max-w-4xl mx-auto">
+            <CardContent className="p-4 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                    <img
+                        src={promotion.imageUrl}
+                        alt={promotion.title}
+                        className="w-24 h-24 object-cover rounded-md"
+                        data-ai-hint={promotion.dataAiHint}
+                    />
+                    <div>
+                        <h3 className="font-headline text-xl font-bold text-primary">{promotion.title}</h3>
+                        <p className="text-sm text-muted-foreground mt-1">
+                            Offered by <span className="font-semibold text-foreground">{promotion.seller.name}</span>
+                        </p>
+                        <div className="flex items-baseline space-x-2 mt-2">
+                            <p className="text-md font-semibold text-muted-foreground line-through">${originalPrice.toFixed(2)}</p>
+                            <p className="text-xl font-bold text-foreground">${discountedPrice.toFixed(2)}</p>
+                        </div>
+                    </div>
                 </div>
-                <Button asChild size="sm" className="w-full mt-4">
-                    <Link href={`/vendors/${promotion.sellerId}`}>View Offer</Link>
-                </Button>
+                 <div className="flex flex-col items-end gap-2">
+                     <Badge variant="destructive">
+                        <Tag className="mr-2 h-4 w-4" /> 20% OFF
+                    </Badge>
+                    <Button asChild size="sm" className="mt-2">
+                        <Link href={`/vendors/${promotion.sellerId}`}>Claim Offer</Link>
+                    </Button>
+                </div>
             </CardContent>
         </Card>
       ) : (
