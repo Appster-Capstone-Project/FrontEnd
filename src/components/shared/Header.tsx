@@ -47,8 +47,10 @@ const Header = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
     // This effect runs on the client and checks the login status.
     const token = localStorage.getItem('token');
     const name = localStorage.getItem('userName');
@@ -203,7 +205,7 @@ const Header = () => {
           <CartSheet>
             <Button variant="ghost" size="icon" aria-label="Cart" className="relative">
               <ShoppingBag className="h-5 w-5" />
-              {itemCount > 0 && (
+              {isClient && itemCount > 0 && (
                 <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 justify-center rounded-full p-0 text-xs">
                   {itemCount}
                 </Badge>
@@ -217,7 +219,7 @@ const Header = () => {
             <CartSheet>
                 <Button variant="ghost" size="icon" aria-label="Cart" className="relative mr-2">
                   <ShoppingBag className="h-5 w-5" />
-                  {itemCount > 0 && (
+                  {isClient && itemCount > 0 && (
                     <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 justify-center rounded-full p-0 text-xs">
                       {itemCount}
                     </Badge>
@@ -259,3 +261,5 @@ const Header = () => {
 };
 
 export default Header;
+
+    
