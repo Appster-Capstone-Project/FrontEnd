@@ -113,11 +113,17 @@ export default function PromotionsPage() {
 
         if (eligibleDishes.length === 0) {
             setPromotions([]);
+            setIsLoading(false); // Stop loading if no promotions
             return;
         }
 
         // Fetch seller details for each eligible dish
         const promotionPromises = eligibleDishes.map(async (dish) => {
+            // Handle case where sellerId might be missing
+            if (!dish.sellerId) {
+                console.warn(`Dish '${dish.title}' is missing a sellerId and cannot be part of a promotion.`);
+                return null;
+            }
             const sellerRes = await fetch(`/api/sellers/${dish.sellerId}`);
             if (!sellerRes.ok) {
                 console.warn(`Could not fetch seller for dish ${dish.title}.`);
