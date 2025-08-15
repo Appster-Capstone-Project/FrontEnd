@@ -158,54 +158,65 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 ;
 ;
 const PromotionCardSkeleton = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
-        className: "overflow-hidden shadow-lg",
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "p-4",
-            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "space-y-3",
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
-                        className: "h-6 w-3/4"
-                    }, void 0, false, {
-                        fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                        lineNumber: 24,
-                        columnNumber: 17
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
-                        className: "h-4 w-full"
-                    }, void 0, false, {
-                        fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                        lineNumber: 25,
-                        columnNumber: 17
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
-                        className: "h-4 w-5/6"
-                    }, void 0, false, {
-                        fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                        lineNumber: 26,
-                        columnNumber: 17
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "pt-2",
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
-                            className: "h-10 w-full"
+        className: "overflow-hidden shadow-lg border-2 border-primary/20 max-w-4xl mx-auto",
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
+            className: "p-4 flex items-center justify-between gap-4",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "flex items-center gap-4",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
+                            className: "w-24 h-24 rounded-md"
                         }, void 0, false, {
                             fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                            lineNumber: 28,
-                            columnNumber: 21
+                            lineNumber: 24,
+                            columnNumber: 17
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "space-y-2",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
+                                    className: "h-6 w-48"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/(pages)/promotions/page.tsx",
+                                    lineNumber: 26,
+                                    columnNumber: 21
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
+                                    className: "h-4 w-32"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/(pages)/promotions/page.tsx",
+                                    lineNumber: 27,
+                                    columnNumber: 21
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
+                                    className: "h-5 w-24"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/(pages)/promotions/page.tsx",
+                                    lineNumber: 28,
+                                    columnNumber: 21
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/app/(pages)/promotions/page.tsx",
+                            lineNumber: 25,
+                            columnNumber: 17
                         }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                        lineNumber: 27,
-                        columnNumber: 17
-                    }, this)
-                ]
-            }, void 0, true, {
-                fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                lineNumber: 23,
-                columnNumber: 13
-            }, this)
-        }, void 0, false, {
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/app/(pages)/promotions/page.tsx",
+                    lineNumber: 23,
+                    columnNumber: 14
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
+                    className: "h-9 w-28"
+                }, void 0, false, {
+                    fileName: "[project]/src/app/(pages)/promotions/page.tsx",
+                    lineNumber: 31,
+                    columnNumber: 13
+                }, this)
+            ]
+        }, void 0, true, {
             fileName: "[project]/src/app/(pages)/promotions/page.tsx",
             lineNumber: 22,
             columnNumber: 9
@@ -230,12 +241,14 @@ function PromotionsPage() {
                     throw new Error('Could not fetch dishes.');
                 }
                 const listings = await listingsRes.json();
-                const latestDish = listings[0];
-                if (!latestDish) {
+                // Filter for dishes with more than 10 portions left
+                const promotableDishes = listings.filter((dish)=>(dish.leftSize || 0) >= 10);
+                if (promotableDishes.length === 0) {
                     setPromotion(null);
                     return;
                 }
-                const sellerRes = await fetch(`/api/sellers/${latestDish.sellerId}`);
+                const dishToPromote = promotableDishes[0];
+                const sellerRes = await fetch(`/api/sellers/${dishToPromote.sellerId}`);
                 if (!sellerRes.ok) {
                     throw new Error(`Could not fetch seller details.`);
                 }
@@ -247,8 +260,8 @@ function PromotionsPage() {
                     dataAiHint: 'home cooking'
                 };
                 const finalPromotion = {
-                    ...latestDish,
-                    imageUrl: latestDish.image ? `/api${latestDish.image}` : 'https://placehold.co/600x400.png',
+                    ...dishToPromote,
+                    imageUrl: dishToPromote.image ? `/api${dishToPromote.image}` : 'https://placehold.co/600x400.png',
                     seller: augmentedSeller
                 };
                 setPromotion(finalPromotion);
@@ -272,19 +285,19 @@ function PromotionsPage() {
     const originalPrice = promotion ? promotion.price : 0;
     const discountedPrice = originalPrice * 0.8;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "flex-1 space-y-8 p-4 pt-6 md:p-8",
+        className: "flex-1 space-y-8 p-4 md:p-8 pt-6",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$shared$2f$SectionTitle$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                 title: "Special Promotions",
-                subtitle: "Exclusive discounts on freshly added meals"
+                subtitle: "Exclusive discounts on freshly added meals."
             }, void 0, false, {
                 fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                lineNumber: 103,
+                lineNumber: 108,
                 columnNumber: 7
             }, this),
             isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(PromotionCardSkeleton, {}, void 0, false, {
                 fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                lineNumber: 108,
+                lineNumber: 113,
                 columnNumber: 9
             }, this) : error ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
                 className: "text-center p-8",
@@ -295,7 +308,7 @@ function PromotionsPage() {
                             children: "Something went wrong"
                         }, void 0, false, {
                             fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                            lineNumber: 112,
+                            lineNumber: 117,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -303,18 +316,18 @@ function PromotionsPage() {
                             children: error
                         }, void 0, false, {
                             fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                            lineNumber: 113,
+                            lineNumber: 118,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                    lineNumber: 111,
+                    lineNumber: 116,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                lineNumber: 110,
+                lineNumber: 115,
                 columnNumber: 9
             }, this) : promotion ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
                 className: "overflow-hidden shadow-lg border-2 border-primary/20 max-w-4xl mx-auto",
@@ -331,7 +344,7 @@ function PromotionsPage() {
                                     "data-ai-hint": promotion.dataAiHint
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                                    lineNumber: 120,
+                                    lineNumber: 125,
                                     columnNumber: 21
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -341,7 +354,7 @@ function PromotionsPage() {
                                             children: promotion.title
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                                            lineNumber: 127,
+                                            lineNumber: 132,
                                             columnNumber: 25
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -353,56 +366,56 @@ function PromotionsPage() {
                                                     children: promotion.seller.name
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                                                    lineNumber: 129,
+                                                    lineNumber: 134,
                                                     columnNumber: 40
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                                            lineNumber: 128,
-                                            columnNumber: 25
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex items-baseline space-x-2 mt-2",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-md font-semibold text-muted-foreground line-through",
-                                                    children: [
-                                                        "$",
-                                                        originalPrice.toFixed(2)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                                                    lineNumber: 132,
-                                                    columnNumber: 29
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-xl font-bold text-foreground",
-                                                    children: [
-                                                        "$",
-                                                        discountedPrice.toFixed(2)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                                                    lineNumber: 133,
-                                                    columnNumber: 29
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                                            lineNumber: 131,
+                                            lineNumber: 133,
                                             columnNumber: 25
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                                    lineNumber: 126,
+                                    lineNumber: 131,
+                                    columnNumber: 22
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/app/(pages)/promotions/page.tsx",
+                            lineNumber: 124,
+                            columnNumber: 17
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex items-baseline space-x-2",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: "text-md font-semibold text-muted-foreground line-through",
+                                    children: [
+                                        "$",
+                                        originalPrice.toFixed(2)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/(pages)/promotions/page.tsx",
+                                    lineNumber: 140,
+                                    columnNumber: 21
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: "text-xl font-bold text-foreground",
+                                    children: [
+                                        "$",
+                                        discountedPrice.toFixed(2)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/(pages)/promotions/page.tsx",
+                                    lineNumber: 141,
                                     columnNumber: 21
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                            lineNumber: 119,
+                            lineNumber: 139,
                             columnNumber: 17
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -415,14 +428,14 @@ function PromotionsPage() {
                                             className: "mr-2 h-4 w-4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                                            lineNumber: 139,
+                                            lineNumber: 146,
                                             columnNumber: 25
                                         }, this),
                                         " 20% OFF"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                                    lineNumber: 138,
+                                    lineNumber: 145,
                                     columnNumber: 22
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -434,64 +447,65 @@ function PromotionsPage() {
                                         children: "Claim Offer"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                                        lineNumber: 142,
+                                        lineNumber: 149,
                                         columnNumber: 25
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                                    lineNumber: 141,
+                                    lineNumber: 148,
                                     columnNumber: 21
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                            lineNumber: 137,
-                            columnNumber: 18
+                            lineNumber: 144,
+                            columnNumber: 17
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                    lineNumber: 118,
+                    lineNumber: 123,
                     columnNumber: 13
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                lineNumber: 117,
+                lineNumber: 122,
                 columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
-                className: "text-center p-12",
+                className: "text-center p-12 max-w-4xl mx-auto",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                            className: "font-headline text-xl",
                             children: "No Promotions Available"
                         }, void 0, false, {
                             fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                            lineNumber: 150,
+                            lineNumber: 157,
                             columnNumber: 17
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "mt-2",
-                            children: "Please check back later for new offers."
+                            className: "mt-2 text-muted-foreground",
+                            children: "Check back later for new offers on dishes with plenty of stock!"
                         }, void 0, false, {
                             fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                            lineNumber: 151,
+                            lineNumber: 158,
                             columnNumber: 17
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                    lineNumber: 149,
+                    lineNumber: 156,
                     columnNumber: 13
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                lineNumber: 148,
+                lineNumber: 155,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-        lineNumber: 102,
+        lineNumber: 107,
         columnNumber: 5
     }, this);
 }
