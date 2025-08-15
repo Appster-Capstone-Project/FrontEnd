@@ -188,7 +188,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 const PromotionCard = ({ promotion })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
-        className: "max-w-2xl mx-auto shadow-lg border-2 border-primary/20 overflow-hidden",
+        className: "shadow-lg border-2 border-primary/20 overflow-hidden flex flex-col h-full",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardHeader"], {
                 className: "text-center bg-primary/10 p-4",
@@ -219,7 +219,7 @@ const PromotionCard = ({ promotion })=>/*#__PURE__*/ (0, __TURBOPACK__imported__
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardDescription"], {
                         className: "text-primary/90",
-                        children: "Get 20% OFF on the newest dish available on TiffinBox!"
+                        children: "Get 20% OFF on this new dish!"
                     }, void 0, false, {
                         fileName: "[project]/src/app/(pages)/promotions/page.tsx",
                         lineNumber: 27,
@@ -232,7 +232,7 @@ const PromotionCard = ({ promotion })=>/*#__PURE__*/ (0, __TURBOPACK__imported__
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
-                className: "p-6",
+                className: "p-6 flex-grow",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "flex flex-col sm:flex-row gap-6 items-center",
                     children: [
@@ -346,7 +346,7 @@ const PromotionCard = ({ promotion })=>/*#__PURE__*/ (0, __TURBOPACK__imported__
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardFooter"], {
-                className: "bg-muted/50 p-4",
+                className: "bg-muted/50 p-4 mt-auto",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                     asChild: true,
                     className: "w-full",
@@ -386,7 +386,6 @@ const PromotionCard = ({ promotion })=>/*#__PURE__*/ (0, __TURBOPACK__imported__
     }, this);
 _c = PromotionCard;
 const PromotionSkeleton = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
-        className: "max-w-2xl mx-auto",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardHeader"], {
                 className: "text-center bg-primary/10 p-4",
@@ -500,7 +499,7 @@ const PromotionSkeleton = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$
     }, this);
 _c1 = PromotionSkeleton;
 const NoPromotions = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
-        className: "max-w-2xl mx-auto",
+        className: "col-span-full",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
             className: "pt-6 text-center",
             children: [
@@ -540,7 +539,7 @@ const NoPromotions = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$pr
     }, this);
 _c2 = NoPromotions;
 const ErrorState = ({ onRetry })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
-        className: "max-w-2xl mx-auto text-center",
+        className: "col-span-full text-center",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
             className: "pt-6",
             children: [
@@ -651,29 +650,38 @@ function PromotionsPage() {
                 lineNumber: 170,
                 columnNumber: 7
             }, this),
-            isLoading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(PromotionSkeleton, {}, void 0, false, {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8",
+                children: [
+                    isLoading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(PromotionSkeleton, {}, void 0, false, {
+                        fileName: "[project]/src/app/(pages)/promotions/page.tsx",
+                        lineNumber: 176,
+                        columnNumber: 27
+                    }, this),
+                    !isLoading && error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(ErrorState, {
+                        onRetry: fetchPromotion
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/(pages)/promotions/page.tsx",
+                        lineNumber: 177,
+                        columnNumber: 37
+                    }, this),
+                    !isLoading && !error && promotion && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(PromotionCard, {
+                        promotion: promotion
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/(pages)/promotions/page.tsx",
+                        lineNumber: 178,
+                        columnNumber: 51
+                    }, this),
+                    !isLoading && !error && !promotion && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(NoPromotions, {}, void 0, false, {
+                        fileName: "[project]/src/app/(pages)/promotions/page.tsx",
+                        lineNumber: 179,
+                        columnNumber: 52
+                    }, this)
+                ]
+            }, void 0, true, {
                 fileName: "[project]/src/app/(pages)/promotions/page.tsx",
                 lineNumber: 175,
-                columnNumber: 22
-            }, this),
-            !isLoading && error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(ErrorState, {
-                onRetry: fetchPromotion
-            }, void 0, false, {
-                fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                lineNumber: 176,
-                columnNumber: 32
-            }, this),
-            !isLoading && !error && promotion && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(PromotionCard, {
-                promotion: promotion
-            }, void 0, false, {
-                fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                lineNumber: 177,
-                columnNumber: 46
-            }, this),
-            !isLoading && !error && !promotion && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(NoPromotions, {}, void 0, false, {
-                fileName: "[project]/src/app/(pages)/promotions/page.tsx",
-                lineNumber: 178,
-                columnNumber: 47
+                columnNumber: 8
             }, this)
         ]
     }, void 0, true, {

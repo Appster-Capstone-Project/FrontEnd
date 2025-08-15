@@ -18,72 +18,57 @@ interface Promotion {
 }
 
 const PromotionCard = ({ promotion }: { promotion: Promotion }) => (
-    <Card className="shadow-lg border-2 border-primary/20 overflow-hidden flex flex-col h-full">
-        <CardHeader className="text-center bg-primary/10 p-4">
-            <div className="flex justify-center items-center gap-2">
-                <TicketPercent className="h-8 w-8 text-primary" />
-                <CardTitle className="font-headline text-2xl text-primary">Limited Time Offer!</CardTitle>
-            </div>
-            <CardDescription className="text-primary/90">
-                Get 20% OFF on this new dish!
-            </CardDescription>
-        </CardHeader>
-        <CardContent className="p-6 flex-grow">
-            <div className="flex flex-col sm:flex-row gap-6 items-center">
-                <div className="w-full sm:w-1/3">
-                    <img
-                        src={promotion.dish.imageUrl || 'https://placehold.co/300x200.png'}
-                        alt={promotion.dish.title}
-                        className="rounded-lg object-cover aspect-square"
-                        data-ai-hint={promotion.dish.dataAiHint || 'food dish'}
-                    />
+    <Card className="shadow-lg overflow-hidden flex flex-col sm:flex-row h-full">
+        <div className="w-full sm:w-2/5">
+            <img
+                src={promotion.dish.imageUrl || 'https://placehold.co/300x200.png'}
+                alt={promotion.dish.title}
+                className="w-full h-full object-cover"
+                data-ai-hint={promotion.dish.dataAiHint || 'food dish'}
+            />
+        </div>
+        <div className="w-full sm:w-3/5 flex flex-col">
+            <CardContent className="p-6 flex-grow space-y-3">
+                 <h3 className="font-headline text-xl font-bold">{promotion.dish.title}</h3>
+                 <p className="text-sm text-muted-foreground flex items-center">
+                    <Utensils className="h-4 w-4 mr-2" />
+                    From <span className="font-semibold text-foreground ml-1">{promotion.seller.name}</span>
+                </p>
+                <p className="text-xs text-muted-foreground line-clamp-2">{promotion.dish.description}</p>
+                 <div className="flex items-baseline gap-3 pt-2">
+                    <span className="text-3xl font-bold text-primary">${promotion.discountedPrice.toFixed(2)}</span>
+                    <span className="text-lg text-muted-foreground line-through">${promotion.dish.price.toFixed(2)}</span>
                 </div>
-                <div className="w-full sm:w-2/3 space-y-3">
-                    <h3 className="font-headline text-xl font-bold">{promotion.dish.title}</h3>
-                    <p className="text-sm text-muted-foreground flex items-center">
-                        <Utensils className="h-4 w-4 mr-2" />
-                        From the kitchen of <span className="font-semibold text-foreground ml-1">{promotion.seller.name}</span>
-                    </p>
-                    <div className="flex items-baseline gap-3 pt-2">
-                        <span className="text-3xl font-bold text-primary">${promotion.discountedPrice.toFixed(2)}</span>
-                        <span className="text-lg text-muted-foreground line-through">${promotion.dish.price.toFixed(2)}</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">{promotion.dish.description}</p>
-                </div>
-            </div>
-        </CardContent>
-        <CardFooter className="bg-muted/50 p-4 mt-auto">
-            <Button asChild className="w-full" size="lg">
-                <Link href={`/vendors/${promotion.seller.id}`}>
-                    <Tag className="mr-2 h-4 w-4" /> Claim Offer & View Menu
-                </Link>
-            </Button>
-        </CardFooter>
+                 <p className="text-sm font-semibold text-green-600">20% OFF!</p>
+            </CardContent>
+            <CardFooter className="bg-muted/50 p-4 mt-auto">
+                <Button asChild className="w-full" size="sm">
+                    <Link href={`/vendors/${promotion.seller.id}`}>
+                        <Tag className="mr-2 h-4 w-4" /> Claim Offer
+                    </Link>
+                </Button>
+            </CardFooter>
+        </div>
     </Card>
 );
 
 const PromotionSkeleton = () => (
-     <Card>
-        <CardHeader className="text-center bg-primary/10 p-4">
-             <Skeleton className="h-8 w-64 mx-auto" />
-             <Skeleton className="h-5 w-80 mx-auto mt-1" />
-        </CardHeader>
-        <CardContent className="p-6">
-             <div className="flex flex-col sm:flex-row gap-6 items-center">
-                <div className="w-full sm:w-1/3">
-                    <Skeleton className="w-full aspect-square rounded-lg" />
-                </div>
-                <div className="w-full sm:w-2/3 space-y-3">
-                     <Skeleton className="h-7 w-4/5" />
-                     <Skeleton className="h-5 w-3/5" />
-                     <Skeleton className="h-9 w-1/2" />
-                     <Skeleton className="h-4 w-full" />
-                </div>
-            </div>
-        </CardContent>
-        <CardFooter className="bg-muted/50 p-4">
-            <Skeleton className="h-11 w-full" />
-        </CardFooter>
+     <Card className="shadow-lg overflow-hidden flex flex-col sm:flex-row">
+        <div className="w-full sm:w-2/5">
+             <Skeleton className="w-full h-full aspect-[4/3] sm:aspect-auto" />
+        </div>
+        <div className="w-full sm:w-3/5 flex flex-col">
+            <CardContent className="p-6 flex-grow space-y-3">
+                 <Skeleton className="h-7 w-4/5" />
+                 <Skeleton className="h-5 w-3/5" />
+                 <Skeleton className="h-4 w-full" />
+                 <Skeleton className="h-4 w-full" />
+                 <Skeleton className="h-9 w-1/2" />
+            </CardContent>
+            <CardFooter className="bg-muted/50 p-4 mt-auto">
+                <Skeleton className="h-9 w-full" />
+            </CardFooter>
+        </div>
     </Card>
 )
 
@@ -170,7 +155,6 @@ export default function PromotionsPage() {
       <SectionTitle
         title="Promotions & Vouchers"
         subtitle="Your available discounts and special offers."
-        className="text-center"
       />
        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
             {isLoading && <PromotionSkeleton />}

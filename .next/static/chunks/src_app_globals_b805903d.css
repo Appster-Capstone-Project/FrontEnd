@@ -658,6 +658,10 @@ h1, h2, h3, h4, h5, h6 {
   aspect-ratio: 16 / 9;
 }
 
+.aspect-\[4\/3\] {
+  aspect-ratio: 4 / 3;
+}
+
 .size-4 {
   width: 1rem;
   height: 1rem;
@@ -1893,6 +1897,11 @@ h1, h2, h3, h4, h5, h6 {
   color: hsl(var(--primary) / .9);
 }
 
+.text-green-600 {
+  --tw-text-opacity: 1;
+  color: rgb(22 163 74 / var(--tw-text-opacity, 1));
+}
+
 .line-through {
   text-decoration-line: line-through;
 }
@@ -2931,6 +2940,10 @@ body {
     display: flex;
   }
 
+  .sm\:aspect-auto {
+    aspect-ratio: auto;
+  }
+
   .sm\:w-auto {
     width: auto;
   }
@@ -2941,6 +2954,14 @@ body {
 
   .sm\:w-2\/3 {
     width: 66.6667%;
+  }
+
+  .sm\:w-2\/5 {
+    width: 40%;
+  }
+
+  .sm\:w-3\/5 {
+    width: 60%;
   }
 
   .sm\:max-w-sm {
