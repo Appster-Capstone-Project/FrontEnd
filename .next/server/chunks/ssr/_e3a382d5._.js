@@ -572,7 +572,7 @@ const $$RSC_SERVER_ACTION_0 = async function submitReview(formData) {
 var submitReview = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])($$RSC_SERVER_ACTION_0, "4037096e53c3dae36eab2cdc63b454eef1617dc230", null);
 async function getVendorDetails(id) {
     try {
-        const baseUrl = ("TURBOPACK compile-time value", "http://20.168.243.183:8000");
+        const baseUrl = ("TURBOPACK compile-time value", "http://172.191.11.228:8000");
         if ("TURBOPACK compile-time falsy", 0) {
             "TURBOPACK unreachable";
         }

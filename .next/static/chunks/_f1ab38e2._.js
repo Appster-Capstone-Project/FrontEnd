@@ -360,7 +360,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$b
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/table.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/dialog.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$scroll$2d$area$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/scroll-area.tsx [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$OrderContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/context/OrderContext.tsx [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
@@ -376,11 +375,8 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-;
 async function fetchOrderDetails(orderIds, token) {
     const dishPromises = orderIds.map(async (id)=>{
-        // Use the absolute path for server-side fetching if this were a server component,
-        // but since it's a client component with a client-side call, we use the proxy path.
         const response = await fetch(`/api/listings/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -399,24 +395,59 @@ function SellerOrdersPage() {
     _s();
     const { toast } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useToast"])();
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
-    const { orders, isLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$OrderContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useOrder"])(); // Use orders from context
-    const [isUpdating, setIsUpdating] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null); // Holds the ID of the order being updated
+    const [orders, setOrders] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
+    const [isUpdating, setIsUpdating] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [detailedDishes, setDetailedDishes] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({});
+    const fetchOrdersForSeller = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "SellerOrdersPage.useCallback[fetchOrdersForSeller]": async (token)=>{
+            setIsLoading(true);
+            try {
+                // The backend needs to know to return orders FOR a seller.
+                // Based on the docs, a seller calling /api/orders should return their orders.
+                const response = await fetch('/api/orders', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(err.error || "Failed to fetch orders.");
+                }
+                const data = await response.json();
+                setOrders(Array.isArray(data) ? data : []);
+            } catch (error) {
+                toast({
+                    variant: "destructive",
+                    title: "Error fetching orders",
+                    description: error.message
+                });
+            } finally{
+                setIsLoading(false);
+            }
+        }
+    }["SellerOrdersPage.useCallback[fetchOrdersForSeller]"], [
+        toast
+    ]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "SellerOrdersPage.useEffect": ()=>{
+            const token = localStorage.getItem('token');
             const userRole = localStorage.getItem('userRole');
-            if (userRole !== 'seller') {
+            if (!token || userRole !== 'seller') {
                 toast({
                     variant: "destructive",
                     title: "Access Denied",
                     description: "You must be a seller to view this page."
                 });
                 router.push('/auth/signin?type=seller');
+            } else {
+                fetchOrdersForSeller(token);
             }
         }
     }["SellerOrdersPage.useEffect"], [
         router,
-        toast
+        toast,
+        fetchOrdersForSeller
     ]);
     const handleUpdateStatus = async (orderId, action)=>{
         const token = localStorage.getItem('token');
@@ -443,8 +474,8 @@ function SellerOrdersPage() {
                 title: `Order ${action === 'accept' ? 'Accepted' : 'Completed'}`,
                 description: "The order status has been updated."
             });
-        // The context will update automatically if the SSE stream sends an update
-        // No need to manually refetch or update state here.
+            // Refetch orders to show the updated status
+            fetchOrdersForSeller(token);
         } catch (error) {
             toast({
                 variant: "destructive",
@@ -485,7 +516,7 @@ function SellerOrdersPage() {
                 subtitle: "Manage incoming orders from customers."
             }, void 0, false, {
                 fileName: "[project]/src/app/sell/orders/page.tsx",
-                lineNumber: 133,
+                lineNumber: 159,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -497,20 +528,20 @@ function SellerOrdersPage() {
                                 children: "Incoming Orders"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/sell/orders/page.tsx",
-                                lineNumber: 139,
+                                lineNumber: 165,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardDescription"], {
-                                children: "Review and manage all orders placed for your items. Updates in real-time."
+                                children: "Review and manage all orders placed for your items."
                             }, void 0, false, {
                                 fileName: "[project]/src/app/sell/orders/page.tsx",
-                                lineNumber: 140,
+                                lineNumber: 166,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/sell/orders/page.tsx",
-                        lineNumber: 138,
+                        lineNumber: 164,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -522,12 +553,12 @@ function SellerOrdersPage() {
                                     className: "h-12 w-full"
                                 }, i, false, {
                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                    lineNumber: 145,
+                                    lineNumber: 171,
                                     columnNumber: 48
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/src/app/sell/orders/page.tsx",
-                            lineNumber: 144,
+                            lineNumber: 170,
                             columnNumber: 13
                         }, this) : orders.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Table"], {
                             children: [
@@ -538,28 +569,28 @@ function SellerOrdersPage() {
                                                 children: "Order ID"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                lineNumber: 151,
+                                                lineNumber: 177,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
                                                 children: "Customer"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                lineNumber: 152,
+                                                lineNumber: 178,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
                                                 children: "Total"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                lineNumber: 153,
+                                                lineNumber: 179,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
                                                 children: "Status"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                lineNumber: 154,
+                                                lineNumber: 180,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
@@ -567,18 +598,18 @@ function SellerOrdersPage() {
                                                 children: "Actions"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                lineNumber: 155,
+                                                lineNumber: 181,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/sell/orders/page.tsx",
-                                        lineNumber: 150,
+                                        lineNumber: 176,
                                         columnNumber: 21
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                    lineNumber: 149,
+                                    lineNumber: 175,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableBody"], {
@@ -592,14 +623,14 @@ function SellerOrdersPage() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                    lineNumber: 161,
+                                                    lineNumber: 187,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
                                                     children: order.user_email
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                    lineNumber: 162,
+                                                    lineNumber: 188,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -609,7 +640,7 @@ function SellerOrdersPage() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                    lineNumber: 163,
+                                                    lineNumber: 189,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -619,12 +650,12 @@ function SellerOrdersPage() {
                                                         children: order.status
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                        lineNumber: 165,
+                                                        lineNumber: 191,
                                                         columnNumber: 29
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                    lineNumber: 164,
+                                                    lineNumber: 190,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -643,7 +674,7 @@ function SellerOrdersPage() {
                                                                                 className: "h-4 w-4"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                                lineNumber: 171,
+                                                                                lineNumber: 197,
                                                                                 columnNumber: 37
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -651,18 +682,18 @@ function SellerOrdersPage() {
                                                                                 children: "View Details"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                                lineNumber: 172,
+                                                                                lineNumber: 198,
                                                                                 columnNumber: 37
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                        lineNumber: 170,
+                                                                        lineNumber: 196,
                                                                         columnNumber: 33
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                    lineNumber: 169,
+                                                                    lineNumber: 195,
                                                                     columnNumber: 29
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogContent"], {
@@ -677,12 +708,12 @@ function SellerOrdersPage() {
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                                lineNumber: 177,
+                                                                                lineNumber: 203,
                                                                                 columnNumber: 33
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                            lineNumber: 176,
+                                                                            lineNumber: 202,
                                                                             columnNumber: 33
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$scroll$2d$area$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ScrollArea"], {
@@ -699,7 +730,7 @@ function SellerOrdersPage() {
                                                                                                         children: dish.title
                                                                                                     }, void 0, false, {
                                                                                                         fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                                                        lineNumber: 185,
+                                                                                                        lineNumber: 211,
                                                                                                         columnNumber: 53
                                                                                                     }, this),
                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -710,13 +741,13 @@ function SellerOrdersPage() {
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                                                        lineNumber: 186,
+                                                                                                        lineNumber: 212,
                                                                                                         columnNumber: 53
                                                                                                     }, this)
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                                                lineNumber: 184,
+                                                                                                lineNumber: 210,
                                                                                                 columnNumber: 49
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -727,41 +758,41 @@ function SellerOrdersPage() {
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                                                lineNumber: 188,
+                                                                                                lineNumber: 214,
                                                                                                 columnNumber: 49
                                                                                             }, this)
                                                                                         ]
                                                                                     }, dish.id, true, {
                                                                                         fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                                        lineNumber: 183,
+                                                                                        lineNumber: 209,
                                                                                         columnNumber: 45
                                                                                     }, this))
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                                lineNumber: 181,
+                                                                                lineNumber: 207,
                                                                                 columnNumber: 37
                                                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
                                                                                 className: "mx-auto h-6 w-6 animate-spin"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                                lineNumber: 192,
+                                                                                lineNumber: 218,
                                                                                 columnNumber: 37
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                            lineNumber: 179,
+                                                                            lineNumber: 205,
                                                                             columnNumber: 33
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                    lineNumber: 175,
+                                                                    lineNumber: 201,
                                                                     columnNumber: 29
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                            lineNumber: 168,
+                                                            lineNumber: 194,
                                                             columnNumber: 28
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -774,20 +805,20 @@ function SellerOrdersPage() {
                                                                     className: "mr-2 h-4 w-4 animate-spin"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                    lineNumber: 203,
+                                                                    lineNumber: 229,
                                                                     columnNumber: 60
                                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__["Check"], {
                                                                     className: "mr-2 h-4 w-4"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                    lineNumber: 203,
+                                                                    lineNumber: 229,
                                                                     columnNumber: 112
                                                                 }, this),
                                                                 "Accept"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                            lineNumber: 197,
+                                                            lineNumber: 223,
                                                             columnNumber: 29
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -799,43 +830,43 @@ function SellerOrdersPage() {
                                                                     className: "mr-2 h-4 w-4 animate-spin"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                    lineNumber: 211,
+                                                                    lineNumber: 237,
                                                                     columnNumber: 60
                                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__["Check"], {
                                                                     className: "mr-2 h-4 w-4"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                                    lineNumber: 211,
+                                                                    lineNumber: 237,
                                                                     columnNumber: 112
                                                                 }, this),
                                                                 "Complete"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                            lineNumber: 206,
+                                                            lineNumber: 232,
                                                             columnNumber: 29
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                                    lineNumber: 167,
+                                                    lineNumber: 193,
                                                     columnNumber: 25
                                                 }, this)
                                             ]
                                         }, order.id, true, {
                                             fileName: "[project]/src/app/sell/orders/page.tsx",
-                                            lineNumber: 160,
+                                            lineNumber: 186,
                                             columnNumber: 21
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                    lineNumber: 158,
+                                    lineNumber: 184,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/sell/orders/page.tsx",
-                            lineNumber: 148,
+                            lineNumber: 174,
                             columnNumber: 14
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "text-center py-12",
@@ -844,7 +875,7 @@ function SellerOrdersPage() {
                                     className: "h-12 w-12 mx-auto text-muted-foreground mb-4"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                    lineNumber: 221,
+                                    lineNumber: 247,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -852,7 +883,7 @@ function SellerOrdersPage() {
                                     children: "No orders yet"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                    lineNumber: 222,
+                                    lineNumber: 248,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -860,38 +891,37 @@ function SellerOrdersPage() {
                                     children: "New orders from customers will appear here automatically."
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/sell/orders/page.tsx",
-                                    lineNumber: 223,
+                                    lineNumber: 249,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/sell/orders/page.tsx",
-                            lineNumber: 220,
+                            lineNumber: 246,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/sell/orders/page.tsx",
-                        lineNumber: 142,
+                        lineNumber: 168,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/sell/orders/page.tsx",
-                lineNumber: 137,
+                lineNumber: 163,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/sell/orders/page.tsx",
-        lineNumber: 132,
+        lineNumber: 158,
         columnNumber: 5
     }, this);
 }
-_s(SellerOrdersPage, "FXYAnWv+/3bUf4OGu0lg6XgDn8E=", false, function() {
+_s(SellerOrdersPage, "1jZqpKhjP1C2pALvNfYrmcIYxGw=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useToast"],
-        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
-        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$OrderContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useOrder"]
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
     ];
 });
 _c = SellerOrdersPage;
