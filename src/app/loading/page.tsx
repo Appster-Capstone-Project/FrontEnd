@@ -16,7 +16,7 @@ export default function LoadingPage() {
       if (userRole === 'seller') {
         router.replace('/sell');
       } else {
-        router.replace('/dashboard');
+        router.replace('/vendors');
       }
     };
     

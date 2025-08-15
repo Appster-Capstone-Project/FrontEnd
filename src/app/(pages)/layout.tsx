@@ -56,15 +56,10 @@ export default function UserAccountLayout({
 
   const navItems = [
     {
-      href: "/dashboard",
-      label: "Dashboard",
-      icon: LayoutDashboard,
-      exact: true,
-    },
-    {
       href: "/vendors",
       label: "Browse Food",
       icon: Utensils,
+      exact: true,
     },
     {
       href: "/orders",
@@ -116,7 +111,7 @@ export default function UserAccountLayout({
         </div>
       </div>
       <div className="flex flex-col">
-        <header className="flex h-14 items-center justify-end gap-4 border-b bg-muted/40 px-6 lg:h-[60px] lg:px-8">
+        <header className="flex h-14 items-center justify-end gap-4 border-b bg-muted/40 px-6 lg:h-[60px]">
           <CartSheet>
             <Button variant="ghost" size="icon" aria-label="Cart" className="relative">
               <ShoppingBag className="h-5 w-5" />
