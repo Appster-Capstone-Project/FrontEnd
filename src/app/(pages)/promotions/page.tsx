@@ -113,25 +113,24 @@ export default function PromotionsPage() {
 
         if (eligibleDishes.length === 0) {
             setPromotions([]);
-            setIsLoading(false); // Stop loading if no promotions
+            // No need to set loading to false here, finally block handles it.
             return;
         }
 
-        // Fetch seller details for each eligible dish
-        const promotionPromises = eligibleDishes.map(async (dish) => {
-            // Handle case where sellerId might be missing
-            if (!dish.sellerId) {
-                console.warn(`Dish '${dish.title}' is missing a sellerId and cannot be part of a promotion.`);
-                return null;
-            }
-            const sellerRes = await fetch(`/api/sellers/${dish.sellerId}`);
-            if (!sellerRes.ok) {
-                console.warn(`Could not fetch seller for dish ${dish.title}.`);
-                return null;
-            }
-            const seller: Vendor = await sellerRes.json();
+        // Fetch all sellers in one go to be more efficient
+        const sellersRes = await fetch('/api/sellers');
+        if (!sellersRes.ok) throw new Error("Could not fetch sellers.");
+        const allSellers: Vendor[] = await sellersRes.json();
+        const sellersMap = new Map(allSellers.map(s => [s.id, s]));
 
-            // Add image url to the dish if not present
+        const settledPromotions = eligibleDishes.map(dish => {
+            const seller = sellersMap.get(dish.sellerId);
+            if (!seller) {
+                console.warn(`Seller with ID ${dish.sellerId} not found for dish ${dish.title}`);
+                return null;
+            }
+            
+             // Add image url to the dish if not present
             if (!dish.imageUrl && dish.image) {
                 dish.imageUrl = `/api${dish.image}`;
             }
@@ -141,9 +140,8 @@ export default function PromotionsPage() {
                 seller,
                 discountedPrice: dish.price * 0.8,
             };
-        });
+        }).filter((p): p is Promotion => p !== null);
         
-        const settledPromotions = (await Promise.all(promotionPromises)).filter((p): p is Promotion => p !== null);
         setPromotions(settledPromotions);
 
       } catch (err) {
@@ -161,6 +159,7 @@ export default function PromotionsPage() {
 
   useEffect(() => {
     fetchPromotions();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
