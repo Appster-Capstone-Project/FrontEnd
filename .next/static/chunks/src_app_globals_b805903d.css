@@ -611,6 +611,10 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: .75rem;
 }
 
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
 .line-clamp-2 {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -793,6 +797,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .min-h-svh {
   min-height: 100svh;
+}
+
+.min-h-\[250px\] {
+  min-height: 250px;
 }
 
 .w-0 {
@@ -1526,6 +1534,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .p-\[1px\] {
   padding: 1px;
+}
+
+.p-12 {
+  padding: 3rem;
+}
+
+.p-8 {
+  padding: 2rem;
 }
 
 .px-0 {
