@@ -10,6 +10,17 @@
       "layer": {
         "app/vendors/[id]/page": "rsc"
       }
+    },
+    "407e1f382e681398cc0421ce4fc5a9da1f88f61280": {
+      "workers": {
+        "app/(pages)/vendors/[id]/page": {
+          "moduleId": "[project]/.next-internal/server/app/(pages)/vendors/[id]/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/(pages)/vendors/[id]/page.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(pages)/vendors/[id]/page": "rsc"
+      }
     }
   },
   "edge": {},
