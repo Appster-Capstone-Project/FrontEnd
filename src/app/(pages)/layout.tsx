@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import Link from "next/link";
@@ -29,8 +27,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 import CartSheet from "@/components/shared/CartSheet";
-import { useCart } from "@/context/CartContext";
-import { Badge } from "@/components/ui/badge";
 
 // This layout is for user-specific pages like dashboard, orders, promotions
 export default function UserAccountLayout({
@@ -55,11 +51,16 @@ export default function UserAccountLayout({
   };
 
   const navItems = [
+     {
+      href: "/dashboard",
+      label: "Dashboard",
+      icon: LayoutDashboard,
+      exact: true,
+    },
     {
       href: "/vendors",
       label: "Browse Food",
       icon: Utensils,
-      exact: true,
     },
     {
       href: "/orders",
