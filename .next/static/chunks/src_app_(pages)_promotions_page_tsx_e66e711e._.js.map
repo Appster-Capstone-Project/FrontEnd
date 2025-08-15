@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///home/user/studio/src/app/%28pages%29/promotions/page.tsx"],"sourcesContent":["\"use client\";\n\nexport default function PromotionsPage() {\n  return (\n    <div className=\"container py-12 md:py-16\">\n      <h1 className=\"text-3xl font-bold\">Promotions</h1>\n      <p className=\"mt-4 text-lg text-muted-foreground\">This feature is coming soon. Please check back later.</p>\n    </div>\n  );\n}\n"],"names":[],"mappings":";;;;AAAA;;AAEe,SAAS;IACtB,qBACE,6LAAC;QAAI,WAAU;;0BACb,6LAAC;gBAAG,WAAU;0BAAqB;;;;;;0BACnC,6LAAC;gBAAE,WAAU;0BAAqC;;;;;;;;;;;;AAGxD;KAPwB","debugId":null}}]
+}
