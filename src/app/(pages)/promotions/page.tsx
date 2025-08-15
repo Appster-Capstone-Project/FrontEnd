@@ -18,17 +18,18 @@ interface Promotion extends Dish {
 }
 
 const PromotionCardSkeleton = () => (
-    <Card className="overflow-hidden shadow-lg">
-        <div className="p-4">
-            <div className="space-y-3">
-                <Skeleton className="h-6 w-3/4" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-5/6" />
-                <div className="pt-2">
-                    <Skeleton className="h-10 w-full" />
+    <Card className="overflow-hidden shadow-lg border-2 border-primary/20 max-w-4xl mx-auto">
+        <CardContent className="p-4 flex items-center justify-between gap-4">
+             <div className="flex items-center gap-4">
+                <Skeleton className="w-24 h-24 rounded-md" />
+                <div className="space-y-2">
+                    <Skeleton className="h-6 w-48" />
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-5 w-24" />
                 </div>
             </div>
-        </div>
+            <Skeleton className="h-9 w-28" />
+        </CardContent>
     </Card>
 )
 
@@ -49,14 +50,18 @@ export default function PromotionsPage() {
         }
 
         const listings: Dish[] = await listingsRes.json();
-        const latestDish = listings[0];
+        
+        // Filter for dishes with more than 10 portions left
+        const promotableDishes = listings.filter(dish => (dish.leftSize || 0) >= 10);
 
-        if (!latestDish) {
+        if (promotableDishes.length === 0) {
           setPromotion(null);
           return;
         }
 
-        const sellerRes = await fetch(`/api/sellers/${latestDish.sellerId}`);
+        const dishToPromote = promotableDishes[0];
+
+        const sellerRes = await fetch(`/api/sellers/${dishToPromote.sellerId}`);
         if (!sellerRes.ok) {
            throw new Error(`Could not fetch seller details.`);
         }
@@ -71,8 +76,8 @@ export default function PromotionsPage() {
         };
 
         const finalPromotion = { 
-          ...latestDish, 
-          imageUrl: latestDish.image ? `/api${latestDish.image}` : 'https://placehold.co/600x400.png',
+          ...dishToPromote, 
+          imageUrl: dishToPromote.image ? `/api${dishToPromote.image}` : 'https://placehold.co/600x400.png',
           seller: augmentedSeller
         };
         
@@ -99,10 +104,10 @@ export default function PromotionsPage() {
   const discountedPrice = originalPrice * 0.8;
 
   return (
-    <div className="flex-1 space-y-8 p-4 pt-6 md:p-8">
+    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
       <SectionTitle
         title="Special Promotions"
-        subtitle="Exclusive discounts on freshly added meals"
+        subtitle="Exclusive discounts on freshly added meals."
       />
       {isLoading ? (
         <PromotionCardSkeleton />
@@ -123,18 +128,20 @@ export default function PromotionsPage() {
                         className="w-24 h-24 object-cover rounded-md"
                         data-ai-hint={promotion.dataAiHint}
                     />
-                    <div>
+                     <div>
                         <h3 className="font-headline text-xl font-bold text-primary">{promotion.title}</h3>
                         <p className="text-sm text-muted-foreground mt-1">
                             Offered by <span className="font-semibold text-foreground">{promotion.seller.name}</span>
                         </p>
-                        <div className="flex items-baseline space-x-2 mt-2">
-                            <p className="text-md font-semibold text-muted-foreground line-through">${originalPrice.toFixed(2)}</p>
-                            <p className="text-xl font-bold text-foreground">${discountedPrice.toFixed(2)}</p>
-                        </div>
                     </div>
                 </div>
-                 <div className="flex flex-col items-end gap-2">
+               
+                <div className="flex items-baseline space-x-2">
+                    <p className="text-md font-semibold text-muted-foreground line-through">${originalPrice.toFixed(2)}</p>
+                    <p className="text-xl font-bold text-foreground">${discountedPrice.toFixed(2)}</p>
+                </div>
+
+                <div className="flex flex-col items-end gap-2">
                      <Badge variant="destructive">
                         <Tag className="mr-2 h-4 w-4" /> 20% OFF
                     </Badge>
@@ -145,13 +152,14 @@ export default function PromotionsPage() {
             </CardContent>
         </Card>
       ) : (
-        <Card className="text-center p-12">
+        <Card className="text-center p-12 max-w-4xl mx-auto">
             <CardContent>
-                <h3>No Promotions Available</h3>
-                <p className="mt-2">Please check back later for new offers.</p>
+                <h3 className="font-headline text-xl">No Promotions Available</h3>
+                <p className="mt-2 text-muted-foreground">Check back later for new offers on dishes with plenty of stock!</p>
             </CardContent>
         </Card>
       )}
     </div>
   );
 }
+
