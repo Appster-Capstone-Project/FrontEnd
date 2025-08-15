@@ -11,6 +11,7 @@ export async function GET(req: NextRequest) {
   const authToken = req.headers.get('Authorization');
 
   if (!authToken) {
+    console.error('[SSE PROXY] Authorization header is required');
     return new Response('Authorization header is required', {status: 401});
   }
 
@@ -18,6 +19,7 @@ export async function GET(req: NextRequest) {
   const stream = new PassThrough();
 
   try {
+    console.log(`[SSE PROXY] Attempting to connect to backend: ${BACKEND_SSE_URL}`);
     const response = await fetch(BACKEND_SSE_URL, {
       method: 'GET',
       headers: {
@@ -40,12 +42,14 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    console.log('[SSE PROXY] Successfully connected to backend stream.');
     const reader = response.body.getReader();
 
     const push = async () => {
       while (true) {
         const {done, value} = await reader.read();
         if (done) {
+          console.log('[SSE PROXY] Backend stream ended.');
           stream.end();
           break;
         }

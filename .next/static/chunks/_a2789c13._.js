@@ -145,6 +145,8 @@ const OrderNotificationManager = ()=>{
             ctrl.current = new AbortController();
             const connect = {
                 "OrderNotificationManager.useEffect.connect": async ()=>{
+                    // We connect to our OWN API route, which will then proxy to the backend.
+                    // This allows us to securely send the Authorization header.
                     await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$microsoft$2f$fetch$2d$event$2d$source$2f$lib$2f$esm$2f$fetch$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["fetchEventSource"])(`/api/events/stream`, {
                         method: 'GET',
                         headers: {
