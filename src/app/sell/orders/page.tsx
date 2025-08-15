@@ -27,12 +27,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useOrder } from "@/context/OrderContext";
 
 async function fetchOrderDetails(orderIds: string[], token: string): Promise<Dish[]> {
     const dishPromises = orderIds.map(async (id) => {
-        // Use the absolute path for server-side fetching if this were a server component,
-        // but since it's a client component with a client-side call, we use the proxy path.
         const response = await fetch(`/api/listings/${id}`, {
              headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -50,22 +47,51 @@ async function fetchOrderDetails(orderIds: string[], token: string): Promise<Dis
 export default function SellerOrdersPage() {
   const { toast } = useToast();
   const router = useRouter();
-  const { orders, isLoading } = useOrder(); // Use orders from context
-  
-  const [isUpdating, setIsUpdating] = React.useState<string | null>(null); // Holds the ID of the order being updated
+  const [orders, setOrders] = React.useState<Order[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [isUpdating, setIsUpdating] = React.useState<string | null>(null);
   const [detailedDishes, setDetailedDishes] = React.useState<Record<string, Dish[]>>({});
   
+  const fetchOrdersForSeller = React.useCallback(async (token: string) => {
+    setIsLoading(true);
+    try {
+      // The backend needs to know to return orders FOR a seller.
+      // Based on the docs, a seller calling /api/orders should return their orders.
+      const response = await fetch('/api/orders', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || "Failed to fetch orders.");
+      }
+      const data = await response.json();
+      setOrders(Array.isArray(data) ? data : []);
+    } catch (error) {
+       toast({
+        variant: "destructive",
+        title: "Error fetching orders",
+        description: (error as Error).message,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [toast]);
+
   React.useEffect(() => {
+    const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
-    if (userRole !== 'seller') {
+
+    if (!token || userRole !== 'seller') {
        toast({
         variant: "destructive",
         title: "Access Denied",
         description: "You must be a seller to view this page.",
       });
       router.push('/auth/signin?type=seller');
+    } else {
+        fetchOrdersForSeller(token);
     }
-  }, [router, toast]);
+  }, [router, toast, fetchOrdersForSeller]);
 
   const handleUpdateStatus = async (orderId: string, action: 'accept' | 'complete') => {
     const token = localStorage.getItem('token');
@@ -92,8 +118,8 @@ export default function SellerOrdersPage() {
             description: "The order status has been updated.",
         });
         
-        // The context will update automatically if the SSE stream sends an update
-        // No need to manually refetch or update state here.
+        // Refetch orders to show the updated status
+        fetchOrdersForSeller(token);
 
     } catch (error) {
         toast({
@@ -137,7 +163,7 @@ export default function SellerOrdersPage() {
       <Card className="max-w-6xl mx-auto w-full shadow-lg">
         <CardHeader>
             <CardTitle>Incoming Orders</CardTitle>
-            <CardDescription>Review and manage all orders placed for your items. Updates in real-time.</CardDescription>
+            <CardDescription>Review and manage all orders placed for your items.</CardDescription>
         </CardHeader>
         <CardContent>
           {isLoading ? (
