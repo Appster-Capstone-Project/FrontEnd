@@ -1,3 +1,4 @@
+
 // src/app/api/events/stream/route.ts
 import {NextRequest} from 'next/server';
 import {PassThrough} from 'stream';
@@ -28,6 +29,9 @@ export async function GET(req: NextRequest) {
         Connection: 'keep-alive',
         'Cache-Control': 'no-cache',
       },
+      // IMPORTANT: This request should not be buffered.
+      // @ts-ignore
+      duplex: 'half',
     });
 
     if (!response.ok || !response.body) {

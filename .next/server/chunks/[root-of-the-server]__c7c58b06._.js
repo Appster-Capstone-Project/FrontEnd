@@ -71,6 +71,7 @@ const dynamic = 'force-dynamic'; // Ensures this route is not statically built
 async function GET(req) {
     const authToken = req.headers.get('Authorization');
     if (!authToken) {
+        console.error('[SSE PROXY] Authorization header is required');
         return new Response('Authorization header is required', {
             status: 401
         });
@@ -78,6 +79,7 @@ async function GET(req) {
     // Create a transform stream that will be piped to the client.
     const stream = new __TURBOPACK__imported__module__$5b$externals$5d2f$stream__$5b$external$5d$__$28$stream$2c$__cjs$29$__["PassThrough"]();
     try {
+        console.log(`[SSE PROXY] Attempting to connect to backend: ${BACKEND_SSE_URL}`);
         const response = await fetch(BACKEND_SSE_URL, {
             method: 'GET',
             headers: {
@@ -94,11 +96,13 @@ async function GET(req) {
                 status: response.status
             });
         }
+        console.log('[SSE PROXY] Successfully connected to backend stream.');
         const reader = response.body.getReader();
         const push = async ()=>{
             while(true){
                 const { done, value } = await reader.read();
                 if (done) {
+                    console.log('[SSE PROXY] Backend stream ended.');
                     stream.end();
                     break;
                 }

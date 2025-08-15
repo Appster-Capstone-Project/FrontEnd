@@ -62,8 +62,10 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/:path*',
-        destination: 'http://20.168.243.183:8000/:path*', // your backend IP with port
+        // This rewrite is for general API calls, excluding our specific SSE route.
+        // It's important to use a negative lookahead to avoid conflicts.
+        source: '/api/((?!events/stream).*)',
+        destination: 'http://20.168.243.183:8000/:1', 
       },
     ];
   },
